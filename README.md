@@ -1,129 +1,143 @@
-# DevOps Notes Manager
+DevOps Notes Manager
 
-A Flask-based web application to create, manage, and organize DevOps commands and notes.  
-The application uses a MySQL database for persistence and follows secure configuration practices using environment variables.
+A Flask-based CRUD web application for managing DevOps commands and notes, fully containerized using Docker and Docker Compose with a MySQL backend.
 
----
+This project is designed to practice real-world DevOps fundamentals such as containerization, service orchestration, environment-based configuration, and persistent storage.
 
-## 🚀 Features
+📌 Features
 
-- Create, view, update, and delete DevOps notes
-- MySQL database integration
-- Clean and simple UI
-- Environment variable–based configuration (no hardcoded secrets)
-- Structured Flask backend with clear routing
+Create, Read, Update, Delete (CRUD) DevOps notes
 
----
+Flask backend with Jinja2 templates
 
-## 🛠️ Tech Stack
+MySQL database for persistent storage
 
-- **Backend:** Flask (Python)
-- **Database:** MySQL
-- **Frontend:** HTML, CSS (Jinja2 templates)
-- **Environment Management:** python-dotenv
-- **Version Control:** Git & GitHub
+Dockerized application
 
----
+Multi-container setup using Docker Compose
 
-## 📂 Project Structure
+Environment variables for secure configuration
 
+Persistent data using Docker volumes
+
+🛠 Tech Stack
+
+Backend: Flask (Python)
+
+Database: MySQL 8
+
+Frontend: HTML, CSS (Jinja templates)
+
+Containerization: Docker
+
+Orchestration: Docker Compose
+
+📂 Project Structure
 devops-notes-manager/
 ├── app.py
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+├── .dockerignore
+├── .gitignore
+├── .env.example
+│
 ├── templates/
 │ ├── index.html
 │ └── edit.html
-├── static/
-│ └── css/
-│ └── style.css
-├── requirements.txt
-├── .gitignore
-└── .env # not committed
+│
+└── static/
+└── css/
+└── style.css
 
-yaml
-Copy code
+⚙️ Environment Variables
 
----
+Create a .env file in the project root (do not commit it):
 
-## ⚙️ Setup Instructions
-
-### 1️⃣ Clone the repository
-
-```bash
-git clone https://github.com/<your-username>/devops-notes-manager.git
-cd devops-notes-manager
-2️⃣ Create and activate a virtual environment
-bash
-Copy code
-python -m venv .venv
-Windows (PowerShell):
-
-powershell
-Copy code
-.\.venv\Scripts\Activate.ps1
-Linux / macOS:
-
-bash
-Copy code
-source .venv/bin/activate
-3️⃣ Install dependencies
-bash
-Copy code
-pip install -r requirements.txt
-4️⃣ Configure environment variables
-Create a .env file in the project root:
-
-env
-Copy code
-DB_HOST=localhost
+DB_HOST=mysql
 DB_USER=root
-DB_PASSWORD=your_mysql_password
+DB_PASSWORD=rootpassword
 DB_NAME=devops_notes
-⚠️ The .env file is ignored by Git and should never be committed.
 
-5️⃣ Set up the MySQL database
-sql
-Copy code
-CREATE DATABASE devops_notes;
+The .env file is excluded via .gitignore to keep credentials secure.
 
-USE devops_notes;
+🐳 Docker Setup
+1️⃣ Build and start containers
+docker compose up --build
+
+This command will:
+
+Build the Flask application image
+
+Start a MySQL container
+
+Create a shared Docker network
+
+Persist database data using Docker volumes
+
+2️⃣ Access the application
+
+Open your browser and navigate to:
+
+http://localhost:5000
+
+🗄 Database Initialization
+
+The database is created automatically, but the notes table must exist.
+
+Create table (one-time setup):
+docker exec -it devops-mysql mysql -uroot -prootpassword devops_notes
 
 CREATE TABLE notes (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  command VARCHAR(255) NOT NULL,
-  description TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+id INT AUTO_INCREMENT PRIMARY KEY,
+command VARCHAR(255) NOT NULL,
+description TEXT NOT NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-6️⃣ Run the application
-bash
-Copy code
-python app.py
-Open your browser and visit:
 
-cpp
-Copy code
-http://127.0.0.1:5000
-🔐 Security Notes
-Database credentials are loaded using environment variables
+🧠 DevOps Concepts Demonstrated
 
-Sensitive files such as .env and .venv are excluded via .gitignore
+Container isolation and networking
 
-No secrets are committed to the repository
+Service discovery using Docker Compose
 
-📌 Future Improvements
-User authentication
+Environment-based configuration
+
+Persistent storage with Docker volumes
+
+Flask application binding for container access (0.0.0.0)
+
+Separation of application and database layers
+
+🛑 Stopping the Application
+
+To stop all services:
+
+docker compose down
+
+To stop and remove volumes (clears DB data):
+
+docker compose down -v
+
+🚀 Future Enhancements
+
+Automatic database table creation
 
 Pagination for large datasets
 
-Search and filtering
+Authentication and user roles
 
-Dockerization (Flask + MySQL)
+Production server using Gunicorn
 
-CI/CD integration
+CI/CD pipeline with GitHub Actions
 
-📄 License
-This project is for learning and portfolio purposes.
+Cloud deployment (AWS / Azure)
 
-yaml
-Copy code
+👨‍💻 Author
 
----
+Kushagra Agarwal
+DevOps & Cloud Enthusiast
+
+⭐ Support
+
+If you found this project helpful, consider giving it a ⭐ on GitHub.
