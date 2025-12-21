@@ -1,24 +1,24 @@
 # Flask core imports
 from flask import Flask, jsonify, render_template, request, url_for, redirect
+import os
+from dotenv import load_dotenv
 
 # MySQL connector to communicate with MySQL database
 import mysql.connector
 
+load_dotenv(dotenv_path=".env")
 
 # --------------------------------------------------
 # Database connection helper
 # --------------------------------------------------
 def get_db_connection():
-    """
-    Creates and returns a new connection to the MySQL database.
-    This function is called every time the app needs DB access.
-    """
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Agarwals",   # MySQL root password
-        database="devops_notes"
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME")
     )
+
 
 
 # --------------------------------------------------
