@@ -1,0 +1,260 @@
+/* ===============================
+   Global Reset & Base
+   =============================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+body {
+  background-color: #ebf4dd;
+  color: #3b4953;
+  line-height: 1.6;
+}
+
+/* ===============================
+   Navbar
+   =============================== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 3rem;
+  background-color: #90ab8b;
+  border-bottom: 1px solid #5a7863;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #3b4953;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #3b4953;
+  font-weight: 600;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+/* ===============================
+   Hero Section
+   =============================== */
+.hero {
+  padding: 3.5rem 2rem;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 2.4rem;
+  margin-bottom: 0.5rem;
+  color: #5a7863;
+}
+
+.hero p {
+  max-width: 650px;
+  margin: 0 auto;
+  color: #3b4953;
+}
+
+/* ===============================
+   Buttons
+   =============================== */
+.btn {
+  display: inline-block;
+  padding: 0.55rem 1.2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.primary {
+  background-color: #5a7863;
+  color: #ebf4dd;
+}
+
+.primary:hover {
+  background-color: #3b4953;
+}
+
+.secondary {
+  border: 2px solid #5a7863;
+  color: #5a7863;
+  background: transparent;
+}
+
+.secondary:hover {
+  background-color: #5a7863;
+  color: #ebf4dd;
+}
+
+/* ===============================
+   Add Note Form
+   =============================== */
+.note-form-section {
+  max-width: 850px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #90ab8b;
+}
+
+.note-form-section h2 {
+  margin-bottom: 1rem;
+  color: #5a7863;
+}
+
+.note-form input,
+.note-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: 1px solid #90ab8b;
+  background-color: #ebf4dd;
+  color: #3b4953;
+}
+
+.note-form input::placeholder,
+.note-form textarea::placeholder {
+  color: #5a7863;
+}
+
+.note-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* ===============================
+   Notes List
+   =============================== */
+.features {
+  max-width: 1200px;
+  margin: 0 auto 4rem;
+  padding: 0 2rem;
+}
+
+.features {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.features h2 {
+  margin-bottom: 2rem;
+  color: #5a7863;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid #90ab8b;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card h3 {
+  color: #5a7863;
+  margin-bottom: 0.5rem;
+  word-break: break-word;
+}
+
+.feature-card p {
+  color: #3b4953;
+  font-size: 0.95rem;
+}
+
+/* ===============================
+   Edit / Delete Actions
+   =============================== */
+.note-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.note-actions .edit {
+  background-color: #90ab8b;
+  color: #3b4953;
+}
+
+.note-actions .edit:hover {
+  background-color: #5a7863;
+  color: #ebf4dd;
+}
+
+.note-actions .delete {
+  background-color: #3b4953;
+  color: #ebf4dd;
+}
+
+.note-actions .delete:hover {
+  opacity: 0.85;
+}
+
+/* ===============================
+   CTA Section
+   =============================== */
+.cta {
+  text-align: center;
+  padding: 3rem 2rem;
+  background-color: #90ab8b;
+  color: #3b4953;
+}
+
+.cta h2 {
+  margin-bottom: 1rem;
+}
+
+/* ===============================
+   Footer
+   =============================== */
+.footer {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: #5a7863;
+  color: #ebf4dd;
+  font-size: 0.9rem;
+}
+
+/* ===============================
+   Responsive
+   =============================== */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .note-form-section {
+    margin: 2rem 1rem;
+  }
+}
