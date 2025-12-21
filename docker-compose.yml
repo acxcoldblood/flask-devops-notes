@@ -1,13 +1,11 @@
-version: "3.9"
-
 services:
   mysql:
     image: mysql:8.0
     container_name: devops-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: devops_notes
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -20,10 +18,10 @@ services:
     depends_on:
       - mysql
     environment:
-      DB_HOST: mysql
-      DB_USER: root
-      DB_PASSWORD: rootpassword
-      DB_NAME: devops_notes
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
 
 volumes:
   mysql_data:

@@ -14,8 +14,8 @@
     <nav class="navbar">
       <div class="logo">DNotes</div>
       <ul class="nav-links">
-        <li><a href="{{ url_for('home') }}">Notes</a></li>
-        <li><a href="#">About</a></li>
+        <li><a href="{{ url_for('main.home') }}">Notes</a></li>
+        <li><a href="{{ url_for('main.about') }}">About</a></li>
       </ul>
     </nav>
 
@@ -42,11 +42,12 @@
         <div style="display: flex; gap: 1rem">
           <button type="submit" class="btn primary">Save Changes</button>
 
-          <a href="{{ url_for('home') }}" class="btn secondary"> Cancel </a>
+          <a href="{{ url_for('main.home') }}" class="btn secondary">
+            Cancel
+          </a>
         </div>
       </form>
     </section>
-
     <!-- Footer -->
     <footer class="footer">
       <p>DevOps Notes Manager • Edit Mode</p>
