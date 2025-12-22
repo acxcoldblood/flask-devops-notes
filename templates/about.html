@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>About • DevOps Notes Manager</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">DevNotes</div>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('main.home') }}">Notes</a></li>
+
+        <li><a href="{{ url_for('main.docs') }}">Docs</a></li>
+
+        <li><a href="{{ url_for('main.about') }}">About</a></li>
+      </ul>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-content">
+        <h1>About</h1>
+        <p>A simple and practical DevOps knowledge management tool.</p>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="feature-card">
+        <h3>Why this project?</h3>
+        <p>
+          DevOps Notes Manager was built to store frequently used DevOps
+          commands, configurations, and operational learnings in one place.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Tech Stack</h3>
+        <p>Flask • MySQL • Docker • Docker Compose</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>DevOps Notes Manager • Built with Flask</p>
+    </footer>
+  </body>
+</html>

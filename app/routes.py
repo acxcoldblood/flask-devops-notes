@@ -44,6 +44,11 @@ def about():
     return render_template("about.html")
 
 
+@main.route("/docs")
+def docs():
+    return render_template("docs.html")
+
+
 @main.route("/delete/<int:id>")
 def delete_note(id):
     conn = get_db_connection()

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Docs • DevOps Notes Manager</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">DevNotes</div>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('main.home') }}">Notes</a></li>
+        <li><a href="{{ url_for('main.docs') }}">Docs</a></li>
+        <li><a href="{{ url_for('main.about') }}">About</a></li>
+      </ul>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Documentation</h1>
+        <p>How this application works and how to run it.</p>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="feature-card">
+        <h3>Local Setup</h3>
+        <p>
+          Clone the repository, create a virtual environment, install
+          dependencies, and run the Flask app locally.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Docker Setup</h3>
+        <p>
+          The application is fully containerized using Docker and Docker Compose
+          with a MySQL backend.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3>DevOps Concepts Practiced</h3>
+        <p>
+          Containerization, environment variables, multi-container
+          orchestration, and persistent storage.
+        </p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>DevOps Notes Manager • Documentation</p>
+    </footer>
+  </body>
+</html>
