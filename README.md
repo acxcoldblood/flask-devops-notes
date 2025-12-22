@@ -58,10 +58,9 @@ DB_PASSWORD=rootpassword
 DB_NAME=devops_notes
 The .env file is excluded via .gitignore to keep credentials secure.
 
-🐳 Docker Setup
+**🐳 Docker Setup**
 1️⃣ Build and start containers
-bash
-Copy code
+
 docker compose up --build
 This command will:
 
@@ -76,18 +75,14 @@ Persist database data using Docker volumes
 2️⃣ Access the application
 Open your browser and navigate to:
 
-arduino
-Copy code
 http://localhost:5000
 🗄 Database Initialization
 The database is created automatically, but the notes table must exist.
 
-One-time setup
-bash
-Copy code
+**One-time setup**
+
 docker exec -it devops-mysql mysql -uroot -prootpassword devops_notes
-sql
-Copy code
+
 CREATE TABLE notes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   command VARCHAR(255) NOT NULL,
@@ -110,13 +105,11 @@ Separation of application and database layers
 🛑 Stopping the Application
 Stop all services:
 
-bash
-Copy code
+
 docker compose down
 Stop services and remove volumes (clears database data):
 
-bash
-Copy code
+
 docker compose down -v
 🚀 Future Enhancements
 Automatic database table creation
