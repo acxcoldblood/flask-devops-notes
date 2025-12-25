@@ -12,6 +12,9 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v3
 
+      - name: create env file for CI
+        run: cp .env.example .env
+
       - name: Say hello from CI
         run: echo "Hello from GitHub Actions CI"
 
@@ -29,6 +32,7 @@ jobs:
 
       - name: wait for services to be ready
         run: sleep 15
+
       - name: Show container logs
         run: docker compose logs
 
