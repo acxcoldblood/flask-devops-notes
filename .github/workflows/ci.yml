@@ -27,6 +27,12 @@ jobs:
       - name: list docker containers
         run: docker ps -a
 
+      - name: wait for services to be ready
+        run: sleep 15
+
+      - name: Check flask app is running
+        run: curl -f http://localhost:5000/ || exit 1
+
       - name: stop docker containers
         if: always()
         run: docker compose down
