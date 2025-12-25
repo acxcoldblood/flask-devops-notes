@@ -1,128 +1,166 @@
+![CI](https://github.com/<USERNAME>/<REPO_NAME>/actions/workflows/ci.yml/badge.svg)
+
 # 📘 DevOps Notes Manager
 
-A Flask-based **CRUD web application** for managing DevOps commands and notes, fully containerized using **Docker** and **Docker Compose** with a **MySQL** backend.
+A Flask-based **CRUD web application** for managing DevOps commands and notes, fully containerized using **Docker** and **Docker Compose** with a **MySQL** backend and a **production-style CI pipeline** using GitHub Actions.
 
-This project is designed to practice **real-world DevOps fundamentals** such as containerization, service orchestration, environment-based configuration, and persistent storage.
+This project focuses on practicing **real-world DevOps fundamentals** such as container orchestration, environment-based configuration, service health checks, and CI reliability.
 
 ---
 
-## 📌 Features
+## 🚀 Features
 
-- Create, Read, Update, Delete (CRUD) DevOps notes  
-- Flask backend with Jinja2 templates  
-- MySQL database for persistent storage  
-- Fully Dockerized application  
-- Multi-container setup using Docker Compose  
-- Environment variables for secure configuration  
-- Persistent data using Docker volumes  
+- Create, Read, Update, Delete (CRUD) DevOps notes
+- Flask backend with Jinja2 templates
+- MySQL database for persistent storage
+- Fully Dockerized, multi-container application
+- Environment-based configuration using `.env` files
+- Docker volume for database persistence
+- GitHub Actions CI pipeline
+- Dedicated application health endpoint
+
+---
+
+## 🧱 Architecture Overview
+
+┌────────────┐ ┌────────────┐
+│ Browser │ ---> │ Flask │
+└────────────┘ │ (Docker) │
+└─────┬──────┘
+│
+┌─────▼──────┐
+│ MySQL │
+│ (Docker) │
+└────────────┘
+
+yaml
+Copy code
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Backend:** Flask (Python)  
-- **Database:** MySQL 8  
-- **Frontend:** HTML, CSS (Jinja templates)  
-- **Containerization:** Docker  
-- **Orchestration:** Docker Compose  
+- **Backend:** Flask (Python)
+- **Database:** MySQL 8
+- **Frontend:** HTML, CSS (Jinja2 templates)
+- **Containerization:** Docker
+- **Orchestration:** Docker Compose
+- **CI/CD:** GitHub Actions
 
 ---
 
 ## 📂 Project Structure
 
 ```text
-devops-notes-manager/
-├── app.py
-├── requirements.txt
-├── Dockerfile
-├── docker-compose.yml
-├── .dockerignore
-├── .gitignore
-├── .env.example
-│
+.
+├── app/
+│   ├── __init__.py
+│   ├── routes.py
+│   ├── db.py
+│   └── config.py
 ├── templates/
 │   ├── index.html
 │   └── edit.html
-│
-└── static/
-    └── css/
-        └── style.css
+├── static/
+│   └── css/
+│       └── style.css
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+├── .env.example
+└── .github/workflows/ci.yml
 ⚙️ Environment Variables
 Create a .env file in the project root (do not commit it):
 
 env
 Copy code
 DB_HOST=mysql
-DB_USER=root
-DB_PASSWORD=rootpassword
-DB_NAME=devops_notes
-The .env file is excluded via .gitignore to keep credentials secure.
+DB_USER=example_user
+DB_PASSWORD=example_password
+DB_NAME=example_db
+MYSQL_ROOT_PASSWORD=example_root_password
+📌 .env is ignored via .gitignore.
+📌 .env.example is committed for CI and local setup reference.
 
-**🐳 Docker Setup**
-1️⃣ Build and start containers
+▶️ Run Locally (Docker)
+Prerequisites
+Docker
 
+Docker Compose
+
+Steps
+bash
+Copy code
+git clone https://github.com/<USERNAME>/<REPO_NAME>.git
+cd <REPO_NAME>
+
+cp .env.example .env
 docker compose up --build
-This command will:
+Application will be available at:
 
-Build the Flask application image
-
-Start a MySQL container
-
-Create a shared Docker network
-
-Persist database data using Docker volumes
-
-2️⃣ Access the application
-Open your browser and navigate to:
-
+arduino
+Copy code
 http://localhost:5000
-🗄 Database Initialization
-The database is created automatically, but the notes table must exist.
+🔄 CI Pipeline Overview
+The GitHub Actions CI pipeline runs on every push to the main branch and performs:
 
-**One-time setup**
+Checkout source code
 
-docker exec -it devops-mysql mysql -uroot -prootpassword devops_notes
+Create runtime .env from .env.example
 
-CREATE TABLE notes (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  command VARCHAR(255) NOT NULL,
-  description TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+Build Docker images
+
+Start services using Docker Compose
+
+Wait for MySQL health check
+
+Start Flask application
+
+Validate application using /health endpoint
+
+Cleanly shut down containers
+
+This ensures the application is buildable, runnable, and healthy on every commit.
+
+🧪 Health Check Endpoint
+The application exposes a lightweight health endpoint used by CI:
+
+bash
+Copy code
+GET /health
+Response:
+
+Copy code
+200 OK
+This avoids fragile checks against UI routes.
+
 🧠 DevOps Concepts Demonstrated
-Container isolation and networking
+Containerized multi-service architecture
 
-Service discovery using Docker Compose
+Docker networking and service discovery
 
-Environment-based configuration
+Environment-based configuration management
 
-Persistent storage with Docker volumes
+Database health checks and startup ordering
 
-Flask application binding for container access (0.0.0.0)
+CI debugging using container logs
 
-Separation of application and database layers
+Fail-fast application startup patterns
 
-🛑 Stopping the Application
-Stop all services:
+Persistent storage using Docker volumes
 
-
-docker compose down
-Stop services and remove volumes (clears database data):
-
-
-docker compose down -v
 🚀 Future Enhancements
-Automatic database table creation
+Replace Flask development server with Gunicorn
 
-Pagination for large datasets
+Add automated tests to CI
 
-Authentication and user roles
+Split CI into multiple stages (lint / build / test)
 
-Production server using Gunicorn
+Deploy to a cloud VM (AWS / Azure)
 
-CI/CD pipeline with GitHub Actions
+Add reverse proxy (Nginx)
 
-Cloud deployment (AWS / Azure)
+Convert CI into full CD pipeline
 
 👨‍💻 Author
 Kushagra Agarwal
