@@ -9,5 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+
       - name: Say hello from CI
         run: echo "Hello from GitHub Actions CI"
+
+      - name: list repo files
+        run: ls -la
