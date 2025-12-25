@@ -164,3 +164,7 @@ def edit_note(id):
         conn.close()
 
     return redirect(url_for("main.home"))
+
+@main.route("/health")
+def health():
+    return "OK", 200
