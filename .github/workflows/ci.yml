@@ -1,0 +1,13 @@
+name: devops-notes-manager CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say hello from CI
+        run: echo "Hello from GitHub Actions CI"
