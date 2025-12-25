@@ -17,3 +17,6 @@ jobs:
 
       - name: list repo files
         run: ls -la
+
+      - name: Build Docker image
+        run: docker compose build
