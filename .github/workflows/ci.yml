@@ -29,6 +29,8 @@ jobs:
 
       - name: wait for services to be ready
         run: sleep 15
+      - name: Show container logs
+        run: docker compose logs
 
       - name: Check flask app is running
         run: curl -f http://localhost:5000/ || exit 1
