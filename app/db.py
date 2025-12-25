@@ -30,9 +30,28 @@ def init_db(retries=10, delay=2):
                 CREATE TABLE IF NOT EXISTS notes (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     command VARCHAR(255) NOT NULL,
-                    description TEXT NOT NULL
+                    description TEXT NOT NULL,
+                    category VARCHAR(50),
+                    example TEXT,
+                    tags VARCHAR(500)
                 )
             """)
+            
+            # Add new columns if they don't exist (for existing databases)
+            try:
+                cursor.execute("ALTER TABLE notes ADD COLUMN category VARCHAR(50)")
+            except:
+                pass  # Column already exists
+            
+            try:
+                cursor.execute("ALTER TABLE notes ADD COLUMN example TEXT")
+            except:
+                pass  # Column already exists
+            
+            try:
+                cursor.execute("ALTER TABLE notes ADD COLUMN tags VARCHAR(500)")
+            except:
+                pass  # Column already exists
             conn.commit()
             cursor.close()
             conn.close()

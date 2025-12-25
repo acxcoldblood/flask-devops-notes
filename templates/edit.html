@@ -8,20 +8,28 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
+    <!-- Quill.js CSS -->
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="{{ url_for('static', filename='js/editor.js') }}" defer></script>
   </head>
   <body>
     <!-- Navbar -->
     <nav class="navbar">
-      <div class="logo">DNotes</div>
+      <div class="logo">⚙️ DevNotes</div>
       <ul class="nav-links">
         <li><a href="{{ url_for('main.home') }}">Notes</a></li>
+        <li><a href="{{ url_for('main.docs') }}">Docs</a></li>
         <li><a href="{{ url_for('main.about') }}">About</a></li>
       </ul>
     </nav>
 
     <!-- Edit Section -->
     <section class="note-form-section">
-      <h2>Edit DevOps Note</h2>
+      <h2>✏️ Edit DevOps Note</h2>
 
       <form method="post" class="note-form">
         <input
@@ -31,19 +39,46 @@
           required
         />
 
-        <textarea
-          name="description"
-          placeholder="Explanation or usage notes"
-          required
-        >
-{{ note.description }}</textarea
-        >
+        <select name="category" class="category-select">
+          <option value="">Select Category</option>
+          <option value="docker" {% if note.category == 'docker' %}selected{% endif %}>Docker</option>
+          <option value="kubernetes" {% if note.category == 'kubernetes' %}selected{% endif %}>Kubernetes</option>
+          <option value="linux" {% if note.category == 'linux' %}selected{% endif %}>Linux</option>
+          <option value="cicd" {% if note.category == 'cicd' %}selected{% endif %}>CI/CD</option>
+          <option value="aws" {% if note.category == 'aws' %}selected{% endif %}>AWS</option>
+          <option value="monitoring" {% if note.category == 'monitoring' %}selected{% endif %}>Monitoring</option>
+          <option value="other" {% if note.category == 'other' %}selected{% endif %}>Other</option>
+        </select>
+
+        <!-- Description Rich Text Editor -->
+        <div class="editor-container">
+          <label for="description-editor" style="display: block; margin-bottom: 0.5rem; color: #5a7863; font-weight: 600;">
+            Description <span style="color: #ef4444;">*</span>
+          </label>
+          <div id="description-editor" style="min-height: 150px; background-color: #ffffff;"></div>
+          <input type="hidden" id="description-input" name="description" value="{{ note.description or '' }}" required />
+        </div>
+
+        <!-- Example Rich Text Editor -->
+        <div class="editor-container">
+          <label for="example-editor" style="display: block; margin-bottom: 0.5rem; color: #5a7863; font-weight: 600;">
+            Example (optional)
+          </label>
+          <div id="example-editor" style="min-height: 120px; background-color: #ffffff;"></div>
+          <input type="hidden" id="example-input" name="example" value="{{ note.example or '' }}" />
+        </div>
+
+        <input
+          name="tags"
+          value="{{ note.tags or '' }}"
+          placeholder="Tags (comma-separated): networking, troubleshooting, performance"
+        />
 
         <div style="display: flex; gap: 1rem">
-          <button type="submit" class="btn primary">Save Changes</button>
+          <button type="submit" class="btn primary">💾 Save Changes</button>
 
           <a href="{{ url_for('main.home') }}" class="btn secondary">
-            Cancel
+            ❌ Cancel
           </a>
         </div>
       </form>

@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About • DevOps Notes Manager</title>
     <link
       rel="stylesheet"
@@ -10,35 +11,188 @@
   </head>
   <body>
     <nav class="navbar">
-      <div class="logo">DevNotes</div>
-      <ul class="nav-links">
-        <li><a href="{{ url_for('main.home') }}">Notes</a></li>
-
-        <li><a href="{{ url_for('main.docs') }}">Docs</a></li>
-
-        <li><a href="{{ url_for('main.about') }}">About</a></li>
-      </ul>
+      <div class="navbar-main">
+        <div class="logo">⚙️ DevNotes</div>
+        <ul class="nav-links">
+          <li><a href="{{ url_for('main.home') }}">Notes</a></li>
+          <li><a href="{{ url_for('main.docs') }}">Docs</a></li>
+          <li><a href="{{ url_for('main.about') }}" class="active">About</a></li>
+        </ul>
+      </div>
     </nav>
 
     <section class="hero">
       <div class="hero-content">
-        <h1>About</h1>
+        <h1>ℹ️ About</h1>
         <p>A simple and practical DevOps knowledge management tool.</p>
       </div>
     </section>
 
-    <section class="features">
+    <section class="features" style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
       <div class="feature-card">
-        <h3>Why this project?</h3>
-        <p>
-          DevOps Notes Manager was built to store frequently used DevOps
-          commands, configurations, and operational learnings in one place.
-        </p>
+        <h3>❓ Why this project?</h3>
+        <div class="description">
+          <p>
+            <strong>DevOps Notes Manager</strong> was built to solve a common problem: 
+            keeping track of frequently used DevOps commands, configurations, and 
+            operational learnings in one centralized, searchable location.
+          </p>
+          <p>
+            As DevOps professionals, we often find ourselves searching through 
+            documentation, Stack Overflow, or our own notes to recall that one command 
+            or configuration we used months ago. This application provides a clean, 
+            organized way to store and retrieve this knowledge quickly.
+          </p>
+          <p>
+            Beyond being a practical tool, this project serves as a hands-on learning 
+            experience in modern DevOps practices, including containerization, service 
+            orchestration, and infrastructure as code principles.
+          </p>
+        </div>
       </div>
 
       <div class="feature-card">
-        <h3>Tech Stack</h3>
-        <p>Flask • MySQL • Docker • Docker Compose</p>
+        <h3>🛠️ Tech Stack</h3>
+        <div class="description">
+          <p><strong>Backend:</strong></p>
+          <ul>
+            <li><strong>Flask 3.1.2</strong> - Lightweight Python web framework</li>
+            <li><strong>MySQL 8.0</strong> - Relational database for persistent storage</li>
+            <li><strong>mysql-connector-python</strong> - MySQL database connector</li>
+            <li><strong>python-dotenv</strong> - Environment variable management</li>
+            <li><strong>bleach</strong> - HTML sanitization for security</li>
+          </ul>
+          
+          <p><strong>Frontend:</strong></p>
+          <ul>
+            <li><strong>HTML5</strong> - Semantic markup</li>
+            <li><strong>CSS3</strong> - Modern styling with CSS variables and animations</li>
+            <li><strong>JavaScript (Vanilla)</strong> - Client-side interactivity</li>
+            <li><strong>Quill.js</strong> - Rich text editor for content creation</li>
+          </ul>
+          
+          <p><strong>DevOps & Infrastructure:</strong></p>
+          <ul>
+            <li><strong>Docker</strong> - Containerization platform</li>
+            <li><strong>Docker Compose</strong> - Multi-container orchestration</li>
+            <li><strong>Docker Volumes</strong> - Persistent data storage</li>
+            <li><strong>Environment Variables</strong> - Configuration management</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h3>✨ Key Features</h3>
+        <div class="description">
+          <ul>
+            <li><strong>📝 Rich Text Editing:</strong> Create formatted notes with code blocks, lists, and styling</li>
+            <li><strong>🏷️ Category Organization:</strong> Organize notes by DevOps categories (Docker, Kubernetes, Linux, CI/CD, AWS, Monitoring)</li>
+            <li><strong>🔍 Advanced Search:</strong> Search across commands, descriptions, and tags</li>
+            <li><strong>📊 Multiple Views:</strong> Switch between grid and list views</li>
+            <li><strong>🔄 Sorting Options:</strong> Sort by date, category, or alphabetically</li>
+            <li><strong>📋 Quick Copy:</strong> One-click copy for commands</li>
+            <li><strong>📱 Responsive Design:</strong> Works seamlessly on desktop, tablet, and mobile</li>
+            <li><strong>🎨 Modern UI:</strong> Clean, intuitive interface with smooth animations</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h3>🎯 Project Goals</h3>
+        <div class="description">
+          <p><strong>Learning Objectives:</strong></p>
+          <ul>
+            <li>Practice containerization with Docker</li>
+            <li>Understand multi-container orchestration with Docker Compose</li>
+            <li>Implement environment-based configuration</li>
+            <li>Work with persistent storage using Docker volumes</li>
+            <li>Build a full-stack web application</li>
+            <li>Apply DevOps best practices in a real project</li>
+          </ul>
+          
+          <p><strong>Practical Benefits:</strong></p>
+          <ul>
+            <li>Centralized knowledge base for DevOps commands</li>
+            <li>Quick reference for frequently used operations</li>
+            <li>Shareable documentation for teams</li>
+            <li>Learning resource for DevOps concepts</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h3>🏗️ Architecture</h3>
+        <div class="description">
+          <p><strong>Application Structure:</strong></p>
+          <ul>
+            <li><strong>Frontend Layer:</strong> HTML templates with Jinja2, CSS styling, and JavaScript</li>
+            <li><strong>Application Layer:</strong> Flask routes handling HTTP requests and responses</li>
+            <li><strong>Data Layer:</strong> MySQL database for persistent storage</li>
+            <li><strong>Container Layer:</strong> Docker containers for isolation and portability</li>
+          </ul>
+          
+          <p><strong>Container Architecture:</strong></p>
+          <ul>
+            <li><strong>Web Container:</strong> Runs Flask application, exposed on port 5000</li>
+            <li><strong>MySQL Container:</strong> Database service with persistent volume</li>
+            <li><strong>Docker Network:</strong> Internal network for container communication</li>
+            <li><strong>Docker Volumes:</strong> Persistent storage for database data</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h3>📚 DevOps Concepts Demonstrated</h3>
+        <div class="description">
+          <ul>
+            <li><strong>Containerization:</strong> Application and database run in isolated containers</li>
+            <li><strong>Service Discovery:</strong> Containers communicate using service names</li>
+            <li><strong>Environment Configuration:</strong> Secure credential management via environment variables</li>
+            <li><strong>Persistent Storage:</strong> Data survives container restarts using volumes</li>
+            <li><strong>Multi-Container Orchestration:</strong> Docker Compose manages service dependencies</li>
+            <li><strong>Separation of Concerns:</strong> Web and database layers are independent services</li>
+            <li><strong>Infrastructure as Code:</strong> Docker Compose file defines entire infrastructure</li>
+            <li><strong>Portability:</strong> Application runs consistently across different environments</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h3>🤝 Contributing</h3>
+        <div class="description">
+          <p>
+            This project is open to contributions and improvements! Whether it's bug fixes, 
+            new features, documentation improvements, or code optimizations, all contributions 
+            are welcome.
+          </p>
+          <p><strong>Ways to contribute:</strong></p>
+          <ul>
+            <li>Report bugs or suggest features</li>
+            <li>Submit pull requests with improvements</li>
+            <li>Improve documentation</li>
+            <li>Add new categories or features</li>
+            <li>Optimize performance</li>
+            <li>Enhance security</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h3>📄 License & Credits</h3>
+        <div class="description">
+          <p>
+            This project is built for educational and practical purposes. It demonstrates 
+            real-world DevOps practices and can serve as a learning resource or starting 
+            point for similar projects.
+          </p>
+          <p><strong>Technologies Used:</strong></p>
+          <ul>
+            <li>Flask - <a href="https://flask.palletsprojects.com/" target="_blank">Official Website</a></li>
+            <li>MySQL - <a href="https://www.mysql.com/" target="_blank">Official Website</a></li>
+            <li>Docker - <a href="https://www.docker.com/" target="_blank">Official Website</a></li>
+            <li>Quill.js - <a href="https://quilljs.com/" target="_blank">Official Website</a></li>
+          </ul>
+        </div>
       </div>
     </section>
 

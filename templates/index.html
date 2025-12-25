@@ -8,71 +8,351 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
+    <!-- Quill.js CSS -->
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/editor.js') }}" defer></script>
   </head>
   <body>
     <!-- Navbar -->
     <nav class="navbar">
-      <div class="logo">DevNotes</div>
-      <ul class="nav-links">
-        <li><a href="{{ url_for('main.home') }}">Notes</a></li>
-
-        <li><a href="{{ url_for('main.docs') }}">Docs</a></li>
-
-        <li><a href="{{ url_for('main.about') }}">About</a></li>
-      </ul>
+      <div class="navbar-main">
+        <div class="logo">⚙️ DevNotes</div>
+        <ul class="nav-links">
+          <li><a href="{{ url_for('main.home') }}" class="active">Notes</a></li>
+          <li><a href="{{ url_for('main.docs') }}">Docs</a></li>
+          <li><a href="{{ url_for('main.about') }}">About</a></li>
+        </ul>
+      </div>
+      <div class="navbar-search">
+        <div class="search-input-wrapper">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="🔍 Search commands, descriptions, or tags..."
+            class="search-bar"
+          />
+          <button class="search-clear" id="searchClear" style="display: none;">✕</button>
+        </div>
+        <div class="search-filters">
+          <select id="sortSelect" class="sort-select">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="category">By Category</option>
+            <option value="alphabetical">Alphabetical</option>
+          </select>
+          <div class="view-toggle">
+            <button class="view-btn active" data-view="grid" title="Grid View">⊞</button>
+            <button class="view-btn" data-view="list" title="List View">☰</button>
+          </div>
+        </div>
+      </div>
     </nav>
 
-    <!-- Header / Intro -->
+    <!-- Enhanced Hero Section -->
     <section class="hero">
       <div class="hero-content">
-        <h1>DevOps Notes Manager</h1>
+        <h1>🚀 DevOps Notes Manager</h1>
         <p>
           A personal knowledge base to store DevOps commands, configurations,
           and operational learnings.
         </p>
+        <div class="hero-features">
+          <div class="hero-feature">
+            <span class="feature-icon">📝</span>
+            <span>Rich Text</span>
+          </div>
+          <div class="hero-feature">
+            <span class="feature-icon">🔍</span>
+            <span>Smart Search</span>
+          </div>
+          <div class="hero-feature">
+            <span class="feature-icon">🏷️</span>
+            <span>Tags & Categories</span>
+          </div>
+          <div class="hero-feature">
+            <span class="feature-icon">⚡</span>
+            <span>Quick Access</span>
+          </div>
+        </div>
+        <a href="#add-note" class="hero-cta">Get Started</a>
       </div>
     </section>
 
-    <!-- Add Note -->
-    <section class="note-form-section">
-      <h2>Add DevOps Note</h2>
+    <!-- Dashboard Statistics -->
+    <section class="dashboard-stats">
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-content">
+            <h3 class="stat-number">{{ total_notes }}</h3>
+            <p class="stat-label">Total Notes</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-content">
+            <h3 class="stat-number">{{ category_counts|length }}</h3>
+            <p class="stat-label">Categories</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏷️</div>
+          <div class="stat-content">
+            <h3 class="stat-number">{{ popular_tags|length }}</h3>
+            <p class="stat-label">Popular Tags</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-content">
+            <h3 class="stat-number">{{ recent_notes|length }}</h3>
+            <p class="stat-label">Recent Notes</p>
+          </div>
+        </div>
+      </div>
 
-      <form method="post" class="note-form">
-        <input
-          name="command"
-          placeholder="Command or Concept (e.g. docker ps, kubectl get pods)"
-          required
-        />
-        <textarea
-          name="description"
-          placeholder="Explanation, flags, or usage notes"
-          required
-        ></textarea>
+      <!-- Category Distribution -->
+      {% if category_counts %}
+      <div class="category-stats">
+        <h3>📈 Category Distribution</h3>
+        <div class="category-bars">
+          {% for category, count in category_counts.items() %}
+          <div class="category-bar-item">
+            <div class="category-bar-label">
+              <span class="category-name">{{ category|title }}</span>
+              <span class="category-count">{{ count }}</span>
+            </div>
+            <div class="category-bar">
+              <div 
+                class="category-bar-fill category-{{ category }}" 
+                style="width: {{ (count / total_notes * 100) if total_notes > 0 else 0 }}%"
+              ></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </section>
 
-        <button type="submit" class="btn primary">Save Note</button>
+    <!-- Filters Section -->
+    <section class="filters-section" id="filters-section">
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-category="all">
+          All <span class="filter-count">({{ total_notes }})</span>
+        </button>
+        {% for category, count in category_counts.items() %}
+        <button class="filter-btn" data-category="{{ category }}">
+          {{ category|title }} <span class="filter-count">({{ count }})</span>
+        </button>
+        {% endfor %}
+      </div>
+
+      <!-- Tag Cloud -->
+      {% if popular_tags %}
+      <div class="tag-cloud">
+        <h4>Popular Tags:</h4>
+        <div class="tag-cloud-items">
+          {% for tag, count in popular_tags %}
+          <span class="tag-cloud-tag" data-tag="{{ tag }}" style="font-size: {{ 0.8 + (count * 0.1) }}rem;">
+            {{ tag }} ({{ count }})
+          </span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </section>
+
+    <!-- Quick Actions Panel -->
+    <div class="quick-actions">
+      <button class="fab" id="fabAdd" title="Add New Note">
+        <span class="fab-icon">+</span>
+      </button>
+      <div class="fab-menu" id="fabMenu">
+        <button class="fab-item" data-action="quick-add" title="Quick Add">
+          ⚡ Quick Add
+        </button>
+        <button class="fab-item" data-action="full-form" title="Full Form">
+          📝 Full Form
+        </button>
+      </div>
+    </div>
+
+    <!-- Collapsible Add Note Form -->
+    <section class="note-form-section" id="add-note">
+      <div class="form-header">
+        <h2>✨ Add DevOps Note</h2>
+        <button class="form-toggle" id="formToggle">
+          <span class="toggle-icon">▼</span>
+          <span class="toggle-text">Collapse</span>
+        </button>
+      </div>
+
+      <div class="form-modes">
+        <button class="mode-btn active" data-mode="quick">⚡ Quick Add</button>
+        <button class="mode-btn" data-mode="advanced">📝 Advanced</button>
+      </div>
+
+      <form method="post" class="note-form" id="noteForm">
+        <div class="form-content" id="formContent">
+          <input
+            name="command"
+            id="commandInput"
+            placeholder="Command or Concept (e.g. docker ps, kubectl get pods)"
+            required
+          />
+
+          <select name="category" class="category-select" id="categorySelect">
+            <option value="">Select Category</option>
+            <option value="docker">🐳 Docker</option>
+            <option value="kubernetes">☸️ Kubernetes</option>
+            <option value="linux">🐧 Linux</option>
+            <option value="cicd">🔄 CI/CD</option>
+            <option value="aws">☁️ AWS</option>
+            <option value="monitoring">📊 Monitoring</option>
+            <option value="other">📦 Other</option>
+          </select>
+
+          <!-- Quick Add Mode -->
+          <div class="form-mode-content" id="quickMode">
+            <textarea
+              name="description"
+              id="quickDescription"
+              placeholder="Description (required)"
+              required
+              rows="3"
+            ></textarea>
+            <input
+              name="tags"
+              placeholder="Tags (comma-separated)"
+            />
+          </div>
+
+          <!-- Advanced Mode -->
+          <div class="form-mode-content" id="advancedMode" style="display: none;">
+            <!-- Description Rich Text Editor -->
+            <div class="editor-container">
+              <label for="description-editor" class="editor-label">
+                Description <span class="required">*</span>
+              </label>
+              <div id="description-editor" class="quill-editor"></div>
+              <input type="hidden" id="description-input" name="description" required />
+            </div>
+
+            <!-- Example Rich Text Editor -->
+            <div class="editor-container">
+              <label for="example-editor" class="editor-label">
+                Example (optional)
+              </label>
+              <div id="example-editor" class="quill-editor"></div>
+              <input type="hidden" id="example-input" name="example" />
+            </div>
+
+            <input
+              name="tags"
+              id="advancedTags"
+              placeholder="Tags (comma-separated): networking, troubleshooting, performance"
+            />
+          </div>
+
+          <button type="submit" class="btn primary">💾 Save Note</button>
+        </div>
       </form>
     </section>
 
-    <!-- Notes List -->
+    <!-- Notes List with Improved Layout -->
     <section class="features">
-      <h2>Your Notes</h2>
+      <div class="section-header">
+        <h2>📚 Your Notes</h2>
+        <div class="notes-count" id="notesCount">
+          <span id="visibleCount">{{ notes|length }}</span> of {{ total_notes }} notes
+        </div>
+      </div>
 
       {% if notes %}
-      <div class="feature-grid">
+      <div class="feature-grid" id="notesGrid">
         {% for note in notes %}
-        <div class="feature-card">
+        <div
+          class="feature-card"
+          data-category="{{ note.category or 'other' }}"
+          data-command="{{ note.command|lower }}"
+        >
+          <div class="card-header">
+            {% if note.category %}
+            <span class="category-badge category-{{ note.category }}">
+              {% if note.category == 'docker' %}🐳
+              {% elif note.category == 'kubernetes' %}☸️
+              {% elif note.category == 'linux' %}🐧
+              {% elif note.category == 'cicd' %}🔄
+              {% elif note.category == 'aws' %}☁️
+              {% elif note.category == 'monitoring' %}📊
+              {% else %}📦{% endif %}
+              {{ note.category }}
+            </span>
+            {% endif %}
+            <div class="card-actions-mini">
+              <button
+                class="btn-icon copy"
+                onclick="copyToClipboard('{{ note.command }}', this)"
+                title="Copy Command"
+              >
+                📋
+              </button>
+            </div>
+          </div>
+
           <h3>{{ note.command }}</h3>
-          <p>{{ note.description }}</p>
+
+          <pre><code class="command-code">{{ note.command }}</code></pre>
+
+          <div class="description">{{ note.description|safe }}</div>
+
+          {% if note.example %}
+          <div class="example-section">
+            <strong>Example:</strong>
+            <div class="example-content">{{ note.example|safe }}</div>
+          </div>
+          {% endif %}
+          
+          {% if note.tags %}
+          <div class="tags">
+            {% for tag in note.tags.split(',') %}
+            <span class="tag" data-tag="{{ tag.strip()|lower }}">{{ tag.strip() }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
 
           <div class="note-actions">
-            <a href="/edit/{{ note.id }}" class="btn edit">Edit</a>
-            <a href="/delete/{{ note.id }}" class="btn delete">Delete</a>
+            <button
+              class="btn copy"
+              onclick="copyToClipboard('{{ note.command }}', this)"
+            >
+              📋 Copy
+            </button>
+            <a href="/edit/{{ note.id }}" class="btn edit">✏️ Edit</a>
+            <a
+              href="/delete/{{ note.id }}"
+              class="btn delete"
+              onclick="return confirm('Delete this note?')"
+            >
+              🗑️ Delete
+            </a>
           </div>
         </div>
         {% endfor %}
       </div>
       {% else %}
-      <p>No notes yet. Start by adding your first DevOps command above.</p>
+      <div class="empty-state">
+        <div class="empty-icon">📝</div>
+        <h3>No notes yet!</h3>
+        <p>Start building your DevOps knowledge base by adding your first note.</p>
+        <a href="#add-note" class="btn primary">+ Add Your First Note</a>
+      </div>
       {% endif %}
     </section>
 
