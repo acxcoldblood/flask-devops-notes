@@ -37,7 +37,7 @@ jobs:
         run: docker compose logs
 
       - name: Check flask app health
-        run: curl -f http://localhost:5000/health
+        run: curl -f http://localhost/health
 
       - name: stop docker containers
         if: always()
