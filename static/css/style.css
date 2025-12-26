@@ -16,7 +16,7 @@
   --color-danger-dark: #dc2626;
   --color-code-bg: #1e293b;
   --color-code-text: #e2e8f0;
-  
+
   /* Category Colors */
   --color-docker: #2496ed;
   --color-kubernetes: #326ce5;
@@ -24,7 +24,7 @@
   --color-cicd: #10b981;
   --color-aws: #ff9900;
   --color-monitoring: #9333ea;
-  
+
   /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
@@ -32,19 +32,19 @@
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
-  
+
   /* Border Radius */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 10px;
   --radius-xl: 12px;
   --radius-full: 50%;
-  
+
   /* Transitions */
   --transition-fast: 0.2s ease;
   --transition-base: 0.3s ease;
   --transition-slow: 0.4s ease;
-  
+
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -55,14 +55,17 @@
 /* ===============================
    Global Reset & Base
    =============================== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 * {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
 }
 
 html {
@@ -74,9 +77,16 @@ body {
   color: var(--color-text);
   line-height: 1.6;
   overflow-x: hidden;
-  background-image: 
-    radial-gradient(circle at 20% 20%, rgba(144, 171, 139, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(90, 120, 99, 0.1) 0%, transparent 50%);
+  background-image: radial-gradient(
+      circle at 20% 20%,
+      rgba(144, 171, 139, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(90, 120, 99, 0.1) 0%,
+      transparent 50%
+    );
   background-attachment: fixed;
 }
 
@@ -84,60 +94,117 @@ body {
    Animations & Keyframes
    =============================== */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-30px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(30px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideInDown {
-  from { opacity: 0; transform: translateY(-100%); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 @keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 /* ===============================
    Navbar
    =============================== */
 .navbar {
-  background: linear-gradient(135deg, rgba(144, 171, 139, 0.95) 0%, rgba(90, 120, 99, 0.95) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(144, 171, 139, 0.95) 0%,
+    rgba(90, 120, 99, 0.95) 100%
+  );
   border-bottom: 1px solid var(--color-primary);
   position: relative;
   z-index: 100;
@@ -193,7 +260,7 @@ body {
 }
 
 .nav-links a::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -2px;
   left: 50%;
@@ -221,7 +288,12 @@ body {
 .hero {
   padding: 2rem var(--spacing-xl);
   text-align: center;
-  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 50%, var(--color-primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-secondary) 0%,
+    var(--color-primary) 50%,
+    var(--color-primary-dark) 100%
+  );
   background-size: 200% 200%;
   animation: gradientShift 8s ease infinite;
   color: var(--color-text-light);
@@ -230,12 +302,19 @@ body {
 }
 
 .hero::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  background: radial-gradient(
+      circle at 20% 50%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    );
   animation: float 6s ease-in-out infinite;
   pointer-events: none;
 }
@@ -286,9 +365,15 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-.hero-feature:nth-child(2) .feature-icon { animation-delay: 0.5s; }
-.hero-feature:nth-child(3) .feature-icon { animation-delay: 1s; }
-.hero-feature:nth-child(4) .feature-icon { animation-delay: 1.5s; }
+.hero-feature:nth-child(2) .feature-icon {
+  animation-delay: 0.5s;
+}
+.hero-feature:nth-child(3) .feature-icon {
+  animation-delay: 1s;
+}
+.hero-feature:nth-child(4) .feature-icon {
+  animation-delay: 1.5s;
+}
 
 .hero-cta {
   display: inline-block;
@@ -328,7 +413,11 @@ body {
 }
 
 .stat-card {
-  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-bg) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-white) 0%,
+    var(--color-bg) 100%
+  );
   padding: var(--spacing-lg);
   border-radius: var(--radius-xl);
   border: 2px solid var(--color-secondary);
@@ -422,7 +511,11 @@ body {
   height: 100%;
   border-radius: var(--radius-sm);
   transition: width 1s ease;
-  background: linear-gradient(90deg, var(--color-secondary), var(--color-primary));
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary),
+    var(--color-primary)
+  );
 }
 
 /* ===============================
@@ -595,7 +688,7 @@ body {
 }
 
 .filter-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -681,7 +774,11 @@ body {
   width: 60px;
   height: 60px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-dark)
+  );
   border: none;
   color: var(--color-text-light);
   cursor: pointer;
@@ -814,7 +911,8 @@ body {
   border: 1px solid var(--color-secondary);
   box-shadow: var(--shadow-md);
   animation: fadeInUp 0.8s ease-out 0.8s both;
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  transition: transform var(--transition-base),
+    box-shadow var(--transition-base);
 }
 
 .note-form-section:hover {
@@ -908,13 +1006,17 @@ body {
 }
 
 .note-form-section h2::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -8px;
   left: 0;
   width: 80px;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
   border-radius: 2px;
   animation: slideInLeft 0.6s ease-out 0.5s both;
 }
@@ -1123,17 +1225,27 @@ body {
   color: var(--color-primary-dark);
 }
 
-.description h1, .description h2, .description h3,
-.description h4, .description h5, .description h6 {
+.description h1,
+.description h2,
+.description h3,
+.description h4,
+.description h5,
+.description h6 {
   color: var(--color-primary);
   margin-top: var(--spacing-md);
   margin-bottom: var(--spacing-sm);
   font-weight: 700;
 }
 
-.description h1 { font-size: 1.5rem; }
-.description h2 { font-size: 1.3rem; }
-.description h3 { font-size: 1.1rem; }
+.description h1 {
+  font-size: 1.5rem;
+}
+.description h2 {
+  font-size: 1.3rem;
+}
+.description h3 {
+  font-size: 1.1rem;
+}
 
 .description ul,
 .description ol {
@@ -1176,13 +1288,17 @@ body {
 }
 
 .features h2::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -8px;
   left: 0;
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
   border-radius: 2px;
   animation: slideInLeft 0.6s ease-out 0.3s both;
 }
@@ -1234,13 +1350,18 @@ body {
 }
 
 .feature-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -1248,13 +1369,27 @@ body {
   left: 100%;
 }
 
-.feature-card:nth-child(1) { animation-delay: 0.1s; }
-.feature-card:nth-child(2) { animation-delay: 0.2s; }
-.feature-card:nth-child(3) { animation-delay: 0.3s; }
-.feature-card:nth-child(4) { animation-delay: 0.4s; }
-.feature-card:nth-child(5) { animation-delay: 0.5s; }
-.feature-card:nth-child(6) { animation-delay: 0.6s; }
-.feature-card:nth-child(n+7) { animation-delay: 0.7s; }
+.feature-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.feature-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.feature-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.feature-card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.feature-card:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.feature-card:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.feature-card:nth-child(n + 7) {
+  animation-delay: 0.7s;
+}
 
 .feature-card:hover {
   transform: translateY(-8px) scale(1.02);
@@ -1336,7 +1471,7 @@ body {
 }
 
 .no-notes::before {
-  content: '📝';
+  content: "📝";
   display: block;
   font-size: 4rem;
   margin-bottom: var(--spacing-md);
@@ -1365,13 +1500,34 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
-.category-docker { background-color: var(--color-docker); color: white; }
-.category-kubernetes { background-color: var(--color-kubernetes); color: white; }
-.category-linux { background-color: var(--color-linux); color: var(--color-text); }
-.category-cicd { background-color: var(--color-cicd); color: white; }
-.category-aws { background-color: var(--color-aws); color: white; }
-.category-monitoring { background-color: var(--color-monitoring); color: white; }
-.category-other { background-color: var(--color-secondary); color: white; }
+.category-docker {
+  background-color: var(--color-docker);
+  color: white;
+}
+.category-kubernetes {
+  background-color: var(--color-kubernetes);
+  color: white;
+}
+.category-linux {
+  background-color: var(--color-linux);
+  color: var(--color-text);
+}
+.category-cicd {
+  background-color: var(--color-cicd);
+  color: white;
+}
+.category-aws {
+  background-color: var(--color-aws);
+  color: white;
+}
+.category-monitoring {
+  background-color: var(--color-monitoring);
+  color: white;
+}
+.category-other {
+  background-color: var(--color-secondary);
+  color: white;
+}
 
 /* ===============================
    Code Blocks
@@ -1450,11 +1606,21 @@ code {
   animation: scaleIn 0.4s ease-out backwards;
 }
 
-.tag:nth-child(1) { animation-delay: 0.1s; }
-.tag:nth-child(2) { animation-delay: 0.2s; }
-.tag:nth-child(3) { animation-delay: 0.3s; }
-.tag:nth-child(4) { animation-delay: 0.4s; }
-.tag:nth-child(n+5) { animation-delay: 0.5s; }
+.tag:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.tag:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.tag:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.tag:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.tag:nth-child(n + 5) {
+  animation-delay: 0.5s;
+}
 
 .tag:hover {
   background-color: var(--color-primary);
@@ -1526,13 +1692,18 @@ code {
 }
 
 .footer::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
   animation: shimmer 3s infinite;
 }
 
