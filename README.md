@@ -74,11 +74,14 @@ MySQL (Docker container)
 
 Create a `.env` file in the project root:
 
+```text
 DB_HOST=mysql
 DB_USER=example_user
 DB_PASSWORD=example_password
 DB_NAME=example_db
 MYSQL_ROOT_PASSWORD=example_root_password
+
+```
 
 📌 `.env` is ignored via `.gitignore`.  
 📌 `.env.example` is committed for CI and local setup reference.
