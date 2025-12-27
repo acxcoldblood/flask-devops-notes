@@ -20,29 +20,75 @@ function copyToClipboard(text, button) {
 // Search functionality
 const searchInput = document.getElementById("searchInput");
 const searchClear = document.getElementById("searchClear");
+const searchBtn = document.getElementById("searchBtn");
 let currentCategory = "all";
 let currentView = "grid";
 let currentSort = "newest";
 
 if (searchInput) {
+  const searchWrapper = searchInput.closest(".search-input-wrapper");
+  
   searchInput.addEventListener("input", function (e) {
     const searchTerm = e.target.value.toLowerCase();
     filterNotes(searchTerm, currentCategory);
     updateNotesCount();
     
-    // Show/hide clear button
-    if (searchTerm) {
-      searchClear.style.display = "block";
-    } else {
-      searchClear.style.display = "none";
+    // Show/hide clear button and toggle wrapper class
+    if (searchClear && searchWrapper) {
+      if (searchTerm) {
+        searchClear.style.display = "block";
+        searchWrapper.classList.add("has-clear");
+      } else {
+        searchClear.style.display = "none";
+        searchWrapper.classList.remove("has-clear");
+      }
+    }
+  });
+
+  // Allow Enter key to trigger search and scroll
+  searchInput.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      scrollToNotes();
     }
   });
 }
 
+if (searchBtn) {
+  searchBtn.addEventListener("click", function () {
+    scrollToNotes();
+  });
+}
+
+function scrollToNotes() {
+  const notesSection = document.getElementById("notes-section");
+  if (notesSection) {
+    // Get navbar height for proper offset
+    const navbar = document.querySelector(".navbar");
+    const navbarHeight = navbar ? navbar.offsetHeight : 100;
+    
+    // Calculate position with offset
+    const elementPosition = notesSection.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight - 20;
+    
+    // Smooth scroll to the notes section
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth"
+    });
+  }
+}
+
 if (searchClear) {
-  searchClear.addEventListener("click", function () {
+  const searchWrapper = searchInput ? searchInput.closest(".search-input-wrapper") : null;
+  
+  searchClear.addEventListener("click", function (e) {
+    e.stopPropagation();
     searchInput.value = "";
     searchClear.style.display = "none";
+    if (searchWrapper) {
+      searchWrapper.classList.remove("has-clear");
+    }
     filterNotes("", currentCategory);
     updateNotesCount();
   });

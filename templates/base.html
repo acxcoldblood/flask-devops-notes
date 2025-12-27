@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{% block title %}DevOps Notes Manager{% endblock %}</title>
+
+    <!-- Main Styles -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+
+    <!-- Quill -->
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="{% block body_class %}{% endblock %}">
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+      <div class="navbar-main">
+        <a href="{{ url_for('main.home') }}" class="logo">⚙️ DevNotes</a>
+
+        <button class="hamburger" aria-label="Toggle menu" id="hamburgerBtn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+          <li>
+            <a href="{{ url_for('main.home') }}"
+               class="{% if request.endpoint == 'main.home' %}active{% endif %}">
+              Notes
+            </a>
+          </li>
+          <li>
+            <a href="{{ url_for('main.docs') }}"
+               class="{% if request.endpoint == 'main.docs' %}active{% endif %}">
+              Docs
+            </a>
+          </li>
+          <li>
+            <a href="{{ url_for('main.about') }}"
+               class="{% if request.endpoint == 'main.about' %}active{% endif %}">
+              About
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      {% block navbar_search %}
+      {% endblock %}
+    </nav>
+
+    {% block page_header %}
+    {% endblock %}
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="page-content">
+      {% block content %}
+      {% endblock %}
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+      <p>DevOps Notes Manager • Built with Flask</p>
+    </footer>
+
+    <!-- ================= SCRIPTS ================= -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <!-- Hamburger Menu Toggle -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const hamburger = document.getElementById('hamburgerBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (hamburger && navLinks) {
+          hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+          });
+
+          // Close menu when clicking on a link
+          const links = navLinks.querySelectorAll('a');
+          links.forEach(link => {
+            link.addEventListener('click', function() {
+              hamburger.classList.remove('active');
+              navLinks.classList.remove('active');
+            });
+          });
+
+          // Close menu when clicking outside
+          document.addEventListener('click', function(event) {
+            const isClickInsideNav = navLinks.contains(event.target);
+            const isClickOnHamburger = hamburger.contains(event.target);
+            
+            if (!isClickInsideNav && !isClickOnHamburger && navLinks.classList.contains('active')) {
+              hamburger.classList.remove('active');
+              navLinks.classList.remove('active');
+            }
+          });
+        }
+      });
+    </script>
+
+    {% block extra_js %}
+    {% endblock %}
+  </body>
+</html>

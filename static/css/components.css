@@ -1,0 +1,362 @@
+/* ===============================
+   Buttons
+   =============================== */
+.btn {
+  display: inline-block;
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-fast);
+  font-size: 0.9rem;
+}
+
+.btn.primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+}
+
+.btn.primary:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn.primary:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.btn.secondary {
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  background: transparent;
+}
+
+.btn.secondary:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+}
+
+/* ===============================
+   Quick Actions / FAB
+   =============================== */
+.quick-actions {
+  position: fixed;
+  bottom: var(--spacing-xl);
+  right: var(--spacing-xl);
+  z-index: 1000;
+}
+
+.fab {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-dark)
+  );
+  border: none;
+  color: var(--color-text-light);
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.fab-icon {
+  font-size: 2rem;
+  line-height: 1;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  font-weight: 300;
+  margin: 0;
+  padding: 0;
+  width: 100px;
+  flex-wrap: wrap;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  top: 9px;
+  position: absolute;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-xl);
+}
+
+.fab.active {
+  transform: scale(1.1);
+}
+
+.fab.active .fab-icon {
+  transform: none;
+}
+
+.fab-menu {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all var(--transition-base);
+}
+
+.fab-menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.fab-item {
+  padding: 0.75rem var(--spacing-lg);
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  border: 2px solid var(--color-secondary);
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-md);
+}
+
+.fab-item:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  transform: translateX(-5px);
+}
+
+/* ===============================
+   Category Badges
+   =============================== */
+.category-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.5px;
+  animation: scaleIn 0.5s ease-out;
+  transition: all var(--transition-base);
+  cursor: default;
+}
+
+.category-badge:hover {
+  transform: scale(1.1) rotate(2deg);
+  box-shadow: var(--shadow-sm);
+}
+
+.category-docker {
+  background-color: var(--color-docker);
+  color: white;
+}
+.category-kubernetes {
+  background-color: var(--color-kubernetes);
+  color: white;
+}
+.category-linux {
+  background-color: var(--color-linux);
+  color: var(--color-text);
+}
+.category-cicd {
+  background-color: var(--color-cicd);
+  color: white;
+}
+.category-aws {
+  background-color: var(--color-aws);
+  color: white;
+}
+.category-monitoring {
+  background-color: var(--color-monitoring);
+  color: white;
+}
+.category-other {
+  background-color: var(--color-secondary);
+  color: white;
+}
+
+/* ===============================
+   Code Blocks
+   =============================== */
+pre {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: 0.75rem 0;
+  border-left: 3px solid var(--color-primary);
+  transition: all var(--transition-base);
+}
+
+pre:hover {
+  border-left-color: var(--color-success);
+  box-shadow: var(--shadow-md);
+}
+
+.command-code {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+/* ===============================
+   Example Section
+   =============================== */
+.example-section {
+  background-color: var(--color-bg);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-md) 0;
+  border-left: 3px solid var(--color-secondary);
+}
+
+.example-section strong {
+  color: var(--color-primary);
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  font-size: 0.9rem;
+}
+
+.example-section pre {
+  margin: 0;
+  background-color: var(--color-white);
+  border-left: none;
+}
+
+/* ===============================
+   Tags
+   =============================== */
+.tags {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  margin: var(--spacing-md) 0;
+}
+
+.tag {
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+  padding: 0.3rem 0.7rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid var(--color-secondary);
+  transition: all var(--transition-base);
+  display: inline-block;
+  animation: scaleIn 0.4s ease-out backwards;
+}
+
+.tag:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.tag:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.tag:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.tag:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.tag:nth-child(n + 5) {
+  animation-delay: 0.5s;
+}
+
+.tag:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+/* ===============================
+   Note Actions
+   =============================== */
+.note-actions {
+  margin-top: var(--spacing-lg);
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.note-actions .copy {
+  background-color: var(--color-success);
+  color: white;
+  transition: all var(--transition-base);
+}
+
+.note-actions .copy:hover {
+  background-color: var(--color-success-dark);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.note-actions .edit {
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+  transition: all var(--transition-base);
+}
+
+.note-actions .edit:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(90, 120, 99, 0.3);
+}
+
+.note-actions .delete {
+  background-color: var(--color-danger);
+  color: white;
+  transition: all var(--transition-base);
+}
+
+.note-actions .delete:hover {
+  background-color: var(--color-danger-dark);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* ===============================
+   Footer
+   =============================== */
+.footer {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  animation: fadeIn 1s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 3s infinite;
+}
+

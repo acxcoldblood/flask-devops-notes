@@ -1,0 +1,142 @@
+/* ===============================
+   CSS Variables (Design Tokens)
+   =============================== */
+:root {
+  /* Colors */
+  --color-primary: #5a7863;
+  --color-primary-dark: #3b4953;
+  --color-secondary: #90ab8b;
+  --color-bg: #ebf4dd;
+  --color-text: #3b4953;
+  --color-text-light: #ebf4dd;
+  --color-white: #ffffff;
+  --color-success: #10b981;
+  --color-success-dark: #059669;
+  --color-danger: #ef4444;
+  --color-danger-dark: #dc2626;
+  --color-code-bg: #1e293b;
+  --color-code-text: #e2e8f0;
+
+  /* Category Colors */
+  --color-docker: #2496ed;
+  --color-kubernetes: #326ce5;
+  --color-linux: #fcc624;
+  --color-cicd: #10b981;
+  --color-aws: #ff9900;
+  --color-monitoring: #9333ea;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  --radius-full: 50%;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.4s ease;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* ===============================
+   Global Reset & Base
+   =============================== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+* {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  background-image: radial-gradient(
+      circle at 20% 20%,
+      rgba(144, 171, 139, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(90, 120, 99, 0.1) 0%,
+      transparent 50%
+    );
+  background-attachment: fixed;
+}
+
+/* ===============================
+   Typography
+   =============================== */
+code {
+  font-family: "Courier New", monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* ===============================
+   Page Layout
+   =============================== */
+.page-content {
+  min-height: calc(100vh - 200px);
+  padding-bottom: var(--spacing-2xl);
+}
+
+/* Home page - hero starts immediately after navbar */
+.home-page .page-content {
+  padding-top: 0;
+}
+
+/* Page sections for non-home pages (docs, about) */
+.page-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) var(--spacing-xl);
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  padding-top: var(--spacing-xl);
+}
+
+.page-header h1 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.page-header p {
+  font-size: 1.1rem;
+  color: var(--color-text);
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
