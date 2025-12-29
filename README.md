@@ -65,7 +65,9 @@ MySQL (Docker container)
 .
 ├── .github/
 │   └── workflows/
-│       └── ci.yml
+│       ├── ci.yml
+        └── deploy.yml
+         
 ├── app/
 │   ├── __init__.py
 │   ├── routes.py
