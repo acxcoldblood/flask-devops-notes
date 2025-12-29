@@ -1,4 +1,4 @@
-text
+
 ![CI](https://github.com/acxcoldblood/flask-devops-notes/actions/workflows/ci.yml/badge.svg)
 ![Deploy](https://github.com/acxcoldblood/flask-devops-notes/actions/workflows/deploy.yml/badge.svg)
 
