@@ -1,5 +1,7 @@
 text
 ![CI](https://github.com/acxcoldblood/flask-devops-notes/actions/workflows/ci.yml/badge.svg)
+![Deploy](https://github.com/acxcoldblood/flask-devops-notes/actions/workflows/deploy.yml/badge.svg)
+
 
 # DevOps Notes Manager
 
@@ -22,6 +24,27 @@ Flask + Gunicorn (Docker container)
 MySQL (Docker container)
 
 ```
+## CI/CD pipeline
+
+```text
+┌──────────────┐
+│   Git Push   │
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│     CI       │
+│ Docker Build │
+│ Health Check │
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│     CD       │
+│  SSH → EC2   │
+│ Docker Deploy│
+└──────────────┘
+
+```
+
 
 ---
 
