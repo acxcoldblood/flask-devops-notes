@@ -40,9 +40,13 @@ jobs:
             DB_NAME=${{ secrets.DB_NAME }}
             DB_USER=${{ secrets.DB_USER }}
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
             EOF
 
             echo "Deploying latest version"
-            git pull origin main
+            git pull origin main --rebase
             docker compose down
             docker compose up -d --build
+            
+            echo "Running Database Migrations..."
+            docker compose exec -T web python scripts/migrate.py
