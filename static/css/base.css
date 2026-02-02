@@ -1,142 +1,245 @@
-/* ===============================
-   CSS Variables (Design Tokens)
-   =============================== */
-:root {
-  /* Colors */
-  --color-primary: #5a7863;
-  --color-primary-dark: #3b4953;
-  --color-secondary: #90ab8b;
-  --color-bg: #ebf4dd;
-  --color-text: #3b4953;
-  --color-text-light: #ebf4dd;
-  --color-white: #ffffff;
-  --color-success: #10b981;
-  --color-success-dark: #059669;
-  --color-danger: #ef4444;
-  --color-danger-dark: #dc2626;
-  --color-code-bg: #1e293b;
-  --color-code-text: #e2e8f0;
+/* =========================================
+   BASE.CSS - Reset, Variables, Typography
+   DevNotes SaaS Design System
+   ========================================= */
 
-  /* Category Colors */
-  --color-docker: #2496ed;
-  --color-kubernetes: #326ce5;
-  --color-linux: #fcc624;
-  --color-cicd: #10b981;
-  --color-aws: #ff9900;
-  --color-monitoring: #9333ea;
-
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
-  --radius-xl: 12px;
-  --radius-full: 50%;
-
-  /* Transitions */
-  --transition-fast: 0.2s ease;
-  --transition-base: 0.3s ease;
-  --transition-slow: 0.4s ease;
-
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
-  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.15);
-}
-
-/* ===============================
-   Global Reset & Base
-   =============================== */
-*,
-*::before,
-*::after {
+/* Modern CSS Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-* {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* =========================================
+   Design Tokens - Light Mode (Default)
+   ========================================= */
+:root {
+  /* Neutral Grays */
+  --gray-50: #fafafa;
+  --gray-100: #f4f4f5;
+  --gray-200: #e4e4e7;
+  --gray-300: #d4d4d8;
+  --gray-400: #a1a1aa;
+  --gray-500: #71717a;
+  --gray-600: #52525b;
+  --gray-700: #3f3f46;
+  --gray-800: #27272a;
+  --gray-900: #18181b;
+  --gray-950: #09090b;
+
+  /* Blue Palette (Primary) */
+  --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+
+  /* Semantic Colors */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Category Colors */
+  --cat-docker: #2496ed;
+  --cat-kubernetes: #326ce5;
+  --cat-linux: #fcc624;
+  --cat-cicd: #10b981;
+  --cat-aws: #ff9900;
+  --cat-monitoring: #8b5cf6;
+
+  /* Semantic Mappings - Light Mode */
+  --bg-page: var(--gray-50);
+  --bg-surface: #ffffff;
+  --bg-surface-hover: var(--gray-100);
+  --bg-surface-active: var(--gray-200);
+  
+  --text-primary: var(--gray-900);
+  --text-secondary: var(--gray-500);
+  --text-tertiary: var(--gray-400);
+  --text-inverse: #ffffff;
+  
+  --border-color: var(--gray-200);
+  --border-color-strong: var(--gray-300);
+  
+  --accent: var(--blue-500);
+  --accent-hover: var(--blue-600);
+  --accent-light: var(--blue-50);
+
+  /* Spacing (4px base unit) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* Shadows - Subtle */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+
+  /* Layout */
+  --sidebar-width: 240px;
+  --header-height: 56px;
+  --content-max-width: 1200px;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+
+  /* Transitions */
+  --transition-fast: 0.1s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+}
+
+/* =========================================
+   Dark Mode Overrides
+   ========================================= */
+html.dark-mode {
+  --bg-page: var(--gray-950);
+  --bg-surface: var(--gray-900);
+  --bg-surface-hover: var(--gray-800);
+  --bg-surface-active: var(--gray-700);
+  
+  --text-primary: var(--gray-100);
+  --text-secondary: var(--gray-400);
+  --text-tertiary: var(--gray-500);
+  
+  --border-color: var(--gray-800);
+  --border-color-strong: var(--gray-700);
+
+  --accent-light: rgba(59, 130, 246, 0.15);
+
+  /* Enhanced shadows for dark mode */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+
+  color-scheme: dark;
+}
+
+/* =========================================
+   Base Typography
+   ========================================= */
 body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  line-height: 1.6;
-  overflow-x: hidden;
-  background-image: radial-gradient(
-      circle at 20% 20%,
-      rgba(144, 171, 139, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 80%,
-      rgba(90, 120, 99, 0.1) 0%,
-      transparent 50%
-    );
-  background-attachment: fixed;
-}
-
-/* ===============================
-   Typography
-   =============================== */
-code {
-  font-family: "Courier New", monospace;
-  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: 14px;
   line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-page);
+  min-height: 100vh;
 }
 
-/* ===============================
-   Page Layout
-   =============================== */
-.page-content {
-  min-height: calc(100vh - 200px);
-  padding-bottom: var(--spacing-2xl);
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-primary);
 }
 
-/* Home page - hero starts immediately after navbar */
-.home-page .page-content {
-  padding-top: 0;
+h1 { font-size: 1.875rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.125rem; }
+h5 { font-size: 1rem; }
+h6 { font-size: 0.875rem; }
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
-/* Page sections for non-home pages (docs, about) */
-.page-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--spacing-2xl) var(--spacing-xl);
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
 }
 
-.page-header {
-  text-align: center;
-  margin-bottom: var(--spacing-2xl);
-  padding-top: var(--spacing-xl);
+a:hover {
+  color: var(--accent-hover);
 }
 
-.page-header h1 {
-  font-size: clamp(2rem, 4vw, 2.5rem);
-  font-weight: 800;
-  color: var(--color-primary);
-  margin-bottom: var(--spacing-md);
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--bg-surface-hover);
+  padding: 0.125em 0.375em;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
 }
 
-.page-header p {
-  font-size: 1.1rem;
-  color: var(--color-text);
-  opacity: 0.9;
-  max-width: 600px;
-  margin: 0 auto;
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  background-color: var(--gray-900);
+  color: var(--gray-100);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
 }
 
+html.dark-mode pre {
+  background-color: var(--gray-950);
+  border-color: var(--gray-800);
+}
+
+/* Selection */
+::selection {
+  background-color: var(--accent);
+  color: white;
+}
+
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
+}
+
+html.dark-mode ::-webkit-scrollbar-thumb {
+  background: var(--gray-700);
+}
+
+html.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-600);
+}

@@ -5,11 +5,11 @@ function copyToClipboard(text, button) {
     .then(() => {
       const originalText = button.innerHTML;
       button.innerHTML = "✅ Copied!";
-      button.style.background = "#10b981";
+      button.classList.add("success");
 
       setTimeout(() => {
         button.innerHTML = originalText;
-        button.style.background = "";
+        button.classList.remove("success");
       }, 2000);
     })
     .catch((err) => {
@@ -21,17 +21,75 @@ function copyToClipboard(text, button) {
 const searchInput = document.getElementById("searchInput");
 const searchClear = document.getElementById("searchClear");
 const searchBtn = document.getElementById("searchBtn");
+
+// Dark Mode Toggle Logic
+function initDarkMode() {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    // Check local storage or preference
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark-mode');
+    } else {
+        document.documentElement.classList.remove('dark-mode');
+    }
+}
+
+function toggleDarkMode() {
+    document.documentElement.classList.toggle('dark-mode');
+    const theme = document.documentElement.classList.contains('dark-mode') ? 'dark' : 'light';
+    localStorage.setItem('theme', theme);
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', initDarkMode);
+
+// Local Find Globals
+let localMatches = [];
+let localMatchIndex = -1;
+
 let currentCategory = "all";
 let currentView = "grid";
 let currentSort = "newest";
 
+// Keyboard Shortcuts (Cmd/Ctrl + K)
+document.addEventListener('keydown', function(e) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    if (searchInput) {
+      searchInput.focus();
+    }
+  }
+});
+
 if (searchInput) {
+  // Auto-focus on desktop (if width > 768px)
+  if (window.innerWidth > 768) {
+     searchInput.focus();
+  }
+  
   const searchWrapper = searchInput.closest(".search-input-wrapper");
   
+  // Handle Focus/Blur for visual hints
+  searchInput.addEventListener('focus', () => {
+    if (searchWrapper) searchWrapper.classList.add('focused');
+  });
+  
+  searchInput.addEventListener('blur', () => {
+    if (searchWrapper) searchWrapper.classList.remove('focused');
+  });
+
   searchInput.addEventListener("input", function (e) {
     const searchTerm = e.target.value.toLowerCase();
-    filterNotes(searchTerm, currentCategory);
-    updateNotesCount();
+    
+    if (document.getElementById("notesGrid")) {
+        // Dashboard: Filter
+        filterNotes(searchTerm, currentCategory);
+        updateNotesCount();
+    } else {
+        // Other Pages: Local Find
+        performLocalFind(this.value);
+    }
     
     // Show/hide clear button and toggle wrapper class
     if (searchClear && searchWrapper) {
@@ -49,7 +107,15 @@ if (searchInput) {
   searchInput.addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
       e.preventDefault();
-      scrollToNotes();
+      
+      const notesGrid = document.getElementById("notesGrid");
+      
+      if (notesGrid) {
+          scrollToNotes();
+      } else {
+          // Find Next Match on page
+          findNextMatch();
+      }
     }
   });
 }
@@ -63,8 +129,8 @@ if (searchBtn) {
 function scrollToNotes() {
   const notesSection = document.getElementById("notes-section");
   if (notesSection) {
-    // Get navbar height for proper offset
-    const navbar = document.querySelector(".navbar");
+    // Get header height for proper offset
+    const navbar = document.querySelector(".top-header");
     const navbarHeight = navbar ? navbar.offsetHeight : 100;
     
     // Calculate position with offset
@@ -369,6 +435,26 @@ document
 
 // Initialize notes count
 document.addEventListener("DOMContentLoaded", function () {
+  // Check for search param from URL (Global Search)
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchParam = urlParams.get('search') || urlParams.get('q');
+  
+  if (searchParam && searchInput) {
+      searchInput.value = searchParam;
+      // Trigger filter if on dashboard
+      if (document.getElementById("notesGrid")) {
+          filterNotes(searchParam.toLowerCase(), currentCategory);
+          // Show clear button
+          if (searchClear) {
+              searchClear.style.display = "block";
+              const wrapper = searchInput.closest(".search-input-wrapper");
+              if (wrapper) wrapper.classList.add("has-clear");
+          }
+          // Optional: Scroll to results
+          setTimeout(scrollToNotes, 500);
+      }
+  }
+
   updateNotesCount();
   
   // Add data-id to cards for sorting
@@ -385,3 +471,106 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+// ==========================================
+// Local "Find on Page" Logic
+// ==========================================
+
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function clearHighlights() {
+    document.querySelectorAll(".search-match").forEach(span => {
+        const parent = span.parentNode;
+        parent.replaceChild(document.createTextNode(span.textContent), span);
+        parent.normalize();
+    });
+    localMatches = [];
+    localMatchIndex = -1;
+}
+
+function performLocalFind(term) {
+    clearHighlights();
+    
+    if (!term) return;
+    
+    const context = document.querySelector("main");
+    if (!context) return; // Should allow searching outside main? Maybe. But main is content.
+    
+    // Create TreeWalker to find text nodes
+    const walker = document.createTreeWalker(context, NodeFilter.SHOW_TEXT, {
+        acceptNode: function(node) {
+            // Skip if hidden
+            if (node.parentElement.offsetParent === null) return NodeFilter.FILTER_REJECT;
+            // Skip scripts, inputs, etc
+            const tag = node.parentElement.tagName;
+            if (['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'SELECT'].includes(tag)) return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+        }
+    });
+
+    const regex = new RegExp(escapeRegExp(term), 'gi');
+    let node;
+    const nodesToReplace = [];
+
+    // Collect matching nodes first to avoid messing up walker during modification
+    while(node = walker.nextNode()) {
+        if (regex.test(node.nodeValue)) {
+             nodesToReplace.push(node);
+        }
+    }
+    
+    // Replace text
+    nodesToReplace.forEach(node => {
+        const text = node.nodeValue;
+        const fragment = document.createDocumentFragment();
+        let lastIdx = 0;
+        let match;
+        
+        // Reset regex state
+        regex.lastIndex = 0;
+        
+        // Manual match loop to handle indices
+        // Using string.matchAll or exec loop
+        while ((match = regex.exec(text)) !== null) {
+            // Text before match
+            fragment.appendChild(document.createTextNode(text.substring(lastIdx, match.index)));
+            
+            // Match
+            const span = document.createElement('span');
+            span.className = 'search-match bg-yellow-400 text-black px-0.5 rounded shadow-sm';
+            span.textContent = match[0];
+            fragment.appendChild(span);
+            localMatches.push(span);
+            
+            lastIdx = regex.lastIndex;
+        }
+        
+        // Remaining text
+        fragment.appendChild(document.createTextNode(text.substring(lastIdx)));
+        node.replaceWith(fragment);
+    });
+
+    // Scroll to first match
+    if (localMatches.length > 0) {
+        localMatchIndex = 0;
+        localMatches[0].scrollIntoView({behavior: 'smooth', block: 'center'});
+        localMatches[0].classList.add('ring', 'ring-2', 'ring-accent-500'); // Highlight current
+    }
+}
+
+function findNextMatch() {
+    if (localMatches.length === 0) return;
+    
+    // Remove current highlight from old
+    if (localMatchIndex >= 0 && localMatchIndex < localMatches.length) {
+         localMatches[localMatchIndex].classList.remove('ring', 'ring-2', 'ring-accent-500');
+    }
+    
+    localMatchIndex = (localMatchIndex + 1) % localMatches.length;
+    const match = localMatches[localMatchIndex];
+    
+    match.scrollIntoView({behavior: 'smooth', block: 'center'});
+    match.classList.add('ring', 'ring-2', 'ring-accent-500');
+}

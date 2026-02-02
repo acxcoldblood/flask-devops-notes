@@ -1,0 +1,99 @@
+{% extends "auth_layout.html" %}
+
+{% block title %}Sign Up • DevOps Notes Manager{% endblock %}
+
+{% block visual_title %}Start your journey{% endblock %}
+{% block visual_subtitle %}Create an account to organize your DevOps commands, notes, and workflows in one place.{% endblock %}
+
+{% block form_title %}Create Account{% endblock %}
+{% block form_subtitle %}Join DevNotes for free. No credit card required.{% endblock %}
+
+{% block form_content %}
+<form method="POST" action="" class="space-y-5">
+    {{ form.hidden_tag() }}
+    
+    <!-- Username -->
+    <div>
+        <label class="block text-xs font-medium text-zinc-400 uppercase tracking-wide mb-2">
+            {{ form.username.label.text }}
+        </label>
+        <div class="relative">
+            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 w-5 text-center">👤</div>
+            {% if form.username.errors %}
+                {{ form.username(class="w-full h-11 pl-10 pr-4 rounded-md border border-red-500 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500", placeholder="johndoe") }}
+            {% else %}
+                {{ form.username(class="w-full h-11 pl-10 pr-4 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all shadow-inner", placeholder="johndoe") }}
+            {% endif %}
+        </div>
+        {% for error in form.username.errors %}
+            <p class="mt-1 text-xs text-red-500 font-medium">{{ error }}</p>
+        {% endfor %}
+    </div>
+
+    <!-- Email -->
+    <div>
+        <label class="block text-xs font-medium text-zinc-400 uppercase tracking-wide mb-2">
+            {{ form.email.label.text }}
+        </label>
+        <div class="relative">
+            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 w-5 text-center">✉️</div>
+            {% if form.email.errors %}
+                {{ form.email(class="w-full h-11 pl-10 pr-4 rounded-md border border-red-500 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500", placeholder="name@company.com") }}
+            {% else %}
+                {{ form.email(class="w-full h-11 pl-10 pr-4 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all shadow-inner", placeholder="name@company.com") }}
+            {% endif %}
+        </div>
+        {% for error in form.email.errors %}
+            <p class="mt-1 text-xs text-red-500 font-medium">{{ error }}</p>
+        {% endfor %}
+    </div>
+
+    <!-- Password -->
+    <div>
+        <label class="block text-xs font-medium text-zinc-400 uppercase tracking-wide mb-2">
+            {{ form.password.label.text }}
+        </label>
+        <div class="relative">
+            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 w-5 text-center">🔒</div>
+            {% if form.password.errors %}
+                {{ form.password(class="w-full h-11 pl-10 pr-4 rounded-md border border-red-500 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500", placeholder="Create a strong password") }}
+            {% else %}
+                {{ form.password(class="w-full h-11 pl-10 pr-4 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all shadow-inner", placeholder="Create a strong password") }}
+            {% endif %}
+        </div>
+        {% for error in form.password.errors %}
+            <p class="mt-1 text-xs text-red-500 font-medium">{{ error }}</p>
+        {% endfor %}
+    </div>
+
+    <!-- Confirm Password -->
+    <div>
+        <label class="block text-xs font-medium text-zinc-400 uppercase tracking-wide mb-2">
+            {{ form.confirm_password.label.text }}
+        </label>
+        <div class="relative">
+            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 w-5 text-center">🔒</div>
+            {% if form.confirm_password.errors %}
+                {{ form.confirm_password(class="w-full h-11 pl-10 pr-4 rounded-md border border-red-500 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500", placeholder="Confirm password") }}
+            {% else %}
+                {{ form.confirm_password(class="w-full h-11 pl-10 pr-4 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all shadow-inner", placeholder="Confirm password") }}
+            {% endif %}
+        </div>
+        {% for error in form.confirm_password.errors %}
+            <p class="mt-1 text-xs text-red-500 font-medium">{{ error }}</p>
+        {% endfor %}
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="w-full h-11 flex items-center justify-center gap-2 rounded-md bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-all shadow-lg shadow-red-900/20 border border-transparent hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 mt-6 focus:ring-offset-zinc-900">
+        Create Account →
+    </button>
+</form>
+{% endblock %}
+
+{% block form_footer %}
+<p class="text-sm text-zinc-500 dark:text-zinc-400">
+    Already have an account? 
+    <a href="{{ url_for('auth.login') }}" class="font-semibold text-accent-600 hover:underline">Login</a>
+</p>
+{% endblock %}

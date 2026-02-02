@@ -6,18 +6,19 @@ About • DevOps Notes Manager
 
 {% block content %}
 
-<section class="page-section">
-  <div class="page-header">
-    <h1>ℹ️ About</h1>
-    <p>A simple and practical DevOps knowledge management tool.</p>
+<div class="max-w-5xl mx-auto pb-12">
+  <div class="mb-10 text-center">
+    <h1 class="text-4xl font-bold text-zinc-900 dark:text-white mb-2">ℹ️ About</h1>
+    <p class="text-lg text-zinc-500 dark:text-zinc-400">A simple and practical DevOps knowledge management tool.</p>
   </div>
 
-  <div class="features" style="max-width: 1200px; margin: 0 auto;">
-    <div class="feature-card">
-      <h3>❓ Why this project?</h3>
-      <div class="description">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">❓ Why this project?</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
         <p>
-          <strong>DevOps Notes Manager</strong> was built to solve a common problem: 
+          <strong class="text-zinc-900 dark:text-white">DevOps Notes Manager</strong> was built to solve a common problem: 
           keeping track of frequently used DevOps commands, configurations, and 
           operational learnings in one centralized, searchable location.
         </p>
@@ -35,11 +36,11 @@ About • DevOps Notes Manager
       </div>
     </div>
 
-    <div class="feature-card">
-      <h3>🛠️ Tech Stack</h3>
-      <div class="description">
-        <p><strong>Backend:</strong></p>
-        <ul>
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">🛠️ Tech Stack</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
+        <p><strong class="text-zinc-900 dark:text-white">Backend:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
           <li><strong>Flask 3.1.2</strong> - Lightweight Python web framework</li>
           <li><strong>MySQL 8.0</strong> - Relational database for persistent storage</li>
           <li><strong>mysql-connector-python</strong> - MySQL database connector</li>
@@ -47,16 +48,16 @@ About • DevOps Notes Manager
           <li><strong>bleach</strong> - HTML sanitization for security</li>
         </ul>
         
-        <p><strong>Frontend:</strong></p>
-        <ul>
+        <p class="mt-4"><strong class="text-zinc-900 dark:text-white">Frontend:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
           <li><strong>HTML5</strong> - Semantic markup</li>
-          <li><strong>CSS3</strong> - Modern styling with CSS variables and animations</li>
+          <li><strong>Tailwind CSS</strong> - Utility-first CSS framework</li>
           <li><strong>JavaScript (Vanilla)</strong> - Client-side interactivity</li>
           <li><strong>Quill.js</strong> - Rich text editor for content creation</li>
         </ul>
         
-        <p><strong>DevOps & Infrastructure:</strong></p>
-        <ul>
+        <p class="mt-4"><strong class="text-zinc-900 dark:text-white">DevOps & Infrastructure:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
           <li><strong>Docker</strong> - Containerization platform</li>
           <li><strong>Docker Compose</strong> - Multi-container orchestration</li>
           <li><strong>Docker Volumes</strong> - Persistent data storage</li>
@@ -65,10 +66,10 @@ About • DevOps Notes Manager
       </div>
     </div>
 
-    <div class="feature-card">
-      <h3>✨ Key Features</h3>
-      <div class="description">
-        <ul>
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">✨ Key Features</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
+        <ul class="list-disc pl-5 space-y-2">
           <li><strong>📝 Rich Text Editing:</strong> Create formatted notes with code blocks, lists, and styling</li>
           <li><strong>🏷️ Category Organization:</strong> Organize notes by DevOps categories (Docker, Kubernetes, Linux, CI/CD, AWS, Monitoring)</li>
           <li><strong>🔍 Advanced Search:</strong> Search across commands, descriptions, and tags</li>
@@ -81,11 +82,11 @@ About • DevOps Notes Manager
       </div>
     </div>
 
-    <div class="feature-card">
-      <h3>🎯 Project Goals</h3>
-      <div class="description">
-        <p><strong>Learning Objectives:</strong></p>
-        <ul>
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">🎯 Project Goals</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
+        <p><strong class="text-zinc-900 dark:text-white">Learning Objectives:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
           <li>Practice containerization with Docker</li>
           <li>Understand multi-container orchestration with Docker Compose</li>
           <li>Implement environment-based configuration</li>
@@ -94,8 +95,8 @@ About • DevOps Notes Manager
           <li>Apply DevOps best practices in a real project</li>
         </ul>
         
-        <p><strong>Practical Benefits:</strong></p>
-        <ul>
+        <p class="mt-4"><strong class="text-zinc-900 dark:text-white">Practical Benefits:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
           <li>Centralized knowledge base for DevOps commands</li>
           <li>Quick reference for frequently used operations</li>
           <li>Shareable documentation for teams</li>
@@ -104,19 +105,19 @@ About • DevOps Notes Manager
       </div>
     </div>
 
-    <div class="feature-card">
-      <h3>🏗️ Architecture</h3>
-      <div class="description">
-        <p><strong>Application Structure:</strong></p>
-        <ul>
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">🏗️ Architecture</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
+        <p><strong class="text-zinc-900 dark:text-white">Application Structure:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
           <li><strong>Frontend Layer:</strong> HTML templates with Jinja2, CSS styling, and JavaScript</li>
           <li><strong>Application Layer:</strong> Flask routes handling HTTP requests and responses</li>
           <li><strong>Data Layer:</strong> MySQL database for persistent storage</li>
           <li><strong>Container Layer:</strong> Docker containers for isolation and portability</li>
         </ul>
         
-        <p><strong>Container Architecture:</strong></p>
-        <ul>
+        <p class="mt-4"><strong class="text-zinc-900 dark:text-white">Container Architecture:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
           <li><strong>Web Container:</strong> Runs Flask application, exposed on port 5000</li>
           <li><strong>MySQL Container:</strong> Database service with persistent volume</li>
           <li><strong>Docker Network:</strong> Internal network for container communication</li>
@@ -125,10 +126,10 @@ About • DevOps Notes Manager
       </div>
     </div>
 
-    <div class="feature-card">
-      <h3>📚 DevOps Concepts Demonstrated</h3>
-      <div class="description">
-        <ul>
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">📚 DevOps Concepts Demonstrated</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
+        <ul class="list-disc pl-5 space-y-1">
           <li><strong>Containerization:</strong> Application and database run in isolated containers</li>
           <li><strong>Service Discovery:</strong> Containers communicate using service names</li>
           <li><strong>Environment Configuration:</strong> Secure credential management via environment variables</li>
@@ -141,16 +142,16 @@ About • DevOps Notes Manager
       </div>
     </div>
 
-    <div class="feature-card">
-      <h3>🤝 Contributing</h3>
-      <div class="description">
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">🤝 Contributing</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
         <p>
           This project is open to contributions and improvements! Whether it's bug fixes, 
           new features, documentation improvements, or code optimizations, all contributions 
           are welcome.
         </p>
-        <p><strong>Ways to contribute:</strong></p>
-        <ul>
+        <p class="mt-4"><strong class="text-zinc-900 dark:text-white">Ways to contribute:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
           <li>Report bugs or suggest features</li>
           <li>Submit pull requests with improvements</li>
           <li>Improve documentation</li>
@@ -161,24 +162,25 @@ About • DevOps Notes Manager
       </div>
     </div>
 
-    <div class="feature-card">
-      <h3>📄 License & Credits</h3>
-      <div class="description">
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">📄 License & Credits</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
         <p>
           This project is built for educational and practical purposes. It demonstrates 
           real-world DevOps practices and can serve as a learning resource or starting 
           point for similar projects.
         </p>
-        <p><strong>Technologies Used:</strong></p>
-        <ul>
-          <li>Flask - <a href="https://flask.palletsprojects.com/" target="_blank">Official Website</a></li>
-          <li>MySQL - <a href="https://www.mysql.com/" target="_blank">Official Website</a></li>
-          <li>Docker - <a href="https://www.docker.com/" target="_blank">Official Website</a></li>
-          <li>Quill.js - <a href="https://quilljs.com/" target="_blank">Official Website</a></li>
+        <p class="mt-4"><strong class="text-zinc-900 dark:text-white">Technologies Used:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>Flask - <a href="https://flask.palletsprojects.com/" target="_blank" class="text-accent-600 hover:underline">Official Website</a></li>
+          <li>MySQL - <a href="https://www.mysql.com/" target="_blank" class="text-accent-600 hover:underline">Official Website</a></li>
+          <li>Docker - <a href="https://www.docker.com/" target="_blank" class="text-accent-600 hover:underline">Official Website</a></li>
+          <li>Quill.js - <a href="https://quilljs.com/" target="_blank" class="text-accent-600 hover:underline">Official Website</a></li>
         </ul>
       </div>
     </div>
+
   </div>
-</section>
+</div>
 
 {% endblock %}

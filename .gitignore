@@ -1,6 +1,10 @@
 # Virtual environments
 .env
 .venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
 # Python cache
 __pycache__/
@@ -8,3 +12,23 @@ __pycache__/
 
 # Environment variables
 .env
+.env.local
+.env.*.local
+
+# Database
+*.sqlite
+*.db
+db_data/
+instance/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+

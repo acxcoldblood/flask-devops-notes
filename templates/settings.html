@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}Settings • DevOps Notes Manager{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto pb-12">
+    
+    <!-- Gradient Profile Header -->
+    <div class="bg-gradient-to-r from-zinc-900 to-zinc-800 rounded-xl p-8 mb-8 text-white shadow-lg">
+        <div class="flex flex-col md:flex-row items-center gap-6">
+             <div class="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center text-3xl font-bold border-4 border-white/20">
+                {{ current_user.username[0]|upper }}
+             </div>
+             <div class="flex-1 text-center md:text-left">
+                 <h1 class="text-3xl font-bold flex items-center justify-center md:justify-start gap-3">
+                    {{ current_user.username }} 
+                    <span class="px-2 py-0.5 rounded text-xs font-semibold bg-accent-600/20 text-accent-300 border border-accent-500/30 uppercase tracking-wide">Enterprise</span>
+                 </h1>
+                 <p class="text-zinc-400 mt-1">{{ current_user.username }}@example.com</p>
+             </div>
+             <div class="flex gap-3">
+                 <button class="w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center transition-colors">➕</button>
+                 <button class="w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center transition-colors">⚙️</button>
+                 <button class="w-10 h-10 rounded-lg bg-accent-600 hover:bg-accent-700 text-white shadow-sm flex items-center justify-center transition-colors">🔗</button>
+             </div>
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="settings-content-wrapper">
+
+    <!-- TAB: PROFILE -->
+    <div id="profile" class="tab-content hidden group/tab">
+        <form method="POST" action="{{ url_for('auth.settings') }}" enctype="multipart/form-data">
+        <div class="bg-zinc-900 rounded-xl border border-zinc-800 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-zinc-800 flex justify-between items-center bg-zinc-900">
+                <div>
+                    <h3 class="text-sm font-semibold text-zinc-100 uppercase tracking-wide">Profile Details</h3>
+                    <p class="text-xs text-zinc-500">Manage your public information.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors shadow-lg shadow-red-900/20 border border-transparent hover:border-red-500">Save Changes</button>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-8 bg-zinc-900/50">
+                <!-- Public Profile -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1">
+                        <h4 class="text-sm font-semibold text-zinc-200">Public Profile</h4>
+                        <p class="text-xs text-zinc-500 mt-1">Visible to other team members.</p>
+                    </div>
+                    <div class="md:col-span-2 space-y-4">
+                        <div class="relative">
+                             <div class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 w-5 text-center">👤</div>
+                             <input class="w-full h-11 pl-10 pr-3 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-200 text-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all shadow-inner" type="text" name="display_name" value="{{ current_user.username }}" required>
+                        </div>
+                        
+                        <div class="relative">
+                             <div class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 w-5 text-center">🔗</div>
+                             <input class="w-full h-11 pl-10 pr-3 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-600 text-sm cursor-not-allowed" type="text" value="https://devnotes.com/{{ current_user.username|lower }}" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="border-zinc-800">
+
+                <!-- Bio -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1">
+                        <h4 class="text-sm font-semibold text-zinc-200">Bio Description</h4>
+                        <p class="text-xs text-zinc-500 mt-1">Brief description for your profile card.</p>
+                    </div>
+                    <div class="md:col-span-2">
+                        <textarea class="w-full p-3 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-200 text-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all shadow-inner" name="bio" rows="4" placeholder="Describe yourself..." maxlength="300">{{ current_user.bio or '' }}</textarea>
+                        <div class="text-right mt-1 text-xs text-zinc-600"><span id="bio-count">{{ (current_user.bio or '')|length }}</span>/300</div>
+                    </div>
+                </div>
+
+                <hr class="border-zinc-800">
+
+                <!-- Profile Picture -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1">
+                        <h4 class="text-sm font-semibold text-zinc-200">Profile Picture</h4>
+                        <p class="text-xs text-zinc-500 mt-1">Update your avatar.</p>
+                    </div>
+                    <div class="md:col-span-2 flex items-center gap-6">
+                        {% if current_user.profile_picture %}
+                        <img src="{{ url_for('static', filename='uploads/' + current_user.profile_picture) }}" alt="Profile" class="w-20 h-20 rounded-full object-cover border-2 border-zinc-800 shadow-lg">
+                        {% else %}
+                        <div class="w-20 h-20 rounded-full bg-zinc-800 flex items-center justify-center font-bold text-2xl text-zinc-500 border border-zinc-700">{{ current_user.username[0]|upper }}</div>
+                        {% endif %}
+                        <label class="flex-1 cursor-pointer border border-dashed border-zinc-700 bg-zinc-950/50 rounded-lg p-6 flex flex-col items-center justify-center hover:border-red-500 hover:bg-zinc-900 transition-all upload-area group" for="profile-pic-input">
+                            <input type="file" id="profile-pic-input" name="profile_picture" accept="image/png,image/jpeg,image/gif" class="hidden">
+                            <div class="text-2xl mb-2 opacity-50 group-hover:scale-110 transition-transform">📄</div>
+                            <div class="text-center upload-text">
+                                <strong class="text-zinc-300">Click to upload</strong> <span class="text-zinc-600">or drag and drop</span><br>
+                                <span class="text-[10px] text-zinc-600">PNG, JPG (Max 10MB)</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+
+    <!-- TAB: API -->
+    <div id="api" class="tab-content hidden group/tab">
+        <div class="bg-zinc-900 rounded-xl border border-zinc-800 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-zinc-800 flex justify-between items-center bg-zinc-900">
+                <div>
+                    <h3 class="text-sm font-semibold text-zinc-100 uppercase tracking-wide">API Configuration</h3>
+                    <p class="text-xs text-zinc-500">Manage programmatic access keys.</p>
+                </div>
+                 <a href="{{ url_for('main.docs') }}" class="px-3 py-1.5 text-xs font-medium text-zinc-400 bg-zinc-950 border border-zinc-800 rounded-md hover:bg-zinc-800 hover:text-white transition-colors">Documentation</a>
+            </div>
+
+            <div class="p-6 bg-zinc-900/50">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1">
+                        <h4 class="text-sm font-semibold text-zinc-200">Personal Access Token</h4>
+                        <p class="text-xs text-zinc-500 mt-1">Keep this token secret.</p>
+                    </div>
+                    <div class="md:col-span-2">
+                        {% if current_user.api_token %}
+                            <div class="flex gap-2 mb-4">
+                                <input class="flex-1 h-10 px-3 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-300 font-mono text-xs" value="{{ current_user.api_token }}" id="apiToken" readonly>
+                                <button class="px-3 py-1.5 border border-zinc-800 bg-zinc-900 rounded-md hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors" onclick="copyToClipboard(document.getElementById('apiToken').value, this)">📋</button>
+                            </div>
+                            <div>
+                                <a href="{{ url_for('auth.regenerate_token') }}" class="inline-flex items-center gap-2 px-4 py-2 text-xs border border-zinc-700 bg-zinc-800 rounded-md text-zinc-300 hover:bg-zinc-700 transition-colors" onclick="return confirm('Regenerate token?')">🔄 Regenerate Token</a>
+                            </div>
+                        {% else %}
+                            <div class="p-6 bg-zinc-950 rounded-lg text-center border border-dashed border-zinc-800">
+                                <p class="mb-4 text-xs text-zinc-500">No token generated yet.</p>
+                                <a href="{{ url_for('auth.regenerate_token') }}" class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-md transition-colors shadow-lg shadow-red-900/20">✨ Generate New Token</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: APPEARANCE (Categories) -->
+    <div id="appearance" class="tab-content hidden group/tab">
+        <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/50">
+                <div class="section-title">
+                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-white">Note Categories</h3>
+                    <p class="text-sm text-zinc-500">Customize the tags and folders for your workspace.</p>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                     <div class="md:col-span-1">
+                        <h4 class="text-sm font-semibold text-zinc-900 dark:text-white">Add New Category</h4>
+                        <p class="text-sm text-zinc-500 mt-1">Create a label to organize your notes.</p>
+                    </div>
+                    <div class="md:col-span-2">
+                         <form action="{{ url_for('main.add_category') }}" method="POST" class="flex gap-2">
+                            <input type="text" name="name" placeholder="Category Name" required class="flex-1 h-10 px-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-accent-500">
+                            <input type="color" name="color" value="#3b82f6" class="h-10 w-12 p-0 border-0 rounded cursor-pointer ring-1 ring-zinc-300 dark:ring-zinc-700">
+                            <button type="submit" class="px-4 py-2 bg-accent-600 hover:bg-accent-700 text-white font-medium rounded-lg transition-colors">Add</button>
+                        </form>
+                    </div>
+                </div>
+
+                <hr class="border-zinc-200 dark:border-zinc-800">
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                     <div class="md:col-span-1">
+                        <h4 class="text-sm font-semibold text-zinc-900 dark:text-white">Active Categories</h4>
+                        <p class="text-sm text-zinc-500 mt-1">Manage existing categories.</p>
+                    </div>
+                    <div class="md:col-span-2">
+                        <div class="flex flex-wrap gap-2">
+                            {% for category in categories %}
+                                <div class="inline-flex items-center px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700">
+                                    <span class="w-2.5 h-2.5 rounded-full mr-2" style="background-color: {{ category.color }};"></span>
+                                    <span class="font-medium text-sm text-zinc-900 dark:text-white">{{ category.name }}</span>
+                                    {% if not category.is_system %}
+                                        <a href="{{ url_for('main.delete_category', id=category.id) }}" onclick="return confirm('Delete?')" class="ml-2 text-zinc-400 hover:text-red-500 text-lg leading-none">&times;</a>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to switch tabs
+    function switchToTab(tabId) {
+        if (!tabId) tabId = 'profile'; // Default
+        
+        // Hide all tabs
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(el => {
+            el.classList.add('hidden');
+        });
+
+        // Show target tab
+        const target = document.getElementById(tabId);
+        if (target) {
+            target.classList.remove('hidden');
+        }
+
+        // Update active state in sidebar (optional visual cue)
+        // ...
+    }
+
+    // Listen for Hash Changes
+    window.addEventListener('hashchange', function() {
+        const hash = window.location.hash.substring(1);
+        switchToTab(hash);
+    });
+
+    // Initial Load
+    const initialHash = window.location.hash.substring(1);
+    switchToTab(initialHash);
+
+    // Bio character counter
+    const bioTextarea = document.querySelector('textarea[name="bio"]');
+    const bioCount = document.getElementById('bio-count');
+    if (bioTextarea && bioCount) {
+        bioTextarea.addEventListener('input', function() {
+            bioCount.textContent = this.value.length;
+        });
+    }
+
+    // File input preview
+    const fileInput = document.getElementById('profile-pic-input');
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            const uploadText = this.closest('.upload-area').querySelector('.upload-text');
+            if (this.files.length > 0) {
+                uploadText.innerHTML = '<strong class="text-zinc-900 dark:text-white">Selected:</strong> ' + this.files[0].name + '<br><span class="text-green-600">Click Save Changes to upload</span>';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,116 +1,251 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>{% block title %}DevOps Notes Manager{% endblock %}</title>
 
-    <!-- Main Styles -->
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <!-- Quill -->
-    <link
-      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
-      rel="stylesheet"
-    />
-  </head>
-
-  <body class="{% block body_class %}{% endblock %}">
-
-    <!-- ================= NAVBAR ================= -->
-    <nav class="navbar">
-      <div class="navbar-main">
-        <a href="{{ url_for('main.home') }}" class="logo">⚙️ DevNotes</a>
-
-        <button class="hamburger" aria-label="Toggle menu" id="hamburgerBtn">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-
-        <ul class="nav-links" id="navLinks">
-          <li>
-            <a href="{{ url_for('main.home') }}"
-               class="{% if request.endpoint == 'main.home' %}active{% endif %}">
-              Notes
-            </a>
-          </li>
-          <li>
-            <a href="{{ url_for('main.docs') }}"
-               class="{% if request.endpoint == 'main.docs' %}active{% endif %}">
-              Docs
-            </a>
-          </li>
-          <li>
-            <a href="{{ url_for('main.about') }}"
-               class="{% if request.endpoint == 'main.about' %}active{% endif %}">
-              About
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      {% block navbar_search %}
-      {% endblock %}
-    </nav>
-
-    {% block page_header %}
-    {% endblock %}
-
-    <!-- ================= MAIN CONTENT ================= -->
-    <main class="page-content">
-      {% block content %}
-      {% endblock %}
-    </main>
-
-    <!-- ================= FOOTER ================= -->
-    <footer class="footer">
-      <p>DevOps Notes Manager • Built with Flask</p>
-    </footer>
-
-    <!-- ================= SCRIPTS ================= -->
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-    <!-- Hamburger Menu Toggle -->
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const hamburger = document.getElementById('hamburgerBtn');
-        const navLinks = document.getElementById('navLinks');
-        
-        if (hamburger && navLinks) {
-          hamburger.addEventListener('click', function() {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-          });
-
-          // Close menu when clicking on a link
-          const links = navLinks.querySelectorAll('a');
-          links.forEach(link => {
-            link.addEventListener('click', function() {
-              hamburger.classList.remove('active');
-              navLinks.classList.remove('active');
-            });
-          });
-
-          // Close menu when clicking outside
-          document.addEventListener('click', function(event) {
-            const isClickInsideNav = navLinks.contains(event.target);
-            const isClickOnHamburger = hamburger.contains(event.target);
-            
-            if (!isClickInsideNav && !isClickOnHamburger && navLinks.classList.contains('active')) {
-              hamburger.classList.remove('active');
-              navLinks.classList.remove('active');
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              accent: {
+                50: '#fff1f2',
+                100: '#ffe4e6',
+                200: '#fecdd3',
+                300: '#fda4af',
+                400: '#fb7185',
+                500: '#f43f5e',
+                600: '#e11d48',
+                700: '#be123c',
+                800: '#9f1239',
+                900: '#881337',
+                950: '#4c0519',
+              },
+              zinc: {
+                850: '#1f1f22',
+                950: '#09090b', 
+              }
+            },
+             backgroundImage: {
+                'grid-pattern': "linear-gradient(to right, #27272a 1px, transparent 1px), linear-gradient(to bottom, #27272a 1px, transparent 1px)",
             }
-          });
+          }
         }
-      });
+      }
     </script>
 
-    {% block extra_js %}
-    {% endblock %}
+    <!-- Quill CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+    
+    <style>
+      /* Command Center Scrollbar */
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #09090b; }
+      ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+
+      /* Quill Dark Theme Overrides */
+      .ql-toolbar { border-color: #27272a !important; background: #18181b; color: #a1a1aa; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; }
+      .ql-container { border-color: #27272a !important; background: #09090b; color: #e4e4e7; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; font-family: 'Inter', sans-serif; }
+      .ql-stroke { stroke: #a1a1aa !important; }
+      .ql-fill { fill: #a1a1aa !important; }
+      .ql-picker { color: #a1a1aa !important; }
+      
+      /* Grid Pattern Background */
+      .bg-grid {
+          background-size: 40px 40px;
+          mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
+          -webkit-mask-image: linear-gradient(to bottom, transparent, 5%, black, 95%, transparent);
+      }
+    </style>
+  </head>
+
+  <body class="font-sans antialiased bg-zinc-950 text-zinc-100 h-screen overflow-hidden selection:bg-accent-500/30 selection:text-accent-200">
+
+    <div class="flex h-full">
+        
+        <!-- ================= SIDEBAR ================= -->
+        {% if current_user.is_authenticated %}
+        <aside class="w-64 flex-shrink-0 bg-zinc-900 border-r border-zinc-800 flex flex-col fixed inset-y-0 left-0 z-50 transition-transform duration-300 transform lg:translate-x-0 -translate-x-full lg:static" id="sidebar">
+            <!-- Sidebar Header -->
+            <div class="h-16 flex items-center px-6 border-b border-zinc-800 bg-zinc-900">
+                <a href="{{ url_for('main.home') }}" class="flex items-center gap-3 text-white no-underline group">
+                   <div class="w-8 h-8 rounded bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center font-bold text-white shadow-lg shadow-red-900/20 group-hover:scale-105 transition-transform">D</div>
+                   <span class="font-bold text-lg tracking-tight text-zinc-100">DevNotes</span>
+                </a>
+            </div>
+
+            <!-- Nav -->
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto custom-scrollbar">
+                <!-- Main Nav -->
+                <div class="space-y-1">
+                    <p class="px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Platform</p>
+                    <a href="{{ url_for('main.home') }}" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 {% if request.endpoint == 'main.home' %}bg-zinc-800 text-white shadow-sm ring-1 ring-white/5{% else %}text-zinc-400 hover:bg-zinc-800 hover:text-white{% endif %}">
+                        <span class="opacity-70 group-hover:opacity-100 transition-opacity">⚡</span> Dashboard
+                    </a>
+                    <a href="{{ url_for('main.docs') }}" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 {% if request.endpoint == 'main.docs' %}bg-zinc-800 text-white shadow-sm ring-1 ring-white/5{% else %}text-zinc-400 hover:bg-zinc-800 hover:text-white{% endif %}">
+                        <span class="opacity-70 group-hover:opacity-100 transition-opacity">📚</span> Documentation
+                    </a>
+                    <a href="{{ url_for('main.about') }}" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 {% if request.endpoint == 'main.about' %}bg-zinc-800 text-white shadow-sm ring-1 ring-white/5{% else %}text-zinc-400 hover:bg-zinc-800 hover:text-white{% endif %}">
+                        <span class="opacity-70 group-hover:opacity-100 transition-opacity">ℹ️</span> About
+                    </a>
+                </div>
+
+                <!-- Settings -->
+                <div class="mt-8">
+                    <p class="px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Configuration</p>
+                    <div class="space-y-1">
+                        <a href="{{ url_for('auth.profile') }}" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 {% if request.endpoint == 'auth.profile' %}bg-zinc-800 text-white shadow-sm ring-1 ring-white/5{% else %}text-zinc-400 hover:bg-zinc-800 hover:text-white{% endif %}">
+                            <span class="opacity-70 group-hover:opacity-100 transition-opacity">👤</span> Profile
+                        </a>
+                        <a href="{{ url_for('auth.settings') }}#api" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 text-zinc-400 hover:bg-zinc-800 hover:text-white">
+                            <span class="opacity-70 group-hover:opacity-100 transition-opacity">🔑</span> API Keys
+                        </a>
+                        <a href="{{ url_for('auth.settings') }}#appearance" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 text-zinc-400 hover:bg-zinc-800 hover:text-white">
+                            <span class="opacity-70 group-hover:opacity-100 transition-opacity">🎨</span> Preferences
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            
+             <!-- User Info Bottom -->
+             <div class="p-4 border-t border-zinc-800 bg-zinc-900/50">
+                <div class="flex items-center gap-3 p-2 rounded-md hover:bg-zinc-800 transition-colors cursor-pointer group">
+                    <div class="w-8 h-8 rounded bg-zinc-800 flex items-center justify-center font-bold text-xs border border-zinc-700 text-zinc-400 group-hover:text-white group-hover:border-zinc-600 transition-colors">
+                        {{ current_user.username[0]|upper }}
+                    </div>
+                    <div class="overflow-hidden">
+                        <div class="text-sm font-medium text-zinc-200 group-hover:text-white transition-colors truncate">{{ current_user.username }}</div>
+                        <div class="text-[10px] text-zinc-500 group-hover:text-zinc-400 transition-colors truncate uppercase tracking-wider">{{ current_user.role }}</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        {% endif %}
+
+        <!-- ================= MAIN CONTENT WRAPPER ================= -->
+        <div class="flex-1 flex flex-col min-w-0 bg-zinc-950 relative">
+            <!-- Grid Background Overlay -->
+            <div class="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none bg-grid"></div>
+
+            <!-- ================= TOP HEADER ================= -->
+            <header class="h-16 flex-shrink-0 bg-zinc-950/80 backdrop-blur border-b border-zinc-800/50 sticky top-0 z-40 px-6 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                     <button class="lg:hidden p-2 -ml-2 text-zinc-400 hover:text-zinc-200 rounded-md transition-colors" aria-label="Toggle menu" id="hamburgerBtn">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <!-- Breadcrumbs or Title could go here -->
+                </div>
+
+                <div class="flex-1 max-w-xl mx-4">
+                    {% if current_user.is_authenticated %}
+                    <div class="relative group search-input-wrapper">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="text-zinc-500 group-focus-within:text-accent-400 transition-colors">🔍</span>
+                        </div>
+                        <input type="text" class="w-full bg-zinc-900/50 border border-zinc-800/80 rounded-lg py-2 pl-10 pr-12 text-sm text-zinc-200 placeholder:text-zinc-500 focus:bg-zinc-900 focus:border-accent-500/40 focus:ring-1 focus:ring-accent-500/40 transition-all shadow-sm" placeholder="Search commands..." id="searchInput">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <span class="text-[10px] uppercase font-bold text-zinc-500 bg-zinc-800/50 px-1.5 py-0.5 rounded border border-zinc-700/50">Ctrl K</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="flex items-center gap-4">
+                    {% if current_user.is_authenticated %}
+                        <div class="flex items-center gap-3 pl-4">
+                            <div class="relative group">
+                                <button class="w-9 h-9 rounded-full bg-zinc-800 text-zinc-300 flex items-center justify-center font-bold border border-zinc-700 hover:border-zinc-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-950 focus:ring-accent-500 transition-all">
+                                    {% if current_user.profile_picture %}
+                                        <img src="{{ url_for('static', filename='uploads/' + current_user.profile_picture) }}" alt="{{ current_user.username }}" class="w-full h-full rounded-full object-cover">
+                                    {% else %}
+                                        {{ current_user.username[0]|upper }}
+                                    {% endif %}
+                                </button>
+                                
+                                <!-- Dropdown with bridge for hover -->
+                                <div class="absolute right-0 top-full pt-2 w-48 hidden group-hover:block z-50">
+                                    <div class="bg-zinc-900 rounded-lg shadow-xl border border-zinc-700/50 py-1 ring-1 ring-black/5">
+                                        <div class="px-4 py-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider border-b border-zinc-800 mb-1">Account</div>
+                                        <a href="{{ url_for('auth.profile') }}" class="block px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors">Profile</a>
+                                        <a href="{{ url_for('auth.settings') }}" class="block px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors">Settings</a>
+                                        <div class="my-1 border-t border-zinc-800"></div>
+                                        <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors">Log Out</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Login</a>
+                        <a href="{{ url_for('auth.register') }}" class="inline-flex items-center px-4 py-2 border border-accent-500/50 text-sm font-medium rounded-md shadow-sm text-accent-100 bg-accent-600/20 hover:bg-accent-600/30 hover:shadow-accent-500/20 transition-all">Sign Up</a>
+                    {% endif %}
+                </div>
+            </header>
+
+            <!-- ================= PAGE CONTENT ================= -->
+            <main class="flex-1 p-6 lg:p-8 overflow-y-auto relative custom-scrollbar">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="fixed top-20 right-6 z-50 flex flex-col gap-2">
+                            {% for category, message in messages %}
+                                <div class="px-4 py-3 rounded-lg shadow-lg border text-sm font-medium animate-in slide-in-from-right-10 fade-in duration-300 backdrop-blur-md
+                                    {% if category == 'success' %}bg-green-500/10 border-green-500/20 text-green-400
+                                    {% elif category == 'danger' %}bg-red-500/10 border-red-500/20 text-red-400
+                                    {% elif category == 'info' %}bg-blue-500/10 border-blue-500/20 text-blue-400
+                                    {% else %}bg-zinc-800/80 border-zinc-700 text-zinc-200{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                <div class="max-w-7xl mx-auto">
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+
+        </div>
+    </div>
+
+    <!-- Mobile Sidebar Backdrop -->
+    <div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden" id="sidebarBackdrop"></div>
+
+    <script>
+        // Start simple mobile sidebar toggle
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebarBackdrop');
+
+        if (hamburgerBtn && sidebar && backdrop) {
+            hamburgerBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+                backdrop.classList.toggle('hidden');
+            });
+            
+            backdrop.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                backdrop.classList.add('hidden');
+            });
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
   </body>
 </html>

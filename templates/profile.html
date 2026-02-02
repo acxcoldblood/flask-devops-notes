@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile • DevOps Notes Manager{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    
+    <!-- Profile Card -->
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+        
+        <!-- Header with gradient -->
+        <div class="bg-gradient-to-r from-zinc-800 to-zinc-900 p-8">
+            <div class="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+                <!-- Avatar -->
+                <div class="w-24 h-24 rounded-full border-4 border-white/20 overflow-hidden bg-white/10 flex items-center justify-center shrink-0">
+                    {% if current_user.profile_picture %}
+                    <img src="{{ url_for('static', filename='uploads/' + current_user.profile_picture) }}" 
+                         alt="{{ current_user.username }}" 
+                         class="w-full h-full object-cover">
+                    {% else %}
+                    <div class="text-3xl font-bold text-white">
+                        {{ current_user.username[0]|upper }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Info -->
+                <div class="flex-1">
+                    <h1 class="text-3xl font-bold text-white mb-1">
+                        {{ current_user.username }}
+                    </h1>
+                    <p class="text-zinc-400">
+                        {{ current_user.email }}
+                    </p>
+                </div>
+                
+                <!-- Edit Button -->
+                <button class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white font-medium transition-colors" id="edit-profile-btn">
+                    <span>✏️</span> Edit Profile
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW MODE -->
+        <div id="profile-view" class="p-8">
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-zinc-900 dark:text-white">Profile Information</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
+                    <span class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">👤 Username</span>
+                    <span class="text-base text-zinc-900 dark:text-zinc-100">{{ current_user.username }}</span>
+                </div>
+                
+                <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
+                    <span class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">📧 Email</span>
+                    <span class="text-base text-zinc-900 dark:text-zinc-100">{{ current_user.email }}</span>
+                </div>
+                
+                <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg md:col-span-2">
+                    <span class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">📝 Bio</span>
+                    <span class="text-base text-zinc-900 dark:text-zinc-100">{{ current_user.bio or 'No bio yet. Click Edit Profile to add one!' }}</span>
+                </div>
+                
+                <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
+                    <span class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">🔑 Role</span>
+                    <span class="text-base text-zinc-900 dark:text-zinc-100 capitalize">{{ current_user.role or 'User' }}</span>
+                </div>
+                
+                <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
+                    <span class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">📅 API Token</span>
+                    <span class="text-base text-zinc-900 dark:text-zinc-100 font-mono">{{ '••••••••' + current_user.api_token[-4:] if current_user.api_token else 'Not generated' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- EDIT MODE (Hidden by default) -->
+        <form method="POST" action="{{ url_for('auth.profile') }}" enctype="multipart/form-data" id="profile-edit" class="hidden p-8 border-t border-zinc-800 bg-zinc-900/30">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-sm font-semibold text-zinc-100 uppercase tracking-wide">Edit Profile</h3>
+                <div class="flex gap-3">
+                    <button type="button" class="px-3 py-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors border border-zinc-700 rounded-md hover:bg-zinc-800" id="cancel-edit-btn">Cancel</button>
+                    <button type="submit" class="inline-flex items-center gap-2 px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-md transition-colors shadow-lg shadow-red-900/20">💾 Save Changes</button>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Username -->
+                <div>
+                    <label class="block text-xs font-medium text-zinc-400 mb-2 uppercase tracking-wide">Display Name</label>
+                    <input class="w-full h-11 px-3 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-200 text-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all shadow-inner" type="text" name="display_name" value="{{ current_user.username }}" required>
+                </div>
+
+                <!-- Bio -->
+                <div>
+                    <label class="block text-xs font-medium text-zinc-400 mb-2 uppercase tracking-wide">Bio</label>
+                    <textarea class="w-full p-3 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-200 text-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all shadow-inner" name="bio" rows="3" placeholder="Tell us about yourself..." maxlength="300">{{ current_user.bio or '' }}</textarea>
+                    <div class="text-right mt-1 text-xs text-zinc-600"><span id="bio-count">{{ (current_user.bio or '')|length }}</span>/300</div>
+                </div>
+
+                <!-- Profile Picture -->
+                <div>
+                    <label class="block text-xs font-medium text-zinc-400 mb-2 uppercase tracking-wide">Profile Picture</label>
+                    <div class="flex items-center gap-4">
+                        {% if current_user.profile_picture %}
+                        <img src="{{ url_for('static', filename='uploads/' + current_user.profile_picture) }}" alt="Current" class="w-12 h-12 rounded-full object-cover border border-zinc-700">
+                        {% else %}
+                        <div class="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center font-bold text-zinc-500 border border-zinc-700">{{ current_user.username[0]|upper }}</div>
+                        {% endif %}
+                        
+                        <label class="flex-1 cursor-pointer border border-dashed border-zinc-700 bg-zinc-950/50 rounded-lg p-4 hover:border-red-500 hover:bg-zinc-900 transition-all group" for="profile-pic-input">
+                            <input type="file" id="profile-pic-input" name="profile_picture" accept="image/png,image/jpeg,image/gif" class="hidden">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl opacity-50 group-hover:scale-110 transition-transform">📷</span>
+                                <div class="upload-text text-sm text-zinc-400">
+                                    <strong class="text-zinc-200">Click to upload</strong> or drag<br>
+                                    <span class="text-[10px] text-zinc-500">PNG, JPG up to 10MB</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const viewSection = document.getElementById('profile-view');
+    const editSection = document.getElementById('profile-edit');
+    const editBtn = document.getElementById('edit-profile-btn');
+    const cancelBtn = document.getElementById('cancel-edit-btn');
+
+    editBtn.addEventListener('click', function() {
+        viewSection.classList.add('hidden');
+        editSection.classList.remove('hidden');
+        editBtn.classList.add('hidden'); // Or style.display = 'none' if class hidden causes layout shift for button container, but here button is in header so hidden is fine
+        editBtn.style.display = 'none'; // Safer for flex container
+    });
+
+    cancelBtn.addEventListener('click', function() {
+        editSection.classList.add('hidden');
+        viewSection.classList.remove('hidden');
+        editBtn.style.display = null; // Restore default (flex/inline-flex)
+    });
+
+    // Bio character counter
+    const bioTextarea = document.querySelector('textarea[name="bio"]');
+    const bioCount = document.getElementById('bio-count');
+    if (bioTextarea && bioCount) {
+        bioTextarea.addEventListener('input', function() {
+            bioCount.textContent = this.value.length;
+        });
+    }
+
+    // File input preview
+    const fileInput = document.getElementById('profile-pic-input');
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            const uploadText = this.closest('label').querySelector('.upload-text');
+            if (this.files.length > 0) {
+                uploadText.innerHTML = '<strong class="text-green-600 dark:text-green-400">✓ ' + this.files[0].name + '</strong><br><span class="text-xs">Click Save to upload</span>';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

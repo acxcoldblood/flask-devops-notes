@@ -32,7 +32,9 @@ def init_db():
             description TEXT NOT NULL,
             category VARCHAR(50),
             example TEXT,
-            tags VARCHAR(500)
+            tags VARCHAR(500),
+            is_public BOOLEAN DEFAULT FALSE,
+            public_id VARCHAR(36) UNIQUE
         )
     """)
 

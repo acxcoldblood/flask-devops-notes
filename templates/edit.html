@@ -6,64 +6,87 @@ Edit Note | DevOps Notes Manager
 
 {% block content %}
 
-<section class="note-form-section">
-  <h2>✏️ Edit DevOps Note</h2>
+<section class="max-w-3xl mx-auto">
+  <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <div class="mb-6 pb-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+            <h2 class="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                ✏️ Edit DevOps Note
+            </h2>
+            <a href="{{ url_for('main.home') }}" class="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">Cancel</a>
+       </div>
 
-  <form method="post" class="note-form">
-    <input
-      name="command"
-      value="{{ note.command }}"
-      placeholder="Command or Concept"
-      required
-    />
+      <form method="post" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Command or Concept</label>
+                <input
+                  name="command"
+                  value="{{ note.command }}"
+                  placeholder="e.g. docker ps"
+                  required
+                  class="w-full h-11 px-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-accent-500"
+                />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Category</label>
+                <select name="category" class="w-full h-11 px-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-accent-500">
+                  <option value="">Select Category</option>
+                  <option value="docker" {% if note.category == 'docker' %}selected{% endif %}>Docker</option>
+                  <option value="kubernetes" {% if note.category == 'kubernetes' %}selected{% endif %}>Kubernetes</option>
+                  <option value="linux" {% if note.category == 'linux' %}selected{% endif %}>Linux</option>
+                  <option value="cicd" {% if note.category == 'cicd' %}selected{% endif %}>CI/CD</option>
+                  <option value="aws" {% if note.category == 'aws' %}selected{% endif %}>AWS</option>
+                  <option value="monitoring" {% if note.category == 'monitoring' %}selected{% endif %}>Monitoring</option>
+                  <option value="other" {% if note.category == 'other' %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+        </div>
 
-    <select name="category" class="category-select">
-      <option value="">Select Category</option>
-      <option value="docker" {% if note.category == 'docker' %}selected{% endif %}>Docker</option>
-      <option value="kubernetes" {% if note.category == 'kubernetes' %}selected{% endif %}>Kubernetes</option>
-      <option value="linux" {% if note.category == 'linux' %}selected{% endif %}>Linux</option>
-      <option value="cicd" {% if note.category == 'cicd' %}selected{% endif %}>CI/CD</option>
-      <option value="aws" {% if note.category == 'aws' %}selected{% endif %}>AWS</option>
-      <option value="monitoring" {% if note.category == 'monitoring' %}selected{% endif %}>Monitoring</option>
-      <option value="other" {% if note.category == 'other' %}selected{% endif %}>Other</option>
-    </select>
+        <!-- Description Rich Text Editor -->
+        <div>
+          <label for="description-editor" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            Description <span class="text-red-500">*</span>
+          </label>
+          <div id="description-editor" class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-300 dark:border-zinc-700 min-h-[150px]"></div>
+          <input type="hidden" id="description-input" name="description" value="{{ note.description or '' }}" required />
+        </div>
 
-    <!-- Description Rich Text Editor -->
-    <div class="editor-container">
-      <label for="description-editor" class="editor-label">
-        Description <span class="required">*</span>
-      </label>
-      <div id="description-editor"></div>
-      <input type="hidden" id="description-input" name="description" value="{{ note.description or '' }}" required />
-    </div>
+        <!-- Example Rich Text Editor -->
+        <div>
+          <label for="example-editor" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            Example (optional)
+          </label>
+          <div id="example-editor" class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-300 dark:border-zinc-700 min-h-[100px]"></div>
+          <input type="hidden" id="example-input" name="example" value="{{ note.example or '' }}" />
+        </div>
 
-    <!-- Example Rich Text Editor -->
-    <div class="editor-container">
-      <label for="example-editor" class="editor-label">
-        Example (optional)
-      </label>
-      <div id="example-editor"></div>
-      <input type="hidden" id="example-input" name="example" value="{{ note.example or '' }}" />
-    </div>
+        <div>
+            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Tags</label>
+            <input
+              name="tags"
+              value="{{ note.tags or '' }}"
+              placeholder="Tags (comma-separated): networking, troubleshooting, performance"
+              class="w-full h-11 px-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-accent-500"
+            />
+        </div>
 
-    <input
-      name="tags"
-      value="{{ note.tags or '' }}"
-      placeholder="Tags (comma-separated): networking, troubleshooting, performance"
-    />
+        <div class="flex gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+          <button type="submit" class="inline-flex items-center px-6 py-2 bg-accent-600 hover:bg-accent-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 shadow-sm">
+            💾 Save Changes
+          </button>
 
-    <div style="display: flex; gap: 1rem">
-      <button type="submit" class="btn primary">💾 Save Changes</button>
-
-      <a href="{{ url_for('main.home') }}" class="btn secondary">
-        ❌ Cancel
-      </a>
-    </div>
-  </form>
+          <a href="{{ url_for('main.home') }}" class="inline-flex items-center px-6 py-2 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 shadow-sm">
+            ❌ Cancel
+          </a>
+        </div>
+      </form>
+  </div>
 </section>
 
 {% endblock %}
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='js/editor.js') }}" defer></script>
+<!-- Quill JS (Ensure it's loaded if base doesn't load it globally, but base.html loads css, check if base loads js) -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 {% endblock %}

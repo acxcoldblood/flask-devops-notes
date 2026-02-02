@@ -6,67 +6,70 @@ Docs • DevOps Notes Manager
 
 {% block content %}
 
-<section class="page-section">
-  <div class="page-header">
-    <h1>📖 Documentation</h1>
-    <p>How this application works and how to run it.</p>
+<div class="max-w-5xl mx-auto pb-12">
+  <div class="mb-10 text-center">
+    <h1 class="text-4xl font-bold text-zinc-900 dark:text-white mb-2">📖 Documentation</h1>
+    <p class="text-lg text-zinc-500 dark:text-zinc-400">How this application works and how to run it.</p>
   </div>
 
-  <div class="features" style="max-width: 1200px; margin: 0 auto;">
-    <div class="feature-card">
-      <h3>💻 Local Setup</h3>
-      <div class="description">
-        <p><strong>Prerequisites:</strong></p>
-        <ul>
+  <div class="grid grid-cols-1 gap-6">
+    
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">💻 Local Setup</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
+        <p><strong class="text-zinc-900 dark:text-white">Prerequisites:</strong></p>
+        <ul class="list-disc pl-5 space-y-1 mb-4">
           <li>Python 3.8+</li>
           <li>MySQL 8.0+ (or use Docker for MySQL)</li>
           <li>pip (Python package manager)</li>
         </ul>
         
-        <p><strong>Steps:</strong></p>
-        <ol>
+        <p><strong class="text-zinc-900 dark:text-white">Steps:</strong></p>
+        <ol class="list-decimal pl-5 space-y-2">
           <li>Clone the repository</li>
-          <li>Create a virtual environment: <code>python -m venv venv</code></li>
+          <li>Create a virtual environment: <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">python -m venv venv</code></li>
           <li>Activate the virtual environment:
-            <ul>
-              <li>Windows: <code>venv\Scripts\activate</code></li>
-              <li>Linux/Mac: <code>source venv/bin/activate</code></li>
+            <ul class="list-disc pl-5 mt-1 space-y-1">
+              <li>Windows: <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">venv\Scripts\activate</code></li>
+              <li>Linux/Mac: <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">source venv/bin/activate</code></li>
             </ul>
           </li>
-          <li>Install dependencies: <code>pip install -r requirements.txt</code></li>
-          <li>Create a <code>.env</code> file with database credentials</li>
+          <li>Install dependencies: <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">pip install -r requirements.txt</code></li>
+          <li>Create a <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">.env</code> file with database credentials</li>
           <li>Set up the MySQL database and create the notes table</li>
-          <li>Run the Flask app: <code>python app.py</code></li>
-          <li>Access the application at <code>http://localhost:5000</code></li>
+          <li>Run the Flask app: <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">python app.py</code></li>
+          <li>Access the application at <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">http://localhost:5000</code></li>
         </ol>
       </div>
     </div>
 
-    <div class="feature-card">
-      <h3>🐳 Docker Setup</h3>
-      <div class="description">
-        <p><strong>Prerequisites:</strong></p>
-        <ul>
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">🐳 Docker Setup</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
+        <p><strong class="text-zinc-900 dark:text-white">Prerequisites:</strong></p>
+        <ul class="list-disc pl-5 space-y-1 mb-4">
           <li>Docker Desktop installed</li>
           <li>Docker Compose (included with Docker Desktop)</li>
         </ul>
         
-        <p><strong>Quick Start:</strong></p>
-        <ol>
-          <li>Create a <code>.env</code> file in the project root with:
-            <pre><code>DB_HOST=mysql
+        <p><strong class="text-zinc-900 dark:text-white">Quick Start:</strong></p>
+        <ol class="list-decimal pl-5 space-y-4">
+          <li>Create a <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">.env</code> file in the project root with:
+            <pre class="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg text-xs font-mono text-zinc-800 dark:text-zinc-200 overflow-x-auto mt-2"><code>DB_HOST=mysql
 DB_USER=root
 DB_PASSWORD=rootpassword
 DB_NAME=devops_notes
 MYSQL_ROOT_PASSWORD=rootpassword</code></pre>
           </li>
           <li>Build and start containers:
-            <pre><code>docker compose up --build</code></pre>
+            <pre class="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg text-xs font-mono text-zinc-800 dark:text-zinc-200 overflow-x-auto mt-2"><code>docker compose up --build</code></pre>
           </li>
           <li>Initialize the database (one-time setup):
-            <pre><code>docker exec -it devops-mysql mysql -uroot -prootpassword devops_notes</code></pre>
-            Then run:
-            <pre><code>CREATE TABLE notes (
+            <div class="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg text-xs font-mono text-zinc-800 dark:text-zinc-200 overflow-x-auto mt-2 space-y-2">
+                <p><code>docker exec -it devops-mysql mysql -uroot -prootpassword devops_notes</code></p>
+                <p class="text-zinc-500 italic"># Then run SQL:</p>
+                <div class="pl-2 border-l-2 border-zinc-300 dark:border-zinc-600">
+CREATE TABLE notes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   command VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
@@ -75,61 +78,42 @@ MYSQL_ROOT_PASSWORD=rootpassword</code></pre>
   example TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);</code></pre>
+);
+                </div>
+            </div>
           </li>
-          <li>Access the application at <code>http://localhost:5000</code></li>
+          <li>Access the application at <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">http://localhost:5000</code></li>
         </ol>
         
-        <p><strong>Useful Commands:</strong></p>
-        <ul>
-          <li>Stop containers: <code>docker compose down</code></li>
-          <li>Stop and remove volumes: <code>docker compose down -v</code></li>
-          <li>View logs: <code>docker compose logs -f</code></li>
-          <li>Rebuild after changes: <code>docker compose up --build</code></li>
+        <p class="mt-6"><strong class="text-zinc-900 dark:text-white">Useful Commands:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>Stop containers: <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">docker compose down</code></li>
+          <li>Stop and remove volumes: <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">docker compose down -v</code></li>
+          <li>View logs: <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">docker compose logs -f</code></li>
+          <li>Rebuild after changes: <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">docker compose up --build</code></li>
         </ul>
       </div>
     </div>
 
-    <div class="feature-card">
-      <h3>⚙️ DevOps Concepts Practiced</h3>
-      <div class="description">
-        <p><strong>This project demonstrates:</strong></p>
-        <ul>
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">⚙️ DevOps Concepts Practiced</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
+        <p><strong class="text-zinc-900 dark:text-white">This project demonstrates:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
           <li><strong>Containerization:</strong> Application and database run in isolated Docker containers</li>
           <li><strong>Service Orchestration:</strong> Docker Compose manages multi-container setup</li>
-          <li><strong>Environment Variables:</strong> Secure configuration using <code>.env</code> files</li>
+          <li><strong>Environment Variables:</strong> Secure configuration using <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">.env</code> files</li>
           <li><strong>Persistent Storage:</strong> Docker volumes for database data persistence</li>
           <li><strong>Service Discovery:</strong> Containers communicate via Docker network</li>
-          <li><strong>Separation of Concerns:</strong> Web and database layers are separate services</li>
-          <li><strong>Container Networking:</strong> Services communicate using service names</li>
-          <li><strong>Build Optimization:</strong> Multi-stage builds and <code>.dockerignore</code> usage</li>
         </ul>
       </div>
     </div>
 
-    <div class="feature-card">
-      <h3>📝 Application Features</h3>
-      <div class="description">
-        <p><strong>Core Functionality:</strong></p>
-        <ul>
-          <li>Create, Read, Update, Delete (CRUD) operations for DevOps notes</li>
-          <li>Rich text editor for descriptions and examples</li>
-          <li>Category-based organization (Docker, Kubernetes, Linux, CI/CD, AWS, Monitoring)</li>
-          <li>Tag system for flexible categorization</li>
-          <li>Search functionality across commands, descriptions, and tags</li>
-          <li>Sorting options (newest, oldest, category, alphabetical)</li>
-          <li>Grid and list view modes</li>
-          <li>Copy command functionality</li>
-          <li>Responsive design for mobile and desktop</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="feature-card">
-      <h3>🗄️ Database Schema</h3>
-      <div class="description">
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">🗄️ Database Schema</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
         <p>The application uses a MySQL database with the following table structure:</p>
-        <pre><code>CREATE TABLE notes (
+        <pre class="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg text-xs font-mono text-zinc-800 dark:text-zinc-200 overflow-x-auto mt-2"><code>CREATE TABLE notes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   command VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
@@ -139,60 +123,42 @@ MYSQL_ROOT_PASSWORD=rootpassword</code></pre>
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );</code></pre>
-        <p><strong>Fields:</strong></p>
-        <ul>
-          <li><code>id</code>: Primary key, auto-incrementing</li>
-          <li><code>command</code>: The DevOps command or operation name</li>
-          <li><code>description</code>: Detailed explanation (HTML formatted)</li>
-          <li><code>category</code>: Predefined category for organization</li>
-          <li><code>tags</code>: Comma-separated tags for flexible searching</li>
-          <li><code>example</code>: Example usage or code snippets (HTML formatted)</li>
-          <li><code>created_at</code>: Timestamp when note was created</li>
-          <li><code>updated_at</code>: Timestamp when note was last modified</li>
+        <p class="mt-4"><strong class="text-zinc-900 dark:text-white">Fields:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">id</code>: Primary key, auto-incrementing</li>
+          <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">command</code>: The DevOps command or operation name</li>
+          <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">description</code>: Detailed explanation (HTML formatted)</li>
+          <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">category</code>: Predefined category for organization</li>
         </ul>
       </div>
     </div>
 
-    <div class="feature-card">
-      <h3>🔧 Configuration</h3>
-      <div class="description">
-        <p><strong>Environment Variables (.env file):</strong></p>
-        <pre><code># Database Configuration
-DB_HOST=mysql          # Database hostname (use 'mysql' for Docker, 'localhost' for local)
-DB_USER=root           # MySQL username
-DB_PASSWORD=rootpassword  # MySQL password
-DB_NAME=devops_notes   # Database name
-MYSQL_ROOT_PASSWORD=rootpassword  # MySQL root password (for Docker)</code></pre>
+    <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">🚀 REST API Usage</h3>
+      <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
+        <p>The application now supplies a REST API for programmatic access to your notes.</p>
         
-        <p><strong>Important Notes:</strong></p>
-        <ul>
-          <li>Never commit the <code>.env</code> file to version control</li>
-          <li>Use different credentials for production environments</li>
-          <li>For Docker setup, <code>DB_HOST</code> should be the service name from <code>docker-compose.yml</code></li>
-          <li>For local setup, use <code>localhost</code> or <code>127.0.0.1</code> as <code>DB_HOST</code></li>
+        <p class="mt-4"><strong class="text-zinc-900 dark:text-white">Authentication:</strong></p>
+        <p>All API requests require an <code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">X-API-Token</code> header. You can generate your token in the <a href="{{ url_for('auth.settings') }}" class="text-accent-600 hover:underline">Settings</a> page.</p>
+        <pre class="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg text-xs font-mono text-zinc-800 dark:text-zinc-200 overflow-x-auto mt-2"><code>curl -H "X-API-Token: YOUR_TOKEN" http://localhost/api/notes</code></pre>
+        
+        <p class="mt-4"><strong class="text-zinc-900 dark:text-white">Endpoints:</strong></p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">GET /api/notes</code> - List all notes (supports ?category=X&search=Y)</li>
+          <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">GET /api/notes/&lt;id&gt;</code> - Get a single note</li>
+          <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">POST /api/notes</code> - Create a new note (JSON body required)</li>
+          <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">GET /api/categories</code> - List all available categories</li>
         </ul>
+        
+        <p class="mt-4"><strong class="text-zinc-900 dark:text-white">Example Creation:</strong></p>
+<pre class="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg text-xs font-mono text-zinc-800 dark:text-zinc-200 overflow-x-auto mt-2"><code>curl -X POST http://localhost/api/notes \
+  -H "X-API-Token: YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"command": "ls -la", "description": "List all files", "category": "Linux"}'</code></pre>
       </div>
     </div>
 
-    <div class="feature-card">
-      <h3>🚀 Future Enhancements</h3>
-      <div class="description">
-        <p>Planned features and improvements:</p>
-        <ul>
-          <li>Automatic database table creation on first run</li>
-          <li>Pagination for large datasets</li>
-          <li>User authentication and role-based access</li>
-          <li>Export/import functionality (JSON, CSV)</li>
-          <li>Production server using Gunicorn</li>
-          <li>CI/CD pipeline with GitHub Actions</li>
-          <li>Cloud deployment (AWS, Azure, GCP)</li>
-          <li>API endpoints for programmatic access</li>
-          <li>Dark mode theme</li>
-          <li>Advanced search with filters</li>
-        </ul>
-      </div>
-    </div>
   </div>
-</section>
+</div>
 
 {% endblock %}

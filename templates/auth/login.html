@@ -1,0 +1,72 @@
+{% extends "auth_layout.html" %}
+
+{% block title %}Login • DevOps Notes Manager{% endblock %}
+
+{% block visual_title %}Welcome back!{% endblock %}
+{% block visual_subtitle %}Log in to your account to manage your DevOps commands, notes, and more.{% endblock %}
+
+{% block form_title %}Login Now!{% endblock %}
+{% block form_subtitle %}Welcome back! Please enter your details.{% endblock %}
+
+{% block form_content %}
+<form method="POST" action="" class="space-y-6">
+    {{ form.hidden_tag() }}
+    
+    <!-- Email -->
+    <div>
+        <label class="block text-xs font-medium text-zinc-400 uppercase tracking-wide mb-2">
+            {{ form.email.label.text }}
+        </label>
+        <div class="relative">
+            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 w-5 text-center">✉️</div>
+            {% if form.email.errors %}
+                {{ form.email(class="w-full h-11 pl-10 pr-4 rounded-md border border-red-500 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500", placeholder="name@company.com") }}
+            {% else %}
+                {{ form.email(class="w-full h-11 pl-10 pr-4 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all shadow-inner", placeholder="name@company.com") }}
+            {% endif %}
+        </div>
+        {% for error in form.email.errors %}
+            <p class="mt-1 text-xs text-red-500 font-medium">{{ error }}</p>
+        {% endfor %}
+    </div>
+
+    <!-- Password -->
+    <div>
+        <div class="flex justify-between items-center mb-2">
+            <label class="text-xs font-medium text-zinc-400 uppercase tracking-wide">
+                {{ form.password.label.text }}
+            </label>
+            <a href="#" class="text-xs text-zinc-500 hover:text-white transition-colors">Forgot password?</a>
+        </div>
+        <div class="relative">
+            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 w-5 text-center">🔒</div>
+            {% if form.password.errors %}
+                {{ form.password(class="w-full h-11 pl-10 pr-4 rounded-md border border-red-500 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500", placeholder="••••••••") }}
+            {% else %}
+                {{ form.password(class="w-full h-11 pl-10 pr-4 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all shadow-inner", placeholder="••••••••") }}
+            {% endif %}
+        </div>
+        {% for error in form.password.errors %}
+            <p class="mt-1 text-xs text-red-500 font-medium">{{ error }}</p>
+        {% endfor %}
+    </div>
+
+    <!-- Remember Me -->
+    <div class="flex items-center gap-2">
+        {{ form.remember(class="w-4 h-4 rounded border-zinc-700 bg-zinc-900 text-red-600 focus:ring-red-500 focus:ring-offset-zinc-900") }}
+        <label class="text-sm text-zinc-400">{{ form.remember.label.text }}</label>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="w-full h-11 flex items-center justify-center gap-2 rounded-md bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-all shadow-lg shadow-red-900/20 border border-transparent hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-zinc-900">
+        Log In →
+    </button>
+</form>
+{% endblock %}
+
+{% block form_footer %}
+<p class="text-sm text-zinc-500 dark:text-zinc-400">
+    Don't have an account? 
+    <a href="{{ url_for('auth.register') }}" class="font-semibold text-accent-600 hover:underline">Sign Up</a>
+</p>
+{% endblock %}
