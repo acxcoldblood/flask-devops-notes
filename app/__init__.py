@@ -12,6 +12,12 @@ def create_app():
     )
 
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-key-please-change')
+    
+    # Session Security Config
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+    app.config['SESSION_COOKIE_SECURE'] = False  # Set to True only if using HTTPS
+    app.config['REMEMBER_COOKIE_SECURE'] = False
+    app.config['REMEMBER_COOKIE_SAMESITE'] = 'Lax'
 
     # Initialize Flask-Login
     from flask_login import LoginManager
