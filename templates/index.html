@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Home • DevOps Notes Manager
+Home - DevOps Notes Manager
 {% endblock %}
 
 {% block content %}
@@ -20,50 +20,72 @@ Home • DevOps Notes Manager
 
 <!-- ================= STATS ROW ================= -->
 <section class="dashboard-stats mb-10">
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
     <!-- Stat Card 1 -->
-    <div class="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-5 shadow-sm group hover:border-zinc-700 hover:ring-1 hover:ring-zinc-800 transition-all duration-300">
-      <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300 shadow-inner">📚</div>
+    <div class="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-lg p-3 shadow-sm group hover:border-zinc-700 hover:ring-1 hover:ring-zinc-800 transition-all duration-300">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 shadow-inner"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 4h7l5 5v11a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M14 4v5h5"/></svg></div>
         <div>
-          <h3 class="text-2xl font-bold text-white font-mono">{{ total_notes }}</h3>
-          <p class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Total Notes</p>
+          <h3 class="text-xl font-bold text-white font-mono">{{ total_notes }}</h3>
+          <p class="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Total Notes</p>
         </div>
       </div>
     </div>
 
     <!-- Stat Card 2 -->
-    <div class="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-5 shadow-sm group hover:border-zinc-700 hover:ring-1 hover:ring-zinc-800 transition-all duration-300">
-      <div class="flex items-center gap-4">
-         <div class="w-12 h-12 rounded-lg bg-green-500/10 text-green-400 border border-green-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300 shadow-inner">📊</div>
+    <div class="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-lg p-3 shadow-sm group hover:border-zinc-700 hover:ring-1 hover:ring-zinc-800 transition-all duration-300">
+      <div class="flex items-center gap-3">
+         <div class="w-9 h-9 rounded-md bg-green-500/10 text-green-400 border border-green-500/20 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 shadow-inner"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 14v4"/><path d="M11 10v8"/><path d="M15 6v12"/></svg></div>
         <div>
-          <h3 class="text-2xl font-bold text-white font-mono">{{ category_counts|length }}</h3>
-          <p class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Categories</p>
+          <h3 class="text-xl font-bold text-white font-mono">{{ category_counts|length }}</h3>
+          <p class="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Categories</p>
         </div>
       </div>
     </div>
 
     <!-- Stat Card 3 -->
-    <div class="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-5 shadow-sm group hover:border-zinc-700 hover:ring-1 hover:ring-zinc-800 transition-all duration-300">
-      <div class="flex items-center gap-4">
-         <div class="w-12 h-12 rounded-lg bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300 shadow-inner">🏷️</div>
+    <div class="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-lg p-3 shadow-sm group hover:border-zinc-700 hover:ring-1 hover:ring-zinc-800 transition-all duration-300">
+      <div class="flex items-center gap-3">
+         <div class="w-9 h-9 rounded-md bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 shadow-inner"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 7h7l7 7-7 7-7-7z"/><circle cx="10" cy="10" r="1"/></svg></div>
         <div>
-          <h3 class="text-2xl font-bold text-white font-mono">{{ popular_tags|length }}</h3>
-          <p class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Tags</p>
+          <h3 class="text-xl font-bold text-white font-mono">{{ popular_tags|length }}</h3>
+          <p class="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Tags</p>
         </div>
       </div>
     </div>
     
     <!-- Stat Card 4 -->
-    <div class="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-5 shadow-sm group hover:border-zinc-700 hover:ring-1 hover:ring-zinc-800 transition-all duration-300">
-      <div class="flex items-center gap-4">
-         <div class="w-12 h-12 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300 shadow-inner">⭐</div>
+    <div class="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-lg p-3 shadow-sm group hover:border-zinc-700 hover:ring-1 hover:ring-zinc-800 transition-all duration-300">
+      <div class="flex items-center gap-3">
+         <div class="w-9 h-9 rounded-md bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 shadow-inner"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l2.7 5.5 6.1.9-4.4 4.2 1 6-5.4-2.9-5.4 2.9 1-6L3.2 9.4l6.1-.9z"/></svg></div>
         <div>
-          <h3 class="text-2xl font-bold text-white font-mono">{{ recent_notes|length }}</h3>
-          <p class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Recent</p>
+          <h3 class="text-xl font-bold text-white font-mono">{{ recent_notes|length }}</h3>
+          <p class="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Recent</p>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ================= RECENT ACTIVITY ================= -->
+<section class="mb-10">
+  <div class="bg-zinc-900/40 border border-zinc-800 rounded-xl p-5 shadow-sm">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-sm font-semibold text-zinc-200 uppercase tracking-wider">Recent Notes</h3>
+      <a href="#notes-section" class="text-xs text-zinc-400 hover:text-white transition-colors">Jump to notes</a>
+    </div>
+    {% if recent_notes %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      {% for note in recent_notes %}
+      <div class="bg-zinc-950/70 border border-zinc-800 rounded-lg px-4 py-3 hover:border-zinc-700 transition-colors">
+        <div class="text-sm font-semibold text-zinc-100 truncate">{{ note.command }}</div>
+        <div class="text-xs text-zinc-500 mt-1 line-clamp-1">{{ note.category or 'Uncategorized' }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-sm text-zinc-500">No recent notes yet. Create your first snippet below.</div>
+    {% endif %}
   </div>
 </section>
 
@@ -75,6 +97,7 @@ Home • DevOps Notes Manager
             <h3 class="text-sm font-semibold text-white uppercase tracking-wider flex items-center gap-2">
                 <span class="text-red-500 animate-pulse">＋</span> Create New Snippet
             </h3>
+            <span class="text-xs text-zinc-500">Tip: Use Ctrl K to search instantly</span>
        </div>
 
        <form method="POST" class="note-form p-6 space-y-6">
@@ -83,6 +106,7 @@ Home • DevOps Notes Manager
                 <div class="space-y-2">
                     <label class="block text-xs font-medium text-zinc-400 uppercase tracking-wide ml-1">Command / Title</label>
                     <input name="command" placeholder="e.g. Docker Compose Up" required class="w-full h-11 px-4 rounded-lg bg-zinc-950/80 border border-zinc-800 text-zinc-200 text-sm placeholder:text-zinc-600 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all shadow-inner" />
+                    <p class="text-[11px] text-zinc-500">Keep it short and descriptive for fast scanning.</p>
                 </div>
                 
                 <!-- Category Select -->
@@ -94,6 +118,7 @@ Home • DevOps Notes Manager
                         <option value="{{ cat.name|lower }}">{{ cat.name }}</option>
                       {% endfor %}
                     </select>
+                    <p class="text-[11px] text-zinc-500">Use categories to organize and filter quickly.</p>
                 </div>
             </div>
 
@@ -102,6 +127,7 @@ Home • DevOps Notes Manager
                 <label class="block text-xs font-medium text-zinc-400 uppercase tracking-wide ml-1">Description & Notes</label>
                 <div id="description-editor" class="bg-zinc-950/80 rounded-lg border border-zinc-800 min-h-[120px] text-zinc-300 prose-invert shadow-inner focus-within:border-red-500/50 focus-within:ring-1 focus-within:ring-red-500/50 transition-all"></div>
                 <input type="hidden" name="description" id="description-input" required />
+                <p class="text-[11px] text-zinc-500">Add context, flags, and when to use this command.</p>
             </div>
             
             <!-- Footer Actions -->
@@ -109,6 +135,7 @@ Home • DevOps Notes Manager
                 <div class="flex-1 w-full space-y-2">
                     <label class="block text-xs font-medium text-zinc-400 uppercase tracking-wide ml-1">Tags (Comma separated)</label>
                     <input name="tags" placeholder="network, db, production" class="w-full h-11 px-4 rounded-lg bg-zinc-950/80 border border-zinc-800 text-zinc-300 text-sm placeholder:text-zinc-600 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all shadow-inner" />
+                    <p class="text-[11px] text-zinc-500">Tags power quick filtering and search.</p>
                 </div>
                 <button type="submit" class="w-full sm:w-auto px-6 h-11 bg-red-600 hover:bg-red-500 text-white text-sm font-semibold rounded-lg transition-all shadow-lg shadow-red-900/20 border border-transparent hover:border-red-400 hover:shadow-red-900/30 flex items-center justify-center gap-2">
                     <span>Save Snippet</span>
@@ -118,6 +145,46 @@ Home • DevOps Notes Manager
     </div>
 </section>
 
+<!-- ================= FILTERS ================= -->
+<section class="mb-8">
+  <div class="bg-zinc-900/80 border border-zinc-800 rounded-xl p-4 shadow-sm">
+    <div class="flex flex-col lg:flex-row gap-4">
+      <div class="flex-1">
+        <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Filter By Category</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="filter-btn active inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-zinc-800 text-white border border-zinc-700 hover:border-zinc-500 transition-colors" data-category="all">
+            All
+            <span class="text-[10px] text-zinc-300 bg-zinc-900/60 px-1.5 py-0.5 rounded-full border border-zinc-700">{{ total_notes }}</span>
+          </button>
+          {% for cat, count in category_counts.items() %}
+          <button class="filter-btn inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-zinc-900 text-zinc-300 border border-zinc-800 hover:border-zinc-600 hover:text-white transition-colors" data-category="{{ cat|lower }}">
+            {{ cat|title }}
+            <span class="text-[10px] text-zinc-400 bg-zinc-950/70 px-1.5 py-0.5 rounded-full border border-zinc-800">{{ count }}</span>
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="flex-1">
+        <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Popular Tags</p>
+        {% if popular_tags %}
+        <div class="flex flex-wrap gap-2">
+          {% for tag, count in popular_tags %}
+          <button class="tag-cloud-tag inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-zinc-950 text-zinc-300 border border-zinc-800 hover:border-zinc-600 hover:text-white transition-colors" data-tag="{{ tag }}">
+            #{{ tag }}
+            <span class="text-[10px] text-zinc-400 bg-zinc-900/70 px-1.5 py-0.5 rounded-full border border-zinc-800">{{ count }}</span>
+          </button>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-xs text-zinc-500 bg-zinc-950/50 border border-dashed border-zinc-800 rounded-lg px-3 py-2">
+          No tags yet. Add tags to your notes to build a quick filter.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ================= NOTES ================= -->
 <section class="features" id="notes-section">
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -125,7 +192,7 @@ Home • DevOps Notes Manager
       <h2 class="text-xl font-bold text-white flex items-center gap-2">
         <span class="text-accent-500">~/</span> Notes
       </h2>
-      <div class="px-2 py-0.5 rounded-full bg-zinc-800/50 border border-zinc-700/50 text-xs font-mono text-zinc-400">{{ notes|length }} items</div>
+      <div class="px-2 py-0.5 rounded-full bg-zinc-800/50 border border-zinc-700/50 text-xs font-mono text-zinc-400"><span id="visibleCount">{{ notes|length }}</span> items</div>
     </div>
     
     <div class="flex items-center gap-3">
@@ -144,15 +211,19 @@ Home • DevOps Notes Manager
              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
         </button>
       </div>
+
+      <button id="resetFilters" class="h-9 px-3 rounded bg-zinc-900 border border-zinc-800 text-xs text-zinc-400 hover:text-white hover:border-zinc-600 transition-colors">
+        Reset
+      </button>
     </div>
   </div>
 
   {% if notes %}
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="notesGrid">
     {% for note in notes %}
-    <div class="feature-card bg-zinc-900 border border-zinc-800 rounded-lg flex flex-col shadow-sm hover:border-zinc-700 hover:shadow-lg transition-all duration-300 group relative overflow-hidden ring-1 ring-white/0 hover:ring-white/5" data-category="{{ note.category|lower|default('other') }}">
+    <div class="feature-card bg-zinc-900/70 border border-zinc-800 rounded-xl flex flex-col shadow-sm hover:border-zinc-700 hover:shadow-lg transition-all duration-300 group relative overflow-hidden ring-1 ring-white/0 hover:ring-white/5" data-category="{{ note.category|lower|default('other') }}">
         <!-- Subtle Top Highlight -->
-        <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-500/0 via-red-500/40 to-red-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-500/0 via-red-500/50 to-red-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         
         <div class="relative flex flex-col h-full p-5">
 
@@ -215,7 +286,7 @@ Home • DevOps Notes Manager
                 <a
                   href="/delete/{{ note.id }}"
                   class="btn delete inline-flex items-center text-xs font-medium text-zinc-600 hover:text-red-400 transition-colors"
-                  onclick="return confirm('Delete this note?')"
+                  onclick="return confirm('Delete this note<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l2.7 5.5 6.1.9-4.4 4.2 1 6-5.4-2.9-5.4 2.9 1-6L3.2 9.4l6.1-.9z"/></svg>')"
                 >
                   Delete
                 </a>
@@ -226,16 +297,36 @@ Home • DevOps Notes Manager
     {% endfor %}
   </div>
   {% else %}
-  <div class="empty-state text-center py-20 bg-zinc-900/30 rounded-xl border border-dashed border-zinc-800">
-    <div class="text-4xl mb-4 opacity-50">📝</div>
-    <h3 class="text-lg font-semibold text-zinc-300 mb-2">No notes yet</h3>
-    <p class="text-zinc-500 mb-6">Create your first snippet in the terminal above.</p>
-    <a href="#add-note-card" class="inline-flex items-center px-4 py-2 bg-accent-600 hover:bg-accent-700 text-white font-medium rounded transition-colors shadow-lg shadow-accent-900/20">Create Snippet</a>
+  <div class="empty-state text-center py-16 bg-gradient-to-br from-zinc-900/50 to-zinc-950 rounded-2xl border border-zinc-800">
+    <div class="max-w-md mx-auto px-6">
+      <div class="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-2">Get Started</div>
+      <h3 class="text-2xl font-bold text-zinc-100 mb-3">Create your first DevOps snippet</h3>
+      <p class="text-zinc-400 mb-6">Store commands, flags, and explainers in one place. Search instantly and share when needed.</p>
+      <div class="flex items-center justify-center gap-3">
+        <a href="#add-note-card" class="inline-flex items-center px-4 py-2 bg-accent-600 hover:bg-accent-700 text-white font-medium rounded-lg transition-colors shadow-lg shadow-accent-900/20">Create Snippet</a>
+        <a href="{{ url_for('main.docs') }}" class="inline-flex items-center px-4 py-2 border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 font-medium rounded-lg transition-colors">View Docs</a>
+      </div>
+    </div>
   </div>
   {% endif %}
 </section>
 
 <style>
+/* Filter/Tag active states */
+.filter-btn.active {
+    background: rgba(225, 29, 72, 0.2);
+    border-color: rgba(225, 29, 72, 0.45);
+    color: #fda4af;
+}
+
+/* Notes card polish */
+.feature-card {
+    backdrop-filter: blur(6px);
+}
+.feature-card:hover .description {
+    opacity: 1;
+}
+
 /* Custom Grid/List Styles for Vue Toggle Logic */
 #notesGrid.list-view {
     display: flex;

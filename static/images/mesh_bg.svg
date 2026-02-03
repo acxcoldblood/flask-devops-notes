@@ -1,0 +1,26 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="g1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(380 260) rotate(35) scale(520 420)">
+      <stop stop-color="#f43f5e" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#09090b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1220 220) rotate(20) scale(520 420)">
+      <stop stop-color="#fb7185" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#09090b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(980 720) rotate(-15) scale(620 520)">
+      <stop stop-color="#be123c" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#09090b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="#09090b"/>
+  <rect width="1600" height="900" fill="url(#g1)"/>
+  <rect width="1600" height="900" fill="url(#g2)"/>
+  <rect width="1600" height="900" fill="url(#g3)"/>
+  <rect width="1600" height="900" fill="url(#grid)" opacity="0.08"/>
+  <defs>
+    <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse">
+      <path d="M56 0H0V56" stroke="#27272a" stroke-width="1"/>
+    </pattern>
+  </defs>
+</svg>

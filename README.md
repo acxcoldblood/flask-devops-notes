@@ -1,231 +1,123 @@
-text
-![CI](https://github.com/acxcoldblood/flask-devops-notes/actions/workflows/ci.yml/badge.svg)
-![Deploy](https://github.com/acxcoldblood/flask-devops-notes/actions/workflows/deploy.yml/badge.svg)
-
-
 # DevOps Notes Manager
 
-A Flask-based CRUD web application for managing DevOps commands and notes, fully containerized using Docker and Docker Compose with a MySQL backend and a production-style CI pipeline using GitHub Actions.
+DevOps Notes Manager is a Flask web app for storing DevOps commands and notes with tags, categories, and optional public sharing. The default deployment runs with Docker Compose using Nginx (reverse proxy) + Gunicorn (app server) + MySQL.
 
----
-
-## 🏗 Architecture Overview
+## Architecture
 
 ```text
-Browser
-   |
-   v
-Nginx (Reverse Proxy, Rate Limiting)
-   |
-   v
-Flask + Gunicorn (Docker container)
-   |
-   v
-MySQL (Docker container)
-
-```
-## CI/CD pipeline
-
-```text
-┌──────────────┐
-│   Git Push   │
-└──────┬───────┘
-       ↓
-┌──────────────┐
-│     CI       │
-│ Docker Build │
-│ Health Check │
-└──────┬───────┘
-       ↓
-┌──────────────┐
-│     CD       │
-│  SSH → EC2   │
-│ Docker Deploy│
-└──────────────┘
-
+Browser -> Nginx -> Flask (Gunicorn) -> MySQL
 ```
 
+## Features
 
----
+- CRUD notes per user
+- Tags + categories
+- Rich text notes (sanitized server-side)
+- Optional public links for notes
+- REST API with token authentication (header: `X-API-Token`)
+- Docker + Docker Compose local deployment
+- GitHub Actions CI workflow (container build + health check)
 
-## 🛠 Tech Stack
+## Quick Start (Docker)
 
-- **Backend:** Flask (Python)
-- **Database:** MySQL 8
-- **Frontend:** HTML, CSS (Jinja2 templates)
-- **Containerization:** Docker
-- **Orchestration:** Docker Compose
-- **CI/CD:** GitHub Actions
+1. Create your env file:
 
----
-
-## 📂 Project Structure
-
-```text
-.
-├── .github/
-│   └── workflows/
-│       ├── ci.yml
-        └── deploy.yml
-         
-├── app/
-│   ├── __init__.py
-│   ├── routes.py
-│   ├── db.py
-│   └── config.py
-├── nginx/
-│   └── nginx.conf
-├── scripts/
-│   └── health_check.sh
-├── static/
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-├── templates/
-│   ├── index.html
-│   └── edit.html
-├── Dockerfile
-├── docker-compose.yml
-├── requirements.txt
-├── .env.example
-├── .gitignore
-└── README.md
-
+```powershell
+Copy-Item .env.example .env
 ```
 
----
+2. Edit `.env` and set at least `SECRET_KEY` and the database values.
 
-## ⚙️ Environment Variables
+3. Start the stack:
 
-Create a `.env` file in the project root:
-
-```text
-DB_HOST=mysql
-DB_USER=example_user
-DB_PASSWORD=example_password
-DB_NAME=example_db
-MYSQL_ROOT_PASSWORD=example_root_password
-
-```
-
-📌 `.env` is ignored via `.gitignore`.  
-📌 `.env.example` is committed for CI and local setup reference.
-
----
-
-## ▶️ Run Locally (Docker)
-
-### Prerequisites
-
-- Docker
-- Docker Compose
-
-### Steps
-
-git clone https://github.com/acxcoldblood/flask-devops-notes.git
-cd flask-devops-notes
-
-cp .env.example .env
+```powershell
 docker compose up --build
+```
 
-Application will be available at:
+4. Open:
 
 ```text
 http://localhost
-
 ```
 
-## (Nginx listens on port 80 and proxies to Flask internally)
+MySQL is published on `localhost:3307` (container `3306`).
 
-## 🔄 CI Pipeline Overview
+## Configuration
 
-The GitHub Actions CI pipeline runs on every push to the `main` branch and performs:
+Key variables in `.env`:
 
-- Checkout source code
-- Create runtime `.env` from `.env.example`
-- Build Docker images
-- Start services using Docker Compose
-- Wait for MySQL health check
-- Start Flask via Gunicorn
-- Validate application using `/health` endpoint
-- Collect logs on failure
-- Cleanly shut down containers
+- `SECRET_KEY` (required)
+- `UPLOAD_MAX_MB` (default `2`)
+- `SESSION_COOKIE_SECURE` (`true` in production/HTTPS)
+- `REMEMBER_COOKIE_SECURE` (`true` in production/HTTPS)
+- `SESSION_COOKIE_SAMESITE` (default `Lax`)
+- `REMEMBER_COOKIE_SAMESITE` (default `Lax`)
+- `MYSQL_ROOT_PASSWORD`
+- `MYSQL_DATABASE`
+- `MYSQL_USER`
+- `MYSQL_PASSWORD`
+- `DB_HOST` (default for Docker: `mysql`)
+- `DB_PORT` (default `3306`)
+- `DB_NAME`
+- `DB_USER`
+- `DB_PASSWORD`
+- `SMTP_HOST` (default `smtp.gmail.com`)
+- `SMTP_PORT` (default `587`)
+- `SMTP_USER` (Gmail address)
+- `SMTP_PASSWORD` (Gmail app password)
+- `SMTP_SENDER` (From address)
+- `SMTP_USE_TLS` (default `true`)
+- `RESET_TOKEN_MAX_AGE` (seconds, default `3600`)
 
-This ensures the application is buildable, runnable, and healthy on every commit.
+### Gmail SMTP Notes
 
----
+Gmail requires an **App Password** if you have 2FA enabled. Create one in your Google Account, then set:
 
-## 🧪 Health Check Endpoint
+```
+SMTP_USER=your_email@gmail.com
+SMTP_PASSWORD=your_app_password
+```
 
-The application exposes a lightweight health endpoint used by CI:
+## API
+
+Base URL: `/api`
+
+Authentication:
+
+- Header: `X-API-Token: <token>`
+
+Endpoints:
+
+- `GET /api/health`
+- `GET /api/notes`
+- `POST /api/notes`
+- `GET /api/notes/<id>`
+- `GET /api/categories`
+
+## Local Development (Without Docker)
+
+You can run the Flask app locally, but you still need a MySQL instance and the correct env vars:
+
+```powershell
+python -m venv .venv
+.venv\\Scripts\\pip install -r requirements.txt
+.venv\\Scripts\\python -m flask --app wsgi:app run --host 0.0.0.0 --port 5000
+```
+
+## Security Notes
+
+- `SECRET_KEY` is required for sessions and CSRF.
+- Nginx rate limiting and security headers are configured in `nginx/nginx.conf`.
+- Profile image uploads enforce extension + MIME type + size limits.
+- Keep API tokens secret.
+
+## Project Layout
 
 ```text
-
-GET /health
-
+app/            Flask app (routes, auth, API, db)
+templates/      Jinja templates
+static/         Static assets (CSS/JS/uploads)
+nginx/          Nginx reverse proxy config
+migrations/     One-off migration scripts
+.github/        GitHub Actions workflows
 ```
-
-Response:
-
-```text
-200 OK
-```
-
-This avoids fragile checks against UI routes.
-
----
-
-## 🔐 Nginx Security Hardening
-
-- The reverse proxy includes:
-- Per-IP rate limiting
-- Explicit 429 responses for abuse
-- Request body size limits (1MB)
-- Backend isolation (Flask not exposed publicly)
-- These protections prevent:
-- Request floods
-- Oversized payload abuse
-- Direct access to application containers
-
-## 🧠 DevOps Concepts Demonstrated
-
-- Containerized multi-service architecture
-- Reverse proxy pattern
-- Docker networking and service discovery
-- Environment-based configuration management
-- Database health checks and startup ordering
-- Gunicorn production server use
-- CI-driven validation using real containers
-- Safe, incremental deployments
-- Safe, incremental deployments
-
----
-
-## 🔮 Future Enhancements
-
-- [ ] Authentication & authorization
-- [ ] HTTPS with Let's Encrypt
-- [ ] GitHub Actions CD (auto-deploy to EC2)
-- [ ] Structured application logging
-- [ ] Metrics & basic monitoring
-- [ ] Database migrations
-- [ ]Production backup strategy
-
----
-
-## 👨‍💻 Author
-
-**Kushagra Agarwal**  
-DevOps & Cloud Enthusiast
-
----
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
-## ⭐ Support
-
-If you found this project helpful, please consider giving it a ⭐ on GitHub!

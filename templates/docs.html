@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 
 {% block title %}
-Docs • DevOps Notes Manager
+Docs - DevOps Notes Manager
 {% endblock %}
 
 {% block content %}
 
 <div class="max-w-5xl mx-auto pb-12">
   <div class="mb-10 text-center">
-    <h1 class="text-4xl font-bold text-zinc-900 dark:text-white mb-2">📖 Documentation</h1>
+    <h1 class="text-4xl font-bold text-zinc-900 dark:text-white mb-2"> Documentation</h1>
     <p class="text-lg text-zinc-500 dark:text-zinc-400">How this application works and how to run it.</p>
   </div>
 
   <div class="grid grid-cols-1 gap-6">
     
     <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
-      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">💻 Local Setup</h3>
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2"> Local Setup</h3>
       <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
         <p><strong class="text-zinc-900 dark:text-white">Prerequisites:</strong></p>
         <ul class="list-disc pl-5 space-y-1 mb-4">
@@ -44,7 +44,7 @@ Docs • DevOps Notes Manager
     </div>
 
     <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
-      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">🐳 Docker Setup</h3>
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2"> Docker Setup</h3>
       <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
         <p><strong class="text-zinc-900 dark:text-white">Prerequisites:</strong></p>
         <ul class="list-disc pl-5 space-y-1 mb-4">
@@ -96,7 +96,7 @@ CREATE TABLE notes (
     </div>
 
     <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
-      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">⚙️ DevOps Concepts Practiced</h3>
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2"> DevOps Concepts Practiced</h3>
       <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
         <p><strong class="text-zinc-900 dark:text-white">This project demonstrates:</strong></p>
         <ul class="list-disc pl-5 space-y-1">
@@ -110,7 +110,7 @@ CREATE TABLE notes (
     </div>
 
     <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
-      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">🗄️ Database Schema</h3>
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2"> Database Schema</h3>
       <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
         <p>The application uses a MySQL database with the following table structure:</p>
         <pre class="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg text-xs font-mono text-zinc-800 dark:text-zinc-200 overflow-x-auto mt-2"><code>CREATE TABLE notes (
@@ -134,7 +134,7 @@ CREATE TABLE notes (
     </div>
 
     <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
-      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2">🚀 REST API Usage</h3>
+      <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-2"> REST API Usage</h3>
       <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400">
         <p>The application now supplies a REST API for programmatic access to your notes.</p>
         
@@ -144,7 +144,7 @@ CREATE TABLE notes (
         
         <p class="mt-4"><strong class="text-zinc-900 dark:text-white">Endpoints:</strong></p>
         <ul class="list-disc pl-5 space-y-1">
-          <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">GET /api/notes</code> - List all notes (supports ?category=X&search=Y)</li>
+          <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">GET /api/notes</code> - List all notes (supports -category=X&search=Y)</li>
           <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">GET /api/notes/&lt;id&gt;</code> - Get a single note</li>
           <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">POST /api/notes</code> - Create a new note (JSON body required)</li>
           <li><code class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-800 dark:text-zinc-200">GET /api/categories</code> - List all available categories</li>

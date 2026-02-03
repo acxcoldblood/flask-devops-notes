@@ -1,0 +1,21 @@
+<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="c1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(200 160) rotate(40) scale(260 210)">
+      <stop stop-color="#f43f5e" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#0b0b0f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="c2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(620 120) rotate(20) scale(240 200)">
+      <stop stop-color="#fb7185" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#0b0b0f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="c3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(520 420) rotate(-20) scale(280 220)">
+      <stop stop-color="#be123c" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#0b0b0f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="520" rx="24" fill="#0b0b0f"/>
+  <rect width="800" height="520" rx="24" fill="url(#c1)"/>
+  <rect width="800" height="520" rx="24" fill="url(#c2)"/>
+  <rect width="800" height="520" rx="24" fill="url(#c3)"/>
+  <rect width="800" height="520" rx="24" stroke="rgba(39,39,42,0.8)"/>
+</svg>

@@ -51,28 +51,7 @@
 
     <!-- Quill CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
-    
-    <style>
-      /* Command Center Scrollbar */
-      ::-webkit-scrollbar { width: 8px; }
-      ::-webkit-scrollbar-track { background: #09090b; }
-      ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
-      ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
-
-      /* Quill Dark Theme Overrides */
-      .ql-toolbar { border-color: #27272a !important; background: #18181b; color: #a1a1aa; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; }
-      .ql-container { border-color: #27272a !important; background: #09090b; color: #e4e4e7; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; font-family: 'Inter', sans-serif; }
-      .ql-stroke { stroke: #a1a1aa !important; }
-      .ql-fill { fill: #a1a1aa !important; }
-      .ql-picker { color: #a1a1aa !important; }
-      
-      /* Grid Pattern Background */
-      .bg-grid {
-          background-size: 40px 40px;
-          mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
-          -webkit-mask-image: linear-gradient(to bottom, transparent, 5%, black, 95%, transparent);
-      }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   </head>
 
   <body class="font-sans antialiased bg-zinc-950 text-zinc-100 h-screen overflow-hidden selection:bg-accent-500/30 selection:text-accent-200">
@@ -96,13 +75,13 @@
                 <div class="space-y-1">
                     <p class="px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Platform</p>
                     <a href="{{ url_for('main.home') }}" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 {% if request.endpoint == 'main.home' %}bg-zinc-800 text-white shadow-sm ring-1 ring-white/5{% else %}text-zinc-400 hover:bg-zinc-800 hover:text-white{% endif %}">
-                        <span class="opacity-70 group-hover:opacity-100 transition-opacity">⚡</span> Dashboard
+                        <svg class="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg> Dashboard
                     </a>
                     <a href="{{ url_for('main.docs') }}" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 {% if request.endpoint == 'main.docs' %}bg-zinc-800 text-white shadow-sm ring-1 ring-white/5{% else %}text-zinc-400 hover:bg-zinc-800 hover:text-white{% endif %}">
-                        <span class="opacity-70 group-hover:opacity-100 transition-opacity">📚</span> Documentation
+                        <svg class="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 4h7l5 5v11a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M14 4v5h5"/><path d="M9 14h6"/><path d="M9 17h6"/></svg> Documentation
                     </a>
                     <a href="{{ url_for('main.about') }}" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 {% if request.endpoint == 'main.about' %}bg-zinc-800 text-white shadow-sm ring-1 ring-white/5{% else %}text-zinc-400 hover:bg-zinc-800 hover:text-white{% endif %}">
-                        <span class="opacity-70 group-hover:opacity-100 transition-opacity">ℹ️</span> About
+                        <svg class="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9h.01"/><path d="M11 12h1v6h1"/><circle cx="12" cy="12" r="9"/></svg> About
                     </a>
                 </div>
 
@@ -110,14 +89,8 @@
                 <div class="mt-8">
                     <p class="px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Configuration</p>
                     <div class="space-y-1">
-                        <a href="{{ url_for('auth.profile') }}" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 {% if request.endpoint == 'auth.profile' %}bg-zinc-800 text-white shadow-sm ring-1 ring-white/5{% else %}text-zinc-400 hover:bg-zinc-800 hover:text-white{% endif %}">
-                            <span class="opacity-70 group-hover:opacity-100 transition-opacity">👤</span> Profile
-                        </a>
-                        <a href="{{ url_for('auth.settings') }}#api" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 text-zinc-400 hover:bg-zinc-800 hover:text-white">
-                            <span class="opacity-70 group-hover:opacity-100 transition-opacity">🔑</span> API Keys
-                        </a>
-                        <a href="{{ url_for('auth.settings') }}#appearance" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 text-zinc-400 hover:bg-zinc-800 hover:text-white">
-                            <span class="opacity-70 group-hover:opacity-100 transition-opacity">🎨</span> Preferences
+                        <a href="{{ url_for('auth.settings') }}" class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 {% if request.endpoint == 'auth.settings' %}bg-zinc-800 text-white shadow-sm ring-1 ring-white/5{% else %}text-zinc-400 hover:bg-zinc-800 hover:text-white{% endif %}">
+                            <svg class="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v2"/><path d="M12 19v2"/><path d="M4.22 4.22l1.42 1.42"/><path d="M18.36 18.36l1.42 1.42"/><path d="M3 12h2"/><path d="M19 12h2"/><path d="M4.22 19.78l1.42-1.42"/><path d="M18.36 5.64l1.42-1.42"/><circle cx="12" cy="12" r="4"/></svg> Settings
                         </a>
                     </div>
                 </div>
@@ -156,11 +129,12 @@
                     {% if current_user.is_authenticated %}
                     <div class="relative group search-input-wrapper">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <span class="text-zinc-500 group-focus-within:text-accent-400 transition-colors">🔍</span>
+                            <svg class="w-4 h-4 text-zinc-500 group-focus-within:text-accent-400 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
                         </div>
                         <input type="text" class="w-full bg-zinc-900/50 border border-zinc-800/80 rounded-lg py-2 pl-10 pr-12 text-sm text-zinc-200 placeholder:text-zinc-500 focus:bg-zinc-900 focus:border-accent-500/40 focus:ring-1 focus:ring-accent-500/40 transition-all shadow-sm" placeholder="Search commands..." id="searchInput">
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                            <span class="text-[10px] uppercase font-bold text-zinc-500 bg-zinc-800/50 px-1.5 py-0.5 rounded border border-zinc-700/50">Ctrl K</span>
+                        <div class="absolute inset-y-0 right-0 pr-2 flex items-center gap-2">
+                            <button id="searchClear" class="text-zinc-500 hover:text-zinc-300 text-xs px-2 py-1 rounded border border-zinc-800 bg-zinc-900/60 transition-colors" style="display:none">Clear</button>
+                            <span class="search-hint text-[10px] uppercase font-bold text-zinc-500 bg-zinc-800/50 px-1.5 py-0.5 rounded border border-zinc-700/50 transition-all">Ctrl K</span>
                         </div>
                     </div>
                     {% endif %}
@@ -182,7 +156,6 @@
                                 <div class="absolute right-0 top-full pt-2 w-48 hidden group-hover:block z-50">
                                     <div class="bg-zinc-900 rounded-lg shadow-xl border border-zinc-700/50 py-1 ring-1 ring-black/5">
                                         <div class="px-4 py-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider border-b border-zinc-800 mb-1">Account</div>
-                                        <a href="{{ url_for('auth.profile') }}" class="block px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors">Profile</a>
                                         <a href="{{ url_for('auth.settings') }}" class="block px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors">Settings</a>
                                         <div class="my-1 border-t border-zinc-800"></div>
                                         <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors">Log Out</a>
@@ -200,21 +173,23 @@
             <!-- ================= PAGE CONTENT ================= -->
             <main class="flex-1 p-6 lg:p-8 overflow-y-auto relative custom-scrollbar">
                 <!-- Flash Messages -->
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        <div class="fixed top-20 right-6 z-50 flex flex-col gap-2">
-                            {% for category, message in messages %}
-                                <div class="px-4 py-3 rounded-lg shadow-lg border text-sm font-medium animate-in slide-in-from-right-10 fade-in duration-300 backdrop-blur-md
-                                    {% if category == 'success' %}bg-green-500/10 border-green-500/20 text-green-400
-                                    {% elif category == 'danger' %}bg-red-500/10 border-red-500/20 text-red-400
-                                    {% elif category == 'info' %}bg-blue-500/10 border-blue-500/20 text-blue-400
-                                    {% else %}bg-zinc-800/80 border-zinc-700 text-zinc-200{% endif %}">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                {% endwith %}
+                {% if request.endpoint != 'auth.settings' %}
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="fixed top-20 right-6 z-50 flex flex-col gap-2">
+                                {% for category, message in messages %}
+                                    <div class="px-4 py-3 rounded-lg shadow-lg border text-sm font-medium animate-in slide-in-from-right-10 fade-in duration-300 backdrop-blur-md
+                                        {% if category == 'success' %}bg-green-500/10 border-green-500/20 text-green-400
+                                        {% elif category == 'danger' %}bg-red-500/10 border-red-500/20 text-red-400
+                                        {% elif category == 'info' %}bg-blue-500/10 border-blue-500/20 text-blue-400
+                                        {% else %}bg-zinc-800/80 border-zinc-700 text-zinc-200{% endif %}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                {% endif %}
 
                 <div class="max-w-7xl mx-auto">
                     {% block content %}{% endblock %}

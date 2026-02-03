@@ -177,6 +177,29 @@ filterButtons.forEach((button) => {
   });
 });
 
+// Reset filters
+const resetFiltersBtn = document.getElementById("resetFilters");
+if (resetFiltersBtn) {
+  resetFiltersBtn.addEventListener("click", function () {
+    currentCategory = "all";
+    filterButtons.forEach((btn) => btn.classList.remove("active"));
+    const allBtn = document.querySelector('.filter-btn[data-category="all"]');
+    if (allBtn) allBtn.classList.add("active");
+
+    if (searchInput) {
+      searchInput.value = "";
+      const searchWrapper = searchInput.closest(".search-input-wrapper");
+      if (searchWrapper) searchWrapper.classList.remove("has-clear");
+    }
+    if (searchClear) {
+      searchClear.style.display = "none";
+    }
+
+    filterNotes("", currentCategory);
+    updateNotesCount();
+  });
+}
+
 // Tag cloud click handler
 document.querySelectorAll(".tag-cloud-tag").forEach((tag) => {
   tag.addEventListener("click", function () {

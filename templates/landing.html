@@ -1,175 +1,179 @@
 {% extends "base_public.html" %}
 
-{% block title %}DevNotes - The Developer's Command Center{% endblock %}
+{% block title %}DevNotes - DevOps Notes Manager{% endblock %}
 
 {% block content %}
-<!-- ================= HERO SECTION ================= -->
-<section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-  
-  <!-- Animated Background -->
-  <div class="absolute inset-0 bg-zinc-950"></div>
-  <div class="absolute inset-0 bg-grid-white opacity-20"></div>
-  
-  <!-- Glowing Blobs -->
-  <div class="absolute top-20 left-1/4 w-[500px] h-[500px] bg-accent-600/30 rounded-full mix-blend-screen filter blur-[100px] animate-blob"></div>
-  <div class="absolute bottom-20 right-1/4 w-[500px] h-[500px] bg-purple-600/30 rounded-full mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000"></div>
+<!-- ================= HERO ================= -->
+<section class="relative overflow-hidden mesh-bg">
+  <div class="absolute inset-0 bg-grid-white opacity-50"></div>
+  <div class="absolute inset-0 pointer-events-none bg-gradient-to-b from-zinc-950/10 via-transparent to-zinc-950/40"></div>
 
-  <div class="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
-    
-    <!-- Hero Content -->
-    <div class="text-center lg:text-left animate-fade-up">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-xs font-medium text-accent-400 mb-6 shadow-lg shadow-accent-900/10">
-         <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-accent-500"></span>
-         </span>
-         v2.0 Now Available with Public Sharing
+  <div class="relative max-w-7xl mx-auto px-6 pt-24 pb-10">
+    <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-start">
+      <!-- Copy -->
+      <div>
+        <div class="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">
+          <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+          DevNotes Ops Ledger
+        </div>
+
+        <h1 class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.05]">
+          A fast, private knowledge system for DevOps teams.
+        </h1>
+
+        <p class="mt-6 text-lg text-zinc-400 leading-relaxed max-w-2xl">
+          Capture commands, deployment notes, and configs in a structured, searchable space. Built for engineers who want less noise and more signal.
+        </p>
+
+        <div class="mt-8 flex flex-col sm:flex-row items-start gap-3">
+          <a href="{{ url_for('auth.register') }}" class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-accent-600 text-white font-semibold hover:bg-accent-500 transition-colors">
+            Create Workspace
+          </a>
+          <a href="{{ url_for('auth.login') }}" class="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-zinc-700 text-zinc-200 hover:bg-zinc-900/60 transition-colors">
+            Sign In
+          </a>
+          <a href="#features" class="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600 transition-colors">
+            System Details
+          </a>
+        </div>
+
+        <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3">
+            <div class="text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">Latency</div>
+            <div class="mt-2 text-lg font-mono text-white">&lt; 200ms</div>
+          </div>
+          <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3">
+            <div class="text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">Search</div>
+            <div class="mt-2 text-lg font-mono text-white">Tags + CLI</div>
+          </div>
+          <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3">
+            <div class="text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">Privacy</div>
+            <div class="mt-2 text-lg font-mono text-white">Per‑user</div>
+          </div>
+          <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3">
+            <div class="text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">Export</div>
+            <div class="mt-2 text-lg font-mono text-white">API Token</div>
+          </div>
+        </div>
       </div>
-      
-      <h1 class="text-5xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] mb-6">
-        Your Personal <br>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 to-purple-500 text-glow">DevOps Brain.</span>
-      </h1>
-      
-      <p class="text-xl text-zinc-400 leading-relaxed mb-10 max-w-lg mx-auto lg:mx-0 font-light">
-        Stop searching through your bash history. Organize your essential commands, snippets, and configs in one stunning, searchable application.
+
+      <!-- System Map -->
+      <div class="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-6 shadow-2xl">
+        <div class="flex items-center justify-between">
+          <div class="text-xs uppercase tracking-widest text-zinc-500 font-semibold">System Map</div>
+          <div class="text-[11px] font-mono text-zinc-500">v1.0</div>
+        </div>
+
+        <div class="mt-6 grid gap-4">
+          <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
+            <div class="text-[11px] uppercase tracking-wider text-zinc-500">Pipeline</div>
+            <div class="mt-3 font-mono text-sm text-zinc-200">
+              client → nginx → gunicorn → mysql
+            </div>
+            <div class="mt-2 text-xs text-zinc-400">Reverse proxy + isolated services.</div>
+          </div>
+
+          <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
+            <div class="text-[11px] uppercase tracking-wider text-zinc-500">Index</div>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span class="px-2 py-0.5 rounded-full text-[11px] border border-zinc-800 bg-zinc-950/60 text-zinc-300">#mysql</span>
+              <span class="px-2 py-0.5 rounded-full text-[11px] border border-zinc-800 bg-zinc-950/60 text-zinc-300">#k8s</span>
+              <span class="px-2 py-0.5 rounded-full text-[11px] border border-zinc-800 bg-zinc-950/60 text-zinc-300">#terraform</span>
+              <span class="px-2 py-0.5 rounded-full text-[11px] border border-zinc-800 bg-zinc-950/60 text-zinc-300">#alerts</span>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
+            <div class="text-[11px] uppercase tracking-wider text-zinc-500">Sample Entry</div>
+            <div class="mt-3 font-mono text-sm text-zinc-200">
+              $ kubectl rollout status deploy/api
+            </div>
+            <div class="mt-2 text-xs text-zinc-400">Saved with context, linkable, shareable.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<section id="features" class="py-20 border-t border-zinc-900">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 items-start">
+      <div>
+        <div class="text-xs uppercase tracking-widest text-zinc-500 font-semibold">Signal over noise</div>
+        <h2 class="mt-4 text-3xl sm:text-4xl font-bold text-white">Designed like an ops console</h2>
+        <p class="mt-4 text-zinc-400 text-lg">
+          Fast input, clean tagging, and the right amount of metadata. No fluffy UI. Just a system that remembers what you deployed and why.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 p-5">
+          <div class="text-xs uppercase tracking-wider text-zinc-500">Search Engine</div>
+          <div class="mt-2 text-white font-semibold">Instant lookup</div>
+          <div class="mt-2 text-sm text-zinc-400">Filter by tag, category, or command prefix.</div>
+        </div>
+        <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 p-5">
+          <div class="text-xs uppercase tracking-wider text-zinc-500">Audit Trail</div>
+          <div class="mt-2 text-white font-semibold">Notes with context</div>
+          <div class="mt-2 text-sm text-zinc-400">Store the why next to the what.</div>
+        </div>
+        <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 p-5">
+          <div class="text-xs uppercase tracking-wider text-zinc-500">Shareable</div>
+          <div class="mt-2 text-white font-semibold">Public links</div>
+          <div class="mt-2 text-sm text-zinc-400">Expose a single note without exposing your workspace.</div>
+        </div>
+        <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 p-5">
+          <div class="text-xs uppercase tracking-wider text-zinc-500">Automation</div>
+          <div class="mt-2 text-white font-semibold">API access</div>
+          <div class="mt-2 text-sm text-zinc-400">Pull notes into scripts and runbooks.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+<section class="py-20 border-t border-zinc-900">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid lg:grid-cols-3 gap-6">
+      <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 p-6">
+        <div class="text-xs uppercase tracking-widest text-zinc-500">01</div>
+        <div class="mt-3 text-white font-semibold">Capture</div>
+        <div class="mt-2 text-sm text-zinc-400">Store commands, configs, and incident notes.</div>
+      </div>
+      <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 p-6">
+        <div class="text-xs uppercase tracking-widest text-zinc-500">02</div>
+        <div class="mt-3 text-white font-semibold">Organize</div>
+        <div class="mt-2 text-sm text-zinc-400">Tag by stack, environment, and service.</div>
+      </div>
+      <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 p-6">
+        <div class="text-xs uppercase tracking-widest text-zinc-500">03</div>
+        <div class="mt-3 text-white font-semibold">Ship</div>
+        <div class="mt-2 text-sm text-zinc-400">Share or automate access via tokenized API.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="py-16 border-t border-zinc-900">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-10 sm:p-12 text-center">
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Build your ops memory</h2>
+      <p class="mt-4 text-zinc-400 text-lg max-w-2xl mx-auto">
+        Run locally with Docker or deploy it anywhere. Your notes remain private by default.
       </p>
-      
-      <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-        <a href="{{ url_for('auth.register') }}" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-accent-600 text-white font-bold text-lg hover:bg-accent-500 hover:shadow-2xl hover:shadow-accent-600/30 transition-all duration-300 transform hover:-translate-y-1">
-          Start for Free
+      <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="{{ url_for('auth.register') }}" class="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-accent-600 text-white font-semibold hover:bg-accent-500 transition-colors">
+          Get Started
         </a>
-        <a href="#features" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 font-semibold text-lg hover:bg-zinc-800 hover:text-white transition-all">
-          Explore Features
+        <a href="{{ url_for('main.docs') }}" class="inline-flex items-center justify-center px-8 py-3 rounded-lg border border-zinc-700 text-zinc-200 hover:bg-zinc-900/60 transition-colors">
+          Read the Docs
         </a>
       </div>
-      
-      <div class="mt-12 flex items-center justify-center lg:justify-start gap-8 opacity-70">
-         <!-- Docker -->
-         <img src="https://cdn.simpleicons.org/docker/white" class="h-8 w-8 hover:opacity-100 transition-opacity opacity-60" title="Docker" alt="Docker">
-         
-         <!-- Kubernetes -->
-         <img src="https://cdn.simpleicons.org/kubernetes/white" class="h-8 w-8 hover:opacity-100 transition-opacity opacity-60" title="Kubernetes" alt="Kubernetes">
-
-         <!-- Linux -->
-         <img src="https://cdn.simpleicons.org/linux/white" class="h-8 w-8 hover:opacity-100 transition-opacity opacity-60" title="Linux" alt="Linux">
-
-         <!-- Python -->
-         <img src="https://cdn.simpleicons.org/python/white" class="h-8 w-8 hover:opacity-100 transition-opacity opacity-60" title="Python" alt="Python">
-
-         <!-- Terraform -->
-         <img src="https://cdn.simpleicons.org/terraform/white" class="h-8 w-8 hover:opacity-100 transition-opacity opacity-60" title="Terraform" alt="Terraform">
-      </div>
-    </div>
-
-    <!-- Hero Visual (Terminal Mockup) -->
-    <div class="relative animate-fade-up" style="animation-delay: 0.2s;">
-        <!-- Card Glow -->
-        <div class="absolute -inset-1 bg-gradient-to-r from-accent-600 to-purple-600 rounded-2xl blur opacity-30"></div>
-        
-        <div class="relative bg-zinc-900 rounded-2xl border border-zinc-800 shadow-2xl overflow-hidden aspect-[4/3] flex flex-col group">
-            <!-- Header -->
-            <div class="px-4 py-3 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between">
-                <div class="flex gap-2">
-                    <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
-                    <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                    <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
-                </div>
-                <div class="text-[10px] items-center gap-1.5 px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-500 font-mono hidden sm:flex">
-                    <span>🔒</span> ssh root@prod-cluster
-                </div>
-            </div>
-            
-            <!-- Body -->
-            <div class="flex-1 p-6 font-mono text-sm overflow-hidden relative">
-                <!-- Scanline -->
-                <div class="absolute inset-x-0 top-0 h-[2px] bg-accent-500/20 shadow-[0_0_20px_rgba(244,63,94,0.5)] animate-scan opacity-50 pointer-events-none"></div>
-                
-                <div class="space-y-4">
-                    <div class="opacity-0 animate-fade-in" style="animation-delay: 0.5s;">
-                        <span class="text-green-400">➜</span> <span class="text-blue-400">~</span> <span class="text-white">devnotes search "docker cleanup"</span>
-                    </div>
-                    
-                    <div class="pl-4 opacity-0 animate-fade-in" style="animation-delay: 0.8s;">
-                        <div class="p-4 rounded-lg bg-zinc-800/50 border-l-2 border-accent-500 mb-2">
-                            <div class="text-xs text-zinc-500 mb-1">// Prune all unused containers & images</div>
-                            <div class="text-accent-300">docker system prune -a --volumes</div>
-                        </div>
-                        <div class="p-4 rounded-lg bg-zinc-800/30 border-l-2 border-zinc-700">
-                            <div class="text-xs text-zinc-500 mb-1">// Stop all running containers</div>
-                            <div class="text-zinc-300">docker stop $(docker ps -aq)</div>
-                        </div>
-                    </div>
-                    
-                    <div class="opacity-0 animate-fade-in" style="animation-delay: 1.5s;">
-                         <span class="text-green-400">➜</span> <span class="text-blue-400">~</span> <span class="text-white animate-pulse">_</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Floating Badge -->
-        <div class="absolute -bottom-6 -right-6 bg-zinc-900 border border-zinc-800 p-4 rounded-xl shadow-xl flex items-center gap-3 animate-bounce" style="animation-duration: 3s;">
-            <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-400 text-xl">🚀</div>
-            <div>
-                <div class="text-xs font-bold text-white uppercase">Efficiency</div>
-                <div class="text-xs text-green-400">+300% Boost</div>
-            </div>
-        </div>
     </div>
   </div>
-  
-  <!-- Scroll Down Indicator -->
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-zinc-600">
-    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
-  </div>
-</section>
-
-<!-- ================= FEATURES GRID ================= -->
-<section id="features" class="py-32 relative bg-zinc-950">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-20">
-            <h2 class="text-3xl lg:text-5xl font-bold text-white mb-6">Built for Modern Engineering</h2>
-            <p class="text-zinc-400 max-w-2xl mx-auto text-lg">Every feature you need to manage your personal knowledge base, without the bloat.</p>
-        </div>
-        
-        <div class="grid md:grid-cols-3 gap-8">
-            <!-- Feature 1 -->
-            <div class="p-8 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-accent-500/50 transition-colors group">
-                <div class="w-14 h-14 rounded-xl bg-accent-500/10 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">⚡</div>
-                <h3 class="text-xl font-bold text-white mb-3">Instant Search</h3>
-                <p class="text-zinc-400 leading-relaxed">Find any command instantly with our powerful fuzzy search.</p>
-            </div>
-            
-            <!-- Feature 2 -->
-            <div class="p-8 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-purple-500/50 transition-colors group">
-                <div class="w-14 h-14 rounded-xl bg-purple-500/10 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">🔒</div>
-                <h3 class="text-xl font-bold text-white mb-3">Secure & Private</h3>
-                <p class="text-zinc-400 leading-relaxed">Your notes are yours. We use industry standard encryption.</p>
-            </div>
-            
-            <!-- Feature 3 -->
-            <div class="p-8 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-green-500/50 transition-colors group">
-                <div class="w-14 h-14 rounded-xl bg-green-500/10 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">🌎</div>
-                <h3 class="text-xl font-bold text-white mb-3">Public Sharing</h3>
-                <p class="text-zinc-400 leading-relaxed">Share snippets with your team or the world with a single click.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ================= CTA SECTION ================= -->
-<section class="py-24 relative overflow-hidden">
-    <!-- Background Glow -->
-    <div class="absolute inset-0 bg-gradient-to-b from-zinc-950 to-accent-900/10"></div>
-    
-    <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
-        <h2 class="text-4xl lg:text-6xl font-extrabold text-white mb-8 tracking-tight">Ready to upgrade your workflow?</h2>
-        <p class="text-xl text-zinc-400 mb-10 font-light">Join thousands of developers who trust DevNotes.</p>
-        
-        <a href="{{ url_for('auth.register') }}" class="inline-flex items-center px-10 py-5 rounded-full bg-white text-zinc-950 font-bold text-xl hover:bg-zinc-200 transition-all transform hover:scale-105 shadow-2xl shadow-white/10">
-            Get Started Now - It's Free
-        </a>
-    </div>
 </section>
 {% endblock %}
