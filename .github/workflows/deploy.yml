@@ -97,14 +97,7 @@ jobs:
           )
           COMMANDS="${COMMANDS/__ENV_B64__/$ENV_B64}"
 
-          COMMANDS_JSON=$(python - <<'PY'
-import json
-import os
-commands = os.environ["COMMANDS"].splitlines()
-commands = [c for c in commands if c.strip() != ""]
-print(json.dumps({"commands": commands}))
-PY
-          )
+          COMMANDS_JSON=$(python -c 'import json,os;commands=[c for c in os.environ["COMMANDS"].splitlines() if c.strip()!=""];print(json.dumps({"commands": commands}))')
 
           COMMAND_ID=$(aws ssm send-command \
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
