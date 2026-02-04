@@ -68,6 +68,7 @@ jobs:
             mkdir -p "$APP_DIR"
             git clone https://github.com/${{ github.repository }}.git "$APP_DIR"
           fi
+          git config --global --add safe.directory "$APP_DIR"
           cd "$APP_DIR"
 
           echo "Generating .env file on EC2"
