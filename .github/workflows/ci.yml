@@ -21,6 +21,20 @@ jobs:
       - name: Say hello from CI
         run: echo "Hello from GitHub Actions CI"
 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+
+      - name: create env file for CI
+        run: cp .env.example .env
+
+      - name: Say hello from CI
+        run: echo "Hello from GitHub Actions CI"
+
       - name: list repo files
         run: ls -la
 
@@ -28,7 +42,7 @@ jobs:
         run: docker compose build
 
       - name: start docker containers
-        run: docker compose up -d
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
 
       - name: list docker containers
         run: docker ps -a
@@ -37,11 +51,11 @@ jobs:
         run: sleep 15
 
       - name: Show container logs
-        run: docker compose logs
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml logs
 
       - name: Check flask app health
-        run: curl -f http://localhost/health
+        run: curl -f http://localhost:5000/health
 
       - name: stop docker containers
         if: always()
-        run: docker compose down
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml down

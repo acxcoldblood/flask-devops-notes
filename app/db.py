@@ -98,19 +98,31 @@ def init_db():
         cursor.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 
     # Ensure unique constraints for users
-    cursor.execute("""
-        SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS
-        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'email' AND NON_UNIQUE = 0
-    """)
-    if cursor.fetchone()[0] == 0:
-        cursor.execute("CREATE UNIQUE INDEX ux_users_email ON users (email)")
+    try:
+        cursor.execute("""
+            SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS
+            WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'email' AND NON_UNIQUE = 0
+        """)
+        if cursor.fetchone()[0] == 0:
+            cursor.execute("CREATE UNIQUE INDEX ux_users_email ON users (email)")
+    except mysql.connector.Error as err:
+        if err.errno == 1061:  # Duplicate key name
+            pass
+        else:
+            raise
 
-    cursor.execute("""
-        SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS
-        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'username' AND NON_UNIQUE = 0
-    """)
-    if cursor.fetchone()[0] == 0:
-        cursor.execute("CREATE UNIQUE INDEX ux_users_username ON users (username)")
+    try:
+        cursor.execute("""
+            SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS
+            WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'username' AND NON_UNIQUE = 0
+        """)
+        if cursor.fetchone()[0] == 0:
+            cursor.execute("CREATE UNIQUE INDEX ux_users_username ON users (username)")
+    except mysql.connector.Error as err:
+        if err.errno == 1061:  # Duplicate key name
+            pass
+        else:
+            raise
 
     cursor.execute("""
         SELECT COLUMN_NAME
