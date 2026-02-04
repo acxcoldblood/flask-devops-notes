@@ -115,7 +115,7 @@ python -m venv .venv
 
 We use a branching strategy to separate development from production code:
 
-- **`prod`**: The stable, production-ready branch. This is what runs in the live environment.
+- **`main`**: The stable, production-ready branch. This is what runs in the live environment.
 - **`dev`**: The active development branch. All new features and fixes should be committed here first.
 
 ### Workflow:
@@ -130,11 +130,11 @@ We use a branching strategy to separate development from production code:
     git commit -m "Feature description"
     git push origin dev
     ```
-3.  **Release**: To release changes to production, merge `dev` into `prod`.
+3.  **Release**: To release changes to production, merge `dev` into `main`.
     ```bash
-    git checkout prod
+    git checkout main
     git merge dev
-    git push origin prod
+    git push origin main
     ```
 
 ## Project Layout
