@@ -50,12 +50,15 @@ services:
       - web
 
   certbot:
-    image: certbot/dns-duckdns:latest
+    image: certbot/certbot:latest
     container_name: devops-certbot
+    profiles:
+      - certbot
     volumes:
       - /home/ubuntu/letsencrypt:/etc/letsencrypt
     entrypoint: >
-      sh -c "certbot certonly --non-interactive --agree-tos
+      sh -c "pip install --no-cache-dir certbot-dns-duckdns &&
+      certbot certonly --non-interactive --agree-tos
       --email you@example.com
       --dns-duckdns --dns-duckdns-credentials /etc/letsencrypt/duckdns.ini
       -d dnotes.duckdns.org"
