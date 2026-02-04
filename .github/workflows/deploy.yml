@@ -1,6 +1,6 @@
 name: Deploy DevOps Notes Manager to EC2
 
-on:
+"on":
   workflow_run:
     workflows: ["devops-notes-manager CI"]
     types:
@@ -97,11 +97,20 @@ jobs:
           )
           COMMANDS="${COMMANDS/__ENV_B64__/$ENV_B64}"
 
+          COMMANDS_JSON=$(python - <<'PY'
+import json
+import os
+commands = os.environ["COMMANDS"].splitlines()
+commands = [c for c in commands if c.strip() != ""]
+print(json.dumps({"commands": commands}))
+PY
+          )
+
           COMMAND_ID=$(aws ssm send-command \
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
             --comment "Deploy $GITHUB_SHA" \
-            --parameters commands="$COMMANDS" \
+            --parameters "$COMMANDS_JSON" \
             --query "Command.CommandId" \
             --output text)
 
