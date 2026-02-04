@@ -97,20 +97,6 @@
             </nav>
             
              <!-- User Info Bottom -->
-             <div class="p-4 border-t border-zinc-800 bg-zinc-900/50">
-                <div class="flex items-center gap-3 p-2 rounded-md hover:bg-zinc-800 transition-colors cursor-pointer group">
-                    <div class="w-8 h-8 rounded bg-zinc-800 flex items-center justify-center font-bold text-xs border border-zinc-700 text-zinc-400 group-hover:text-white group-hover:border-zinc-600 transition-colors">
-                        {{ current_user.username[0]|upper }}
-                    </div>
-                    <div class="overflow-hidden">
-                        <div class="text-sm font-medium text-zinc-200 group-hover:text-white transition-colors truncate">{{ current_user.username }}</div>
-                        <div class="text-[10px] text-zinc-500 group-hover:text-zinc-400 transition-colors truncate uppercase tracking-wider">{{ current_user.role }}</div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-        {% endif %}
-
         <!-- ================= MAIN CONTENT WRAPPER ================= -->
         <div class="flex-1 flex flex-col min-w-0 bg-zinc-950 relative">
             <!-- Grid Background Overlay -->
