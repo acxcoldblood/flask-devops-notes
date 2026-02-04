@@ -1,22 +1,58 @@
-// Copy to clipboard functionality
+// Copy to clipboard functionality (secure + fallback)
 function copyToClipboard(text, button) {
-  navigator.clipboard
-    .writeText(text)
-    .then(() => {
-      const originalText = button.innerHTML;
-      button.innerHTML = "✅ Copied!";
-      button.classList.add("success");
+  if (!text) return;
 
-      setTimeout(() => {
-        button.innerHTML = originalText;
-        button.classList.remove("success");
-      }, 2000);
-    })
-    .catch((err) => {
+  const onSuccess = () => {
+    if (!button) return;
+    const originalText = button.innerHTML;
+    const feedback = button.getAttribute("data-copy-feedback") || "Copied!";
+    button.innerHTML = feedback;
+    button.classList.add("success");
+
+    setTimeout(() => {
+      button.innerHTML = originalText;
+      button.classList.remove("success");
+    }, 2000);
+  };
+
+  const onFailure = (err) => {
+    if (err) {
       alert("Failed to copy: " + err);
-    });
-}
+    }
+  };
 
+  const fallbackCopy = () => {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    let succeeded = false;
+    try {
+      succeeded = document.execCommand("copy");
+    } catch (err) {
+      onFailure(err);
+    }
+
+    document.body.removeChild(textarea);
+
+    if (succeeded) {
+      onSuccess();
+    }
+  };
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard
+      .writeText(text)
+      .then(onSuccess)
+      .catch(() => fallbackCopy());
+  } else {
+    fallbackCopy();
+  }
+}
 // Search functionality
 const searchInput = document.getElementById("searchInput");
 const searchClear = document.getElementById("searchClear");

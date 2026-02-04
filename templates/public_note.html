@@ -66,7 +66,7 @@
                 <div class="p-6 border-b border-zinc-800 bg-zinc-900/80">
                     <div class="flex items-start justify-between gap-4 mb-4">
                         <span class="px-2.5 py-1 text-xs font-medium bg-zinc-800 text-zinc-300 rounded-md border border-zinc-700">{{ note.category or 'Snippet' }}</span>
-                        <button onclick="navigator.clipboard.writeText(`{{ note.command }}`)" class="text-xs text-zinc-500 hover:text-white transition-colors flex items-center gap-1 group">
+                        <button onclick="copyToClipboard(`{{ note.command }}`, this)" data-copy-feedback="Copied!" class="text-xs text-zinc-500 hover:text-white transition-colors flex items-center gap-1 group">
                             <span class="group-hover:hidden">Copy</span>
                             <span class="hidden group-hover:inline text-green-400">Copied!</span>
                             
@@ -105,5 +105,6 @@
         &copy; 2024 DevNotes. All rights reserved.
     </footer>
 
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

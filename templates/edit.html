@@ -30,15 +30,11 @@ Edit Note | DevOps Notes Manager
             <div>
                 <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Category</label>
                 <select name="category" class="w-full h-11 px-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-accent-500">
-                  <option value="">Select Category</option>
-                  <option value="docker" {% if note.category == 'docker' %}selected{% endif %}>Docker</option>
-                  <option value="kubernetes" {% if note.category == 'kubernetes' %}selected{% endif %}>Kubernetes</option>
-                  <option value="linux" {% if note.category == 'linux' %}selected{% endif %}>Linux</option>
-                  <option value="cicd" {% if note.category == 'cicd' %}selected{% endif %}>CI/CD</option>
-                  <option value="aws" {% if note.category == 'aws' %}selected{% endif %}>AWS</option>
-                  <option value="monitoring" {% if note.category == 'monitoring' %}selected{% endif %}>Monitoring</option>
-                  <option value="other" {% if note.category == 'other' %}selected{% endif %}>Other</option>
-                </select>
+  <option value="">Select Category</option>
+  {% for category in categories %}
+  <option value="{{ category.name|lower }}" {% if (note.category or '')|lower|replace('/', '') == category.name|lower|replace('/', '') %}selected{% endif %}>{{ category.name }}</option>
+  {% endfor %}
+</select>
             </div>
         </div>
 

@@ -275,7 +275,7 @@ Home - DevOps Notes Manager
                 <a href="{{ url_for('main.public_note', public_id=note.public_id) }}" target="_blank" class="text-xs text-blue-500 hover:text-blue-400 transition-colors flex items-center gap-1">
                     <span>View</span> ↗
                 </a>
-                <button onclick="navigator.clipboard.writeText('{{ url_for('main.public_note', public_id=note.public_id, _external=True) }}'); alert('Public Link Copied!')" class="text-xs text-zinc-500 hover:text-white transition-colors" title="Copy Public Link">
+                <button onclick="copyToClipboard('{{ url_for('main.public_note', public_id=note.public_id, _external=True) }}', this)" data-copy-feedback="Link Copied!" class="text-xs text-zinc-500 hover:text-white transition-colors" title="Copy Public Link">
                     🔗
                 </button>
                 {% endif %}

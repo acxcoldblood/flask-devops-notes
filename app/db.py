@@ -123,6 +123,23 @@ def init_db():
     if "is_system" not in existing_category_cols:
         cursor.execute("ALTER TABLE categories ADD COLUMN IF NOT EXISTS is_system BOOLEAN DEFAULT FALSE")
 
+    cursor.execute("SELECT name FROM categories")
+    existing_category_names = {row[0].strip().lower() for row in cursor.fetchall() if row[0]}
+
+    default_categories = [
+        ("Docker", "#3b82f6"),
+        ("Kubernetes", "#6366f1"),
+        ("Linux", "#22c55e"),
+        ("CI/CD", "#f59e0b"),
+        ("AWS", "#f97316"),
+        ("Monitoring", "#a855f7"),
+        ("Other", "#64748b"),
+    ]
+
+    for name, color in default_categories:
+        if name.lower() not in existing_category_names:
+            cursor.execute("INSERT INTO categories (name, color, is_system) VALUES (%s, %s, TRUE)", (name, color))
+
     conn.commit()
     cursor.close()
     conn.close()

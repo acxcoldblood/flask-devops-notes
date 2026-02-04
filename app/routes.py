@@ -221,6 +221,9 @@ def edit_note(id):
         cursor.execute("SELECT * FROM notes WHERE id = %s", (id,))
         note = cursor.fetchone()
 
+        cursor.execute("SELECT * FROM categories ORDER BY is_system DESC, name ASC")
+        categories = cursor.fetchall()
+
         cursor.close()
         conn.close()
         
@@ -230,7 +233,7 @@ def edit_note(id):
         if note['user_id'] != current_user.id:
             abort(403)
 
-        return render_template("edit.html", note=note, id=id)
+        return render_template("edit.html", note=note, id=id, categories=categories)
 
     # POST
     command = request.form.get("command")
