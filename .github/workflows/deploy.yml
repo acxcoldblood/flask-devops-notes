@@ -27,17 +27,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          COMMANDS=$(cat <<EOF
-          set -e
-          APP_DIR="/home/ubuntu/flask-devops-notes"
-          if [ ! -d "\$APP_DIR/.git" ]; then
-            mkdir -p "\$APP_DIR"
-            git clone https://github.com/${{ github.repository }}.git "\$APP_DIR"
-          fi
-          cd "\$APP_DIR"
-
-          echo "Generating .env file on EC2"
-          cat > .env <<ENV
+          ENV_B64=$(cat <<ENV | base64 -w 0
           FLASK_ENV=production
           FLASK_APP=app
           FLASK_RUN_HOST=0.0.0.0
@@ -69,6 +59,19 @@ jobs:
           SMTP_USE_TLS=${{ secrets.SMTP_USE_TLS }}
           RESET_TOKEN_MAX_AGE=${{ secrets.RESET_TOKEN_MAX_AGE }}
           ENV
+          )
+
+          COMMANDS=$(cat <<'EOF'
+          set -e
+          APP_DIR="/home/ubuntu/flask-devops-notes"
+          if [ ! -d "$APP_DIR/.git" ]; then
+            mkdir -p "$APP_DIR"
+            git clone https://github.com/${{ github.repository }}.git "$APP_DIR"
+          fi
+          cd "$APP_DIR"
+
+          echo "Generating .env file on EC2"
+          echo "__ENV_B64__" | base64 -d > .env
 
           echo "Deploying latest version"
           git pull origin main --rebase
@@ -84,7 +87,7 @@ jobs:
               echo "Health check passed"
               break
             fi
-            echo "Health check failed, retrying ($i/10)..."
+            echo "Health check failed, retrying (\$i/10)..."
             sleep 3
           done
 
@@ -92,6 +95,7 @@ jobs:
           curl -fsS http://localhost/health
           EOF
           )
+          COMMANDS="${COMMANDS/__ENV_B64__/$ENV_B64}"
 
           COMMAND_ID=$(aws ssm send-command \
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
