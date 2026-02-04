@@ -63,6 +63,7 @@ jobs:
 
           COMMANDS=$(cat <<'EOF'
           set -e
+          export HOME="/home/ubuntu"
           APP_DIR="/home/ubuntu/flask-devops-notes"
           if [ ! -d "$APP_DIR/.git" ]; then
             mkdir -p "$APP_DIR"
