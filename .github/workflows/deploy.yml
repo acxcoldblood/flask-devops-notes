@@ -58,6 +58,7 @@ jobs:
           SMTP_SENDER=${{ secrets.SMTP_SENDER }}
           SMTP_USE_TLS=${{ secrets.SMTP_USE_TLS }}
           RESET_TOKEN_MAX_AGE=${{ secrets.RESET_TOKEN_MAX_AGE }}
+          LETSENCRYPT_EMAIL=${{ secrets.LETSENCRYPT_EMAIL }}
           ENV
           )
 

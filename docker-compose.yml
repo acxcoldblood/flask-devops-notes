@@ -59,7 +59,7 @@ services:
     entrypoint: >
       sh -c "pip install --no-cache-dir certbot-dns-duckdns &&
       certbot certonly --non-interactive --agree-tos
-      --email you@example.com
+      --email ${LETSENCRYPT_EMAIL}
       --authenticator dns-duckdns --dns-duckdns-credentials /etc/letsencrypt/duckdns.ini
       -d dnotes.duckdns.org"
 
