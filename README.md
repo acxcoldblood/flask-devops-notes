@@ -111,6 +111,32 @@ python -m venv .venv
 - Profile image uploads enforce extension + MIME type + size limits.
 - Keep API tokens secret.
 
+## Development Workflow
+
+We use a branching strategy to separate development from production code:
+
+- **`prod`**: The stable, production-ready branch. This is what runs in the live environment.
+- **`dev`**: The active development branch. All new features and fixes should be committed here first.
+
+### Workflow:
+
+1.  **Develop**: Checkout the `dev` branch for your work.
+    ```bash
+    git checkout dev
+    ```
+2.  **Commit**: Make changes and commit them to `dev`.
+    ```bash
+    git add .
+    git commit -m "Feature description"
+    git push origin dev
+    ```
+3.  **Release**: To release changes to production, merge `dev` into `prod`.
+    ```bash
+    git checkout prod
+    git merge dev
+    git push origin prod
+    ```
+
 ## Project Layout
 
 ```text
