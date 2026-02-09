@@ -150,7 +150,13 @@ def init_db():
 
     for name, color in default_categories:
         if name.lower() not in existing_category_names:
-            cursor.execute("INSERT INTO categories (name, color, is_system) VALUES (%s, %s, TRUE)", (name, color))
+            try:
+                cursor.execute("INSERT INTO categories (name, color, is_system) VALUES (%s, %s, TRUE)", (name, color))
+            except mysql.connector.Error as err:
+                 if err.errno == 1062: # Duplicate entry
+                     pass
+                 else:
+                     raise
 
     conn.commit()
     cursor.close()

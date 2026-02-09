@@ -6,7 +6,10 @@ def get_db_connection():
     host = os.environ.get('DB_HOST', 'mysql')
     port = os.environ.get('DB_PORT', '3306')
     user = os.environ.get('DB_USER', 'devops')
-    password = os.environ.get('DB_PASSWORD', 'devops123')
+    password = os.environ.get('DB_PASSWORD')
+    
+    if not password:
+        raise ValueError("DB_PASSWORD environment variable is not set")
     database = os.environ.get('DB_NAME', 'devops_notes')
 
     print(f"Connecting to {host}:{port} as {user}...")
