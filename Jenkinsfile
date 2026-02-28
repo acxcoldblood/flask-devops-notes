@@ -19,7 +19,7 @@ pipeline {
     steps {
         sh '''
         echo "Cleaning old containers..."
-        docker compose -f docker-compose.ci.yml down -v || true
+        docker compose -f docker-compose.yml -f docker-compose.ci.yml down -v || true
 
         echo "Creating .env from template..."
         cp .env.example .env
@@ -42,6 +42,31 @@ pipeline {
         '''
     }
     }
+    stage('Build Docker Images') {
+    steps {
+        sh '''
+        echo "Building Docker images..."
+        docker compose -f docker-compose.yml -f docker-compose.ci.yml build
+        '''
+    }
+
+}
+    stage('Start CI Containers') {
+    steps {
+        sh '''
+        echo "Starting CI containers..."
+        docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
+        '''
+    }
+}
 
     }
+    post {
+    always {
+        sh '''
+        echo "Cleaning up containers..."
+        docker compose -f docker-compose.yml -f docker-compose.ci.yml down -v
+        '''
+    }
+}
 }
