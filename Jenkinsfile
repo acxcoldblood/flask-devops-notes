@@ -64,17 +64,33 @@ pipeline {
         sh '''
         echo "Waiting for application to be healthy..."
 
-        for i in {1..10}; do
-            if curl -s http://localhost:5000/health | grep "OK"; then
+        for i in 1 2 3 4 5 6 7 8 9 10
+        do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/health || true)
+
+            if [ "$STATUS" = "200" ]
+            then
                 echo "Application is healthy!"
                 exit 0
             fi
-            echo "Waiting..."
+
+            echo "Attempt $i failed with status $STATUS"
             sleep 5
         done
 
         echo "Health check failed!"
         exit 1
+        '''
+    }
+}
+    stage('Debug Logs') {
+    steps {
+        sh '''
+        echo "Checking running containers..."
+        docker ps
+
+        echo "Flask container logs:"
+        docker logs devops-flask || true
         '''
     }
 }
