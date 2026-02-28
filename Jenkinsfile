@@ -59,6 +59,25 @@ pipeline {
         '''
     }
 }
+    stage('Health Check') {
+    steps {
+        sh '''
+        echo "Waiting for application to be healthy..."
+
+        for i in {1..10}; do
+            if curl -s http://localhost:5000/health | grep "OK"; then
+                echo "Application is healthy!"
+                exit 0
+            fi
+            echo "Waiting..."
+            sleep 5
+        done
+
+        echo "Health check failed!"
+        exit 1
+        '''
+    }
+}
 
     }
     post {
