@@ -21,7 +21,6 @@ services:
       - "3307:3306"
 
   web:
-    build: .
     image: dnotes
     container_name: devops-flask
     restart: always
