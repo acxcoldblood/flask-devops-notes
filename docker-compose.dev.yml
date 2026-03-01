@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  nginx:
+    volumes:
+      - ./nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+      # Expose 443 if you want but it won't work with this config without SSL
+    depends_on:
+      - web
+
+  # Disable certbot in dev explicitly if needed, though profile handles it
