@@ -1,31 +1,39 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = "acxcoldblood/dnotes"
+        DEPLOY_DIR = "/opt/dnotes"
+    }
+
     stages {
 
-        stage('Checkout confirmation') {
+        stage('Checkout') {
             steps {
-                sh 'echo "Jenkins pipeline started on dev branch"'
+                echo "Jenkins pipeline started on dev branch"
                 sh 'ls -la'
             }
         }
 
-        stage('Prepare Environment') {
+        /* ================================
+           CI ENVIRONMENT PREPARATION
+        ================================= */
+
+        stage('Prepare CI Environment') {
             steps {
                 withCredentials([
-                    usernamePassword(
-                        credentialsId: 'db-creds',
+                    usernamePassword(credentialsId: 'db-creds',
                         usernameVariable: 'DB_USER',
-                        passwordVariable: 'DB_PASSWORD'
-                    ),
+                        passwordVariable: 'DB_PASSWORD'),
                     string(credentialsId: 'mysql-root-password', variable: 'MYSQL_ROOT'),
                     string(credentialsId: 'flask-secret', variable: 'FLASK_SECRET'),
                     string(credentialsId: 'smtp-user', variable: 'SMTP_USER'),
                     string(credentialsId: 'smtp-password', variable: 'SMTP_PASS')
                 ]) {
+
                     sh '''
 echo "Cleaning old CI containers..."
-docker compose -f docker-compose.yml -f docker-compose.ci.yml down -v || true
+docker compose -f docker-compose.yml -f docker-compose.ci.yml down -v --remove-orphans || true
 
 echo "Generating fresh CI .env file..."
 
@@ -57,13 +65,13 @@ SMTP_USE_TLS=true
 RESET_TOKEN_MAX_AGE=3600
 EOF
 
-echo ".env successfully generated"
+echo "CI .env successfully generated"
 '''
                 }
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Build Image') {
             steps {
                 sh '''
 echo "Building Docker images..."
@@ -72,7 +80,7 @@ docker compose -f docker-compose.yml -f docker-compose.ci.yml build
             }
         }
 
-        stage('Start CI Containers') {
+        stage('Start CI Stack') {
             steps {
                 sh '''
 echo "Starting CI containers..."
@@ -84,19 +92,18 @@ docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
         stage('Health Check') {
             steps {
                 sh '''
-echo "Waiting for application to be healthy..."
+echo "Waiting for application health..."
 
-for i in 1 2 3 4 5 6 7 8 9 10
+for i in {1..10}
 do
     STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/health || true)
 
-    if [ "$STATUS" = "200" ]
-    then
+    if [ "$STATUS" = "200" ]; then
         echo "Application is healthy!"
         exit 0
     fi
 
-    echo "Attempt $i failed with status $STATUS"
+    echo "Attempt $i failed (status: $STATUS)"
     sleep 5
 done
 
@@ -106,15 +113,17 @@ exit 1
             }
         }
 
-        stage('Push Image') {
+        /* ================================
+           PUSH IMAGE
+        ================================= */
+
+        stage('Push Image to Docker Hub') {
             steps {
                 script {
-                    def imageName = "acxcoldblood/dnotes"
-
                     sh """
-echo "Tagging image for Docker Hub..."
-docker tag dnotes ${imageName}:${BUILD_NUMBER}
-docker tag dnotes ${imageName}:latest
+echo "Tagging image..."
+docker tag dnotes ${IMAGE_NAME}:${BUILD_NUMBER}
+docker tag dnotes ${IMAGE_NAME}:latest
 """
                 }
 
@@ -123,15 +132,16 @@ docker tag dnotes ${imageName}:latest
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
+
                     sh """
 echo "Logging into Docker Hub..."
 echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin
 
-echo "Pushing build number tag..."
-docker push acxcoldblood/dnotes:${BUILD_NUMBER}
+echo "Pushing build tag..."
+docker push ${IMAGE_NAME}:${BUILD_NUMBER}
 
 echo "Pushing latest tag..."
-docker push acxcoldblood/dnotes:latest
+docker push ${IMAGE_NAME}:latest
 
 docker logout
 """
@@ -139,14 +149,16 @@ docker logout
             }
         }
 
+        /* ================================
+           DEPLOY TO LOCAL PRODUCTION
+        ================================= */
+
         stage('Deploy to Local Production') {
             steps {
                 withCredentials([
-                    usernamePassword(
-                        credentialsId: 'db-creds',
+                    usernamePassword(credentialsId: 'db-creds',
                         usernameVariable: 'DB_USER',
-                        passwordVariable: 'DB_PASSWORD'
-                    ),
+                        passwordVariable: 'DB_PASSWORD'),
                     string(credentialsId: 'mysql-root-password', variable: 'MYSQL_ROOT'),
                     string(credentialsId: 'flask-secret', variable: 'FLASK_SECRET'),
                     string(credentialsId: 'smtp-user', variable: 'SMTP_USER'),
@@ -154,9 +166,7 @@ docker logout
                 ]) {
 
                     sh '''
-DEPLOY_DIR=/opt/dnotes
-
-echo "Ensuring deploy directory exists..."
+echo "Preparing production directory..."
 mkdir -p $DEPLOY_DIR
 
 echo "Copying compose files..."
@@ -192,10 +202,13 @@ EOF
 echo "Exporting image tag..."
 export IMAGE_TAG=${BUILD_NUMBER}
 
+echo "Stopping old production stack..."
+docker compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans || true
+
 echo "Pulling latest image..."
 docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
 
-echo "Deploying containers..."
+echo "Starting production stack..."
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 echo "Production deployment completed successfully."
@@ -204,7 +217,7 @@ echo "Production deployment completed successfully."
             }
         }
 
-        stage('Debug Logs') {
+        stage('Verify Production') {
             steps {
                 sh '''
 echo "Running containers:"
@@ -217,11 +230,15 @@ docker compose -f /opt/dnotes/docker-compose.yml -f /opt/dnotes/docker-compose.p
         }
     }
 
+    /* ================================
+       POST CLEANUP (CI ONLY)
+    ================================= */
+
     post {
         always {
             sh '''
 echo "Cleaning up CI containers..."
-docker compose -f docker-compose.yml -f docker-compose.ci.yml down -v
+docker compose -f docker-compose.yml -f docker-compose.ci.yml down -v --remove-orphans || true
 '''
         }
     }
