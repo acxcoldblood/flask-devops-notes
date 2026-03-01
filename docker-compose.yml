@@ -22,6 +22,7 @@ services:
 
   web:
     build: .
+    image: dnotes
     container_name: devops-flask
     restart: always
     env_file:

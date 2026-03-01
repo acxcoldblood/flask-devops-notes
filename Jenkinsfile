@@ -83,6 +83,39 @@ pipeline {
         '''
     }
 }
+stage('Push Image') {
+    steps {
+        script {
+            def imageTag = "${BUILD_NUMBER}"
+            def imageName = "acxcoldblood/dnotes"
+
+            sh """
+                echo "Tagging image for Docker Hub..."
+                docker tag dnotes ${imageName}:${imageTag}
+                docker tag dnotes ${imageName}:latest
+            """
+        }
+
+        withCredentials([usernamePassword(
+            credentialsId: 'dockerhub-creds',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_PASS'
+        )]) {
+            sh """
+                echo "Logging into Docker Hub..."
+                echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
+                echo "Pushing build number tag..."
+                docker push acxcoldblood/dnotes:${BUILD_NUMBER}
+
+                echo "Pushing latest tag..."
+                docker push acxcoldblood/dnotes:latest
+
+                docker logout
+            """
+        }
+    }
+}
     stage('Debug Logs') {
     steps {
         sh '''
