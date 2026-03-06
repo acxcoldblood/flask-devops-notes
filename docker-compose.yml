@@ -14,8 +14,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
   web:
-    image: latest
+    image: acxcoldblood/dnotes:${IMAGE_TAG}
     restart: always
     env_file:
       - .env
@@ -27,7 +28,7 @@ services:
     environment:
       DB_HOST: mysql
     volumes:
-      - ./static/uploads:/app/static/uploads
+      - uploads_data:/app/static/uploads
 
   nginx:
     image: nginx:1.25-alpine
@@ -57,3 +58,4 @@ services:
 
 volumes:
   mysql_data:
+  uploads_data:

@@ -1,7 +1,6 @@
 services:
   web:
     image: acxcoldblood/dnotes:${IMAGE_TAG}
-    container_name: devops-flask
     restart: always
     env_file:
       - .env
