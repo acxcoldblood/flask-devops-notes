@@ -1,4 +1,4 @@
-```groovy
+groovy
 pipeline {
     agent any
 
@@ -280,4 +280,4 @@ docker compose -f docker-compose.yml -f docker-compose.ci.yml down -v --remove-o
         }
     }
 }
-```
+
