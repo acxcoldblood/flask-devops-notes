@@ -23,6 +23,6 @@ EXPOSE 5000
 # Run Flask app
 CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "wsgi:app"]
 
-# Healthcheck to monitor application status
-HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
-  CMD curl -f http://localhost:5000/health || exit 1
+# # Healthcheck to monitor application status
+# HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
+#   CMD curl -f http://localhost:5000/health || exit 1
