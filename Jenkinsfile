@@ -257,6 +257,18 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
 echo "Starting production stack..."
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
+echo "Injecting nginx configuration into running container..."
+NGINX_CONTAINER=$(docker compose -f docker-compose.yml -f docker-compose.prod.yml ps -q nginx)
+if [ -z "$NGINX_CONTAINER" ]; then
+  echo "ERROR: nginx container not found after startup."
+  docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
+  exit 1
+fi
+
+docker cp ./nginx/nginx.conf "$NGINX_CONTAINER:/etc/nginx/nginx.conf"
+docker exec "$NGINX_CONTAINER" nginx -t
+docker exec "$NGINX_CONTAINER" nginx -s reload
+
 echo "Production deployment completed successfully."
 '''
         }
