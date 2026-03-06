@@ -1,5 +1,10 @@
+```groovy
 pipeline {
     agent any
+
+    options {
+        timeout(time: 20, unit: 'MINUTES')
+    }
 
     environment {
         IMAGE_NAME = "acxcoldblood/dnotes"
@@ -8,9 +13,14 @@ pipeline {
 
     stages {
 
+        /* ================================
+           CHECKOUT SOURCE CODE
+        ================================= */
+
         stage('Checkout') {
             steps {
-                echo "Jenkins pipeline started on dev branch"
+                echo "Checking out repository..."
+                checkout scm
                 sh 'ls -la'
             }
         }
@@ -71,6 +81,10 @@ echo "CI .env successfully generated"
             }
         }
 
+        /* ================================
+           BUILD DOCKER IMAGE
+        ================================= */
+
         stage('Build Image') {
             steps {
                 sh '''
@@ -79,6 +93,10 @@ docker compose -f docker-compose.yml -f docker-compose.ci.yml build
 '''
             }
         }
+
+        /* ================================
+           START CI STACK
+        ================================= */
 
         stage('Start CI Stack') {
             steps {
@@ -89,14 +107,20 @@ docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
             }
         }
 
+        /* ================================
+           HEALTH CHECK
+        ================================= */
+
         stage('Health Check') {
             steps {
                 sh '''
 echo "Waiting for application health..."
 
-for i in {1..10}
+CONTAINER=$(docker compose -f docker-compose.yml -f docker-compose.ci.yml ps -q web)
+
+for i in $(seq 1 10)
 do
-    STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/health || true)
+    STATUS=$(docker exec $CONTAINER curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/health || true)
 
     if [ "$STATUS" = "200" ]; then
         echo "Application is healthy!"
@@ -108,24 +132,32 @@ do
 done
 
 echo "Health check failed!"
+echo "Running containers:"
+docker ps
+
+echo "Container logs:"
+docker logs $CONTAINER || true
+
+echo "Compose logs:"
+docker compose -f docker-compose.yml -f docker-compose.ci.yml logs
+
 exit 1
 '''
             }
         }
 
         /* ================================
-           PUSH IMAGE
+           PUSH IMAGE TO DOCKER HUB
         ================================= */
 
         stage('Push Image to Docker Hub') {
             steps {
-                script {
-                    sh """
+
+                sh """
 echo "Tagging image..."
 docker tag dnotes ${IMAGE_NAME}:${BUILD_NUMBER}
 docker tag dnotes ${IMAGE_NAME}:latest
 """
-                }
 
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
@@ -155,6 +187,7 @@ docker logout
 
         stage('Deploy to Local Production') {
             steps {
+
                 withCredentials([
                     usernamePassword(credentialsId: 'db-creds',
                         usernameVariable: 'DB_USER',
@@ -217,6 +250,10 @@ echo "Production deployment completed successfully."
             }
         }
 
+        /* ================================
+           VERIFY DEPLOYMENT
+        ================================= */
+
         stage('Verify Production') {
             steps {
                 sh '''
@@ -231,7 +268,7 @@ docker compose -f /opt/dnotes/docker-compose.yml -f /opt/dnotes/docker-compose.p
     }
 
     /* ================================
-       POST CLEANUP (CI ONLY)
+       CLEANUP CI STACK
     ================================= */
 
     post {
@@ -243,3 +280,4 @@ docker compose -f docker-compose.yml -f docker-compose.ci.yml down -v --remove-o
         }
     }
 }
+```
