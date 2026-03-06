@@ -199,8 +199,20 @@ docker logout
         ]) {
 
             sh '''
-echo "Switching to project workspace..."
-cd /var/jenkins_home/workspace/Dnotes
+echo "Preparing deployment directory on host-mounted path..."
+mkdir -p "$DEPLOY_DIR/nginx"
+cp docker-compose.yml docker-compose.prod.yml "$DEPLOY_DIR/"
+cp nginx/nginx.conf "$DEPLOY_DIR/nginx/nginx.conf"
+
+echo "Switching to deployment directory..."
+cd "$DEPLOY_DIR"
+
+echo "Validating nginx config mount source..."
+if [ ! -f "./nginx/nginx.conf" ]; then
+  echo "ERROR: ./nginx/nginx.conf is missing or not a regular file."
+  ls -la ./nginx || true
+  exit 1
+fi
 
 echo "Generating production .env..."
 
