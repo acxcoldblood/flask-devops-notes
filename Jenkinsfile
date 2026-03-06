@@ -185,29 +185,22 @@ docker logout
            DEPLOY TO LOCAL PRODUCTION
         ================================= */
 
-        stage('Deploy to Local Production') {
-            steps {
+       stage('Deploy to Local Production') {
+    steps {
 
-                withCredentials([
-                    usernamePassword(credentialsId: 'db-creds',
-                        usernameVariable: 'DB_USER',
-                        passwordVariable: 'DB_PASSWORD'),
-                    string(credentialsId: 'mysql-root-password', variable: 'MYSQL_ROOT'),
-                    string(credentialsId: 'flask-secret', variable: 'FLASK_SECRET'),
-                    string(credentialsId: 'smtp-user', variable: 'SMTP_USER'),
-                    string(credentialsId: 'smtp-password', variable: 'SMTP_PASS')
-                ]) {
+        withCredentials([
+            usernamePassword(credentialsId: 'db-creds',
+                usernameVariable: 'DB_USER',
+                passwordVariable: 'DB_PASSWORD'),
+            string(credentialsId: 'mysql-root-password', variable: 'MYSQL_ROOT'),
+            string(credentialsId: 'flask-secret', variable: 'FLASK_SECRET'),
+            string(credentialsId: 'smtp-user', variable: 'SMTP_USER'),
+            string(credentialsId: 'smtp-password', variable: 'SMTP_PASS')
+        ]) {
 
-                    sh '''
-echo "Preparing production directory..."
-mkdir -p $DEPLOY_DIR
-
-echo "Copying compose files..."
-cp docker-compose.yml $DEPLOY_DIR/
-cp docker-compose.prod.yml $DEPLOY_DIR/
-cp -r nginx $DEPLOY_DIR/
-
-cd $DEPLOY_DIR
+            sh '''
+echo "Switching to project workspace..."
+cd /var/jenkins_home/workspace/Dnotes
 
 echo "Generating production .env..."
 
@@ -232,7 +225,7 @@ SMTP_USE_TLS=true
 RESET_TOKEN_MAX_AGE=3600
 EOF
 
-echo "Exporting image tag..."
+echo "Setting image tag..."
 export IMAGE_TAG=${BUILD_NUMBER}
 
 echo "Stopping old production stack..."
@@ -246,9 +239,9 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 echo "Production deployment completed successfully."
 '''
-                }
-            }
         }
+    }
+}
 
         /* ================================
            VERIFY DEPLOYMENT
@@ -261,7 +254,7 @@ echo "Running containers:"
 docker ps
 
 echo "Production stack status:"
-docker compose -f /opt/dnotes/docker-compose.yml -f /opt/dnotes/docker-compose.prod.yml ps
+docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
 '''
             }
         }
