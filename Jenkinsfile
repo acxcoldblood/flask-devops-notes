@@ -202,25 +202,21 @@ docker logout
 echo "Preparing deployment directory on host-mounted path..."
 mkdir -p "$DEPLOY_DIR/nginx"
 cp docker-compose.yml docker-compose.prod.yml "$DEPLOY_DIR/"
-cp nginx/nginx.conf "$DEPLOY_DIR/nginx/nginx.conf"
+
+if [ -d "$DEPLOY_DIR/nginx/nginx.conf" ]; then
+  echo "Fixing invalid nginx config path (directory found at nginx.conf)..."
+  rm -rf "$DEPLOY_DIR/nginx/nginx.conf"
+fi
+
+install -m 644 nginx/nginx.conf "$DEPLOY_DIR/nginx/nginx.conf"
 
 echo "Switching to deployment directory..."
 cd "$DEPLOY_DIR"
 
-echo "Validating nginx config mount source..."
-if [ ! -f "./nginx/nginx.conf" ]; then
-  echo "ERROR: ./nginx/nginx.conf is missing or not a regular file."
-  ls -la ./nginx || true
-  exit 1
-fi
-
-echo "Validating deploy files from Docker daemon perspective..."
-docker run --rm -v "$DEPLOY_DIR:/mnt/deploy" alpine:3.20 sh -c '
-set -eu
-ls -ld /mnt/deploy /mnt/deploy/nginx
-ls -l /mnt/deploy/nginx
-test -f /mnt/deploy/nginx/nginx.conf
-'
+echo "Validating nginx config file..."
+ls -ld ./nginx
+ls -l ./nginx
+test -f ./nginx/nginx.conf
 
 echo "Generating production .env..."
 
