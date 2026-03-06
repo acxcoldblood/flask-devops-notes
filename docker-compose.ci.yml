@@ -1,7 +1,7 @@
 services:
   web:
     build: .
-    image: dnotes
+    image: .
     ports:
       - "5000:5000"
 
