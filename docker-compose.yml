@@ -15,7 +15,7 @@ services:
       timeout: 5s
       retries: 10
   web:
-    image: dnotes
+    image: latest
     restart: always
     env_file:
       - .env
