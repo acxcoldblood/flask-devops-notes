@@ -9,6 +9,8 @@ pipeline {
     environment {
         IMAGE_NAME = "acxcoldblood/dnotes"
         DEPLOY_DIR = "/opt/dnotes"
+        CI_COMPOSE_PROJECT = "dnotes-ci"
+        PROD_COMPOSE_PROJECT = "dnotes-prod"
     }
 
     stages {
@@ -43,7 +45,7 @@ pipeline {
 
                     sh '''
 echo "Cleaning old CI containers..."
-docker compose -f docker-compose.yml -f docker-compose.ci.yml down -v --remove-orphans || true
+docker compose -p ${CI_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.ci.yml down -v --remove-orphans || true
 
 echo "Generating fresh CI .env file..."
 
@@ -89,7 +91,7 @@ echo "CI .env successfully generated"
             steps {
                 sh '''
 echo "Building Docker images..."
-docker compose -f docker-compose.yml -f docker-compose.ci.yml build
+docker compose -p ${CI_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.ci.yml build
 '''
             }
         }
@@ -102,7 +104,7 @@ docker compose -f docker-compose.yml -f docker-compose.ci.yml build
             steps {
                 sh '''
 echo "Starting CI containers..."
-docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
+docker compose -p ${CI_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.ci.yml up -d
 '''
             }
         }
@@ -116,7 +118,7 @@ docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
                 sh '''
 echo "Waiting for application health..."
 
-CONTAINER=$(docker compose -f docker-compose.yml -f docker-compose.ci.yml ps -q web)
+CONTAINER=$(docker compose -p ${CI_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.ci.yml ps -q web)
 
 for i in $(seq 1 10)
 do
@@ -139,7 +141,7 @@ echo "Container logs:"
 docker logs $CONTAINER || true
 
 echo "Compose logs:"
-docker compose -f docker-compose.yml -f docker-compose.ci.yml logs
+docker compose -p ${CI_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.ci.yml logs
 
 exit 1
 '''
@@ -245,19 +247,19 @@ echo "Setting image tag..."
 export IMAGE_TAG=${BUILD_NUMBER}
 
 echo "Stopping old production stack..."
-docker compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans || true
+docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans || true
 
 echo "Pulling latest image..."
-docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
+docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.prod.yml pull
 
 echo "Starting production stack..."
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 echo "Injecting nginx configuration into running container..."
-NGINX_CONTAINER=$(docker compose -f docker-compose.yml -f docker-compose.prod.yml ps -q nginx)
+NGINX_CONTAINER=$(docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.prod.yml ps -q nginx)
 if [ -z "$NGINX_CONTAINER" ]; then
   echo "ERROR: nginx container not found after startup."
-  docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
+  docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.prod.yml ps
   exit 1
 fi
 
@@ -282,7 +284,7 @@ echo "Running containers:"
 docker ps
 
 echo "Production stack status:"
-docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
+docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.prod.yml ps
 '''
             }
         }
@@ -296,7 +298,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
         always {
             sh '''
 echo "Cleaning up CI containers..."
-docker compose -f docker-compose.yml -f docker-compose.ci.yml down -v --remove-orphans || true
+docker compose -p ${CI_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.ci.yml down -v --remove-orphans || true
 '''
         }
     }
