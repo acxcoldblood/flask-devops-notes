@@ -214,6 +214,14 @@ if [ ! -f "./nginx/nginx.conf" ]; then
   exit 1
 fi
 
+echo "Validating deploy files from Docker daemon perspective..."
+docker run --rm -v "$DEPLOY_DIR:/mnt/deploy" alpine:3.20 sh -c '
+set -eu
+ls -ld /mnt/deploy /mnt/deploy/nginx
+ls -l /mnt/deploy/nginx
+test -f /mnt/deploy/nginx/nginx.conf
+'
+
 echo "Generating production .env..."
 
 cat > .env <<EOF
