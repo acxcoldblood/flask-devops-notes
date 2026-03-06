@@ -1,7 +1,7 @@
 services:
   web:
     build: .
-    image: .
+    image: latest
     ports:
       - "5000:5000"
 
