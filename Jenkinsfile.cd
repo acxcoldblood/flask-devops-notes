@@ -20,7 +20,10 @@ pipeline {
 
         stage('Deploy to EC2') {
             when {
-                branch 'main'
+                anyOf {
+                    branch 'main'
+                    branch 'feature/ec2-rds-deploy'
+                }
             }
             steps {
                 withCredentials([
