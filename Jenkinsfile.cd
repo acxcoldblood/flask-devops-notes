@@ -24,9 +24,12 @@ pipeline {
 
         stage('Deploy to EC2') {
             when {
-                anyOf {
-                    branch 'main'
-                    branch 'feature/ec2-rds-deploy'
+                expression {
+                    def b = env.BRANCH_NAME ?: env.GIT_BRANCH ?: ''
+                    return b == 'main' ||
+                           b == 'feature/ec2-rds-deploy' ||
+                           b.endsWith('/main') ||
+                           b.endsWith('/feature/ec2-rds-deploy')
                 }
             }
             steps {
