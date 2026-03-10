@@ -1,0 +1,76 @@
+pipeline {
+    agent any
+
+    options {
+        timeout(time: 20, unit: 'MINUTES')
+    }
+
+    environment {
+        PROD_COMPOSE_PROJECT = "dnotes-prod"
+        REMOTE_DEPLOY_DIR = "/opt/dnotes"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                sh 'ls -la'
+            }
+        }
+
+        stage('Deploy to EC2') {
+            when {
+                branch 'main'
+            }
+            steps {
+                withCredentials([
+                    usernamePassword(credentialsId: 'db-creds',
+                        usernameVariable: 'DB_USER',
+                        passwordVariable: 'DB_PASSWORD'),
+                    string(credentialsId: 'rds-host', variable: 'RDS_HOST'),
+                    string(credentialsId: 'rds-port', variable: 'RDS_PORT'),
+                    string(credentialsId: 'rds-db-name', variable: 'RDS_DB_NAME'),
+                    string(credentialsId: 'flask-secret', variable: 'FLASK_SECRET'),
+                    string(credentialsId: 'smtp-user', variable: 'SMTP_USER'),
+                    string(credentialsId: 'smtp-password', variable: 'SMTP_PASS'),
+                    string(credentialsId: 'ec2-host', variable: 'EC2_HOST'),
+                    string(credentialsId: 'ec2-user', variable: 'EC2_USER')
+                ]) {
+                    sshagent(credentials: ['ec2-ssh-key']) {
+                        sh '''
+set -e
+
+ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "mkdir -p ${REMOTE_DEPLOY_DIR}/nginx"
+scp -o StrictHostKeyChecking=no docker-compose.prod.yml ${EC2_USER}@${EC2_HOST}:${REMOTE_DEPLOY_DIR}/docker-compose.prod.yml
+scp -o StrictHostKeyChecking=no nginx/nginx.conf ${EC2_USER}@${EC2_HOST}:${REMOTE_DEPLOY_DIR}/nginx/nginx.conf
+
+ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "
+set -e
+cd ${REMOTE_DEPLOY_DIR}
+cat > .env <<EOF
+DB_HOST=$RDS_HOST
+DB_PORT=$RDS_PORT
+DB_USER=$DB_USER
+DB_PASSWORD=$DB_PASSWORD
+DB_NAME=$RDS_DB_NAME
+SECRET_KEY=$FLASK_SECRET
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=$SMTP_USER
+SMTP_PASSWORD=$SMTP_PASS
+SMTP_USE_TLS=true
+RESET_TOKEN_MAX_AGE=3600
+IMAGE_TAG=${BUILD_NUMBER}
+EOF
+
+docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml pull
+docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml up -d
+docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml ps
+"
+'''
+                    }
+                }
+            }
+        }
+    }
+}
