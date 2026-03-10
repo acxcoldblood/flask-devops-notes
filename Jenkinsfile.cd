@@ -81,15 +81,15 @@ docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml up -d
 
 for i in \$(seq 1 20); do
   if curl -fsS http://localhost/health > /dev/null; then
-    echo "Health check passed on attempt \$i"
+    echo Health check passed on attempt \$i
     break
   fi
-  echo "Health check attempt \$i failed, retrying..."
+  echo Health check attempt \$i failed, retrying...
   sleep 3
 done
 
 if ! curl -fsS http://localhost/health > /dev/null; then
-  echo "Health check failed after retries. Showing container status and logs..."
+  echo Health check failed after retries. Showing container status and logs...
   docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml ps
   docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml logs --tail=100 web nginx || true
   exit 1
