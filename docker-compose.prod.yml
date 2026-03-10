@@ -1,6 +1,6 @@
 services:
   web:
-    image: acxcoldblood/dnotes:${IMAGE_TAG}
+    image: acxcoldblood/dnotes:${IMAGE_TAG:?IMAGE_TAG is required}
     restart: always
     env_file:
       - .env
@@ -11,6 +11,11 @@ services:
       DB_PORT: ${DB_PORT:-3306}
     volumes:
       - uploads_data:/app/static/uploads
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:5000/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
 
   nginx:
     image: nginx:1.25-alpine
@@ -19,7 +24,8 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - web
+      web:
+        condition: service_healthy
 
 volumes:
   uploads_data:

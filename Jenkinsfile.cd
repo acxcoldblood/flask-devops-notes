@@ -38,13 +38,15 @@ pipeline {
                 ]) {
                     sshagent(credentials: ['ec2-ssh-key']) {
                         sh '''
-set -e
+set -euo pipefail
 
-ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "mkdir -p ${REMOTE_DEPLOY_DIR}/nginx"
-scp -o StrictHostKeyChecking=no docker-compose.prod.yml ${EC2_USER}@${EC2_HOST}:${REMOTE_DEPLOY_DIR}/docker-compose.prod.yml
-scp -o StrictHostKeyChecking=no nginx/nginx.conf ${EC2_USER}@${EC2_HOST}:${REMOTE_DEPLOY_DIR}/nginx/nginx.conf
+SSH_OPTS="-o StrictHostKeyChecking=accept-new"
 
-ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "
+ssh ${SSH_OPTS} ${EC2_USER}@${EC2_HOST} "mkdir -p ${REMOTE_DEPLOY_DIR}/nginx"
+scp ${SSH_OPTS} docker-compose.prod.yml ${EC2_USER}@${EC2_HOST}:${REMOTE_DEPLOY_DIR}/docker-compose.prod.yml
+scp ${SSH_OPTS} nginx/nginx.conf ${EC2_USER}@${EC2_HOST}:${REMOTE_DEPLOY_DIR}/nginx/nginx.conf
+
+ssh ${SSH_OPTS} ${EC2_USER}@${EC2_HOST} "
 set -e
 cd ${REMOTE_DEPLOY_DIR}
 cat > .env <<EOF
@@ -65,6 +67,7 @@ EOF
 
 docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml pull
 docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml up -d
+curl -fsS http://localhost/health
 docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml ps
 "
 '''

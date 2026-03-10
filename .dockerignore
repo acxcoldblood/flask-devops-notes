@@ -3,3 +3,15 @@
 __pycache__
 .git
 .gitignore
+.github
+.pytest_cache
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+node_modules
+tests
+README.md
+Jenkinsfile*
+docker-compose*.yml

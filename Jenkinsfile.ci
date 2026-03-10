@@ -110,7 +110,6 @@ exit 1
             steps {
                 sh '''
 docker tag dnotes ${IMAGE_NAME}:${BUILD_NUMBER}
-docker tag dnotes ${IMAGE_NAME}:latest
 '''
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
@@ -120,7 +119,10 @@ docker tag dnotes ${IMAGE_NAME}:latest
                     sh '''
 echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 docker push ${IMAGE_NAME}:${BUILD_NUMBER}
-docker push ${IMAGE_NAME}:latest
+if [ "${BRANCH_NAME}" = "main" ]; then
+  docker tag dnotes ${IMAGE_NAME}:latest
+  docker push ${IMAGE_NAME}:latest
+fi
 docker logout
 '''
                 }
