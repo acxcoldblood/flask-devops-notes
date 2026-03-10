@@ -102,10 +102,14 @@ exit 1
 
         stage('Push Image to Docker Hub') {
             when {
-                anyOf {
-                    branch 'dev'
-                    branch 'main'
-                    branch 'feature/ec2-rds-deploy'
+                expression {
+                    def b = env.BRANCH_NAME ?: env.GIT_BRANCH ?: ''
+                    return b == 'dev' ||
+                           b == 'main' ||
+                           b == 'feature/ec2-rds-deploy' ||
+                           b.endsWith('/dev') ||
+                           b.endsWith('/main') ||
+                           b.endsWith('/feature/ec2-rds-deploy')
                 }
             }
             steps {
