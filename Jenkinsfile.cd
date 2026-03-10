@@ -57,10 +57,7 @@ ssh ${SSH_OPTS} ${EC2_USER}@${EC2_HOST} "mkdir -p ${REMOTE_DEPLOY_DIR}/nginx"
 scp ${SSH_OPTS} docker-compose.prod.yml ${EC2_USER}@${EC2_HOST}:${REMOTE_DEPLOY_DIR}/docker-compose.prod.yml
 scp ${SSH_OPTS} nginx/nginx.conf ${EC2_USER}@${EC2_HOST}:${REMOTE_DEPLOY_DIR}/nginx/nginx.conf
 
-ssh ${SSH_OPTS} ${EC2_USER}@${EC2_HOST} "
-set -e
-cd ${REMOTE_DEPLOY_DIR}
-cat > .env <<EOF
+ssh ${SSH_OPTS} ${EC2_USER}@${EC2_HOST} "cat > ${REMOTE_DEPLOY_DIR}/.env" <<EOF
 DB_HOST=$RDS_HOST
 DB_PORT=$RDS_PORT
 DB_USER=$DB_USER
@@ -76,27 +73,31 @@ RESET_TOKEN_MAX_AGE=3600
 IMAGE_TAG=${DEPLOY_IMAGE_TAG}
 EOF
 
-docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml pull
-docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml up -d
+ssh ${SSH_OPTS} ${EC2_USER}@${EC2_HOST} "REMOTE_DEPLOY_DIR='${REMOTE_DEPLOY_DIR}' PROD_COMPOSE_PROJECT='${PROD_COMPOSE_PROJECT}' bash -se" <<'REMOTE_SCRIPT'
+set -e
+cd "${REMOTE_DEPLOY_DIR}"
 
-for i in \$(seq 1 20); do
+docker compose -p "${PROD_COMPOSE_PROJECT}" -f docker-compose.prod.yml pull
+docker compose -p "${PROD_COMPOSE_PROJECT}" -f docker-compose.prod.yml up -d
+
+for i in $(seq 1 20); do
   if curl -fsS http://localhost/health > /dev/null; then
-    echo Health check passed on attempt \$i
+    echo "Health check passed on attempt $i"
     break
   fi
-  echo Health check attempt \$i failed, retrying...
+  echo "Health check attempt $i failed, retrying..."
   sleep 3
 done
 
 if ! curl -fsS http://localhost/health > /dev/null; then
-  echo Health check failed after retries. Showing container status and logs...
-  docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml ps
-  docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml logs --tail=100 web nginx || true
+  echo "Health check failed after retries. Showing container status and logs..."
+  docker compose -p "${PROD_COMPOSE_PROJECT}" -f docker-compose.prod.yml ps
+  docker compose -p "${PROD_COMPOSE_PROJECT}" -f docker-compose.prod.yml logs --tail=100 web nginx || true
   exit 1
 fi
 
-docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml ps
-"
+docker compose -p "${PROD_COMPOSE_PROJECT}" -f docker-compose.prod.yml ps
+REMOTE_SCRIPT
 '''
                     }
                 }
