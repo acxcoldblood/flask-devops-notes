@@ -194,7 +194,9 @@ docker logout
             usernamePassword(credentialsId: 'db-creds',
                 usernameVariable: 'DB_USER',
                 passwordVariable: 'DB_PASSWORD'),
-            string(credentialsId: 'mysql-root-password', variable: 'MYSQL_ROOT'),
+            string(credentialsId: 'rds-host', variable: 'RDS_HOST'),
+            string(credentialsId: 'rds-port', variable: 'RDS_PORT'),
+            string(credentialsId: 'rds-db-name', variable: 'RDS_DB_NAME'),
             string(credentialsId: 'flask-secret', variable: 'FLASK_SECRET'),
             string(credentialsId: 'smtp-user', variable: 'SMTP_USER'),
             string(credentialsId: 'smtp-password', variable: 'SMTP_PASS')
@@ -203,7 +205,7 @@ docker logout
             sh '''
 echo "Preparing deployment directory on host-mounted path..."
 mkdir -p "$DEPLOY_DIR/nginx"
-cp docker-compose.yml docker-compose.prod.yml "$DEPLOY_DIR/"
+cp docker-compose.prod.yml "$DEPLOY_DIR/"
 
 if [ -d "$DEPLOY_DIR/nginx/nginx.conf" ]; then
   echo "Fixing invalid nginx config path (directory found at nginx.conf)..."
@@ -223,15 +225,11 @@ test -f ./nginx/nginx.conf
 echo "Generating production .env..."
 
 cat > .env <<EOF
-DB_HOST=mysql
+DB_HOST=$RDS_HOST
+DB_PORT=$RDS_PORT
 DB_USER=$DB_USER
 DB_PASSWORD=$DB_PASSWORD
-DB_NAME=devops_notes
-
-MYSQL_ROOT_PASSWORD=$MYSQL_ROOT
-MYSQL_DATABASE=devops_notes
-MYSQL_USER=$DB_USER
-MYSQL_PASSWORD=$DB_PASSWORD
+DB_NAME=$RDS_DB_NAME
 
 SECRET_KEY=$FLASK_SECRET
 
@@ -247,19 +245,19 @@ echo "Setting image tag..."
 export IMAGE_TAG=${BUILD_NUMBER}
 
 echo "Stopping old production stack..."
-docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans || true
+docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml down --remove-orphans || true
 
 echo "Pulling latest image..."
-docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.prod.yml pull
+docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml pull
 
 echo "Starting production stack..."
-docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.prod.yml up -d
+docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml up -d
 
 echo "Injecting nginx configuration into running container..."
-NGINX_CONTAINER=$(docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.prod.yml ps -q nginx)
+NGINX_CONTAINER=$(docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml ps -q nginx)
 if [ -z "$NGINX_CONTAINER" ]; then
   echo "ERROR: nginx container not found after startup."
-  docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.prod.yml ps
+  docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml ps
   exit 1
 fi
 
@@ -284,7 +282,7 @@ echo "Running containers:"
 docker ps
 
 echo "Production stack status:"
-docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.yml -f docker-compose.prod.yml ps
+docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml ps
 '''
             }
         }

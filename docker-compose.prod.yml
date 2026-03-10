@@ -6,6 +6,34 @@ services:
       - .env
     expose:
       - "5000"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-3306}
+    volumes:
+      - uploads_data:/app/static/uploads
+
+  nginx:
+    image: nginx:1.25-alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
     depends_on:
-      mysql:
-        condition: service_healthy
+      - web
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: devops-certbot
+    profiles:
+      - certbot
+    volumes:
+      - /home/ubuntu/letsencrypt:/etc/letsencrypt
+    entrypoint: >
+      sh -c "pip install --no-cache-dir certbot-dns-duckdns &&
+      certbot certonly --non-interactive --agree-tos
+      --email ${LETSENCRYPT_EMAIL}
+      --authenticator dns-duckdns --dns-duckdns-credentials /etc/letsencrypt/duckdns.ini
+      -d dnotes.duckdns.org"
+
+volumes:
+  uploads_data:
