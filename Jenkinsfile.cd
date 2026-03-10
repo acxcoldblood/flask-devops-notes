@@ -5,6 +5,10 @@ pipeline {
         timeout(time: 20, unit: 'MINUTES')
     }
 
+    parameters {
+        string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker image tag to deploy (example: CI build number)')
+    }
+
     environment {
         PROD_COMPOSE_PROJECT = "dnotes-prod"
         REMOTE_DEPLOY_DIR = "/opt/dnotes"
@@ -44,6 +48,7 @@ pipeline {
 set -euo pipefail
 
 SSH_OPTS="-o StrictHostKeyChecking=accept-new"
+DEPLOY_IMAGE_TAG="${IMAGE_TAG:-latest}"
 
 ssh ${SSH_OPTS} ${EC2_USER}@${EC2_HOST} "mkdir -p ${REMOTE_DEPLOY_DIR}/nginx"
 scp ${SSH_OPTS} docker-compose.prod.yml ${EC2_USER}@${EC2_HOST}:${REMOTE_DEPLOY_DIR}/docker-compose.prod.yml
@@ -65,7 +70,7 @@ SMTP_USER=$SMTP_USER
 SMTP_PASSWORD=$SMTP_PASS
 SMTP_USE_TLS=true
 RESET_TOKEN_MAX_AGE=3600
-IMAGE_TAG=${BUILD_NUMBER}
+IMAGE_TAG=${DEPLOY_IMAGE_TAG}
 EOF
 
 docker compose -p ${PROD_COMPOSE_PROJECT} -f docker-compose.prod.yml pull
