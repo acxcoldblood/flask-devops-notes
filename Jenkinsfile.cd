@@ -1,0 +1,107 @@
+pipeline {
+    agent any
+
+    options {
+        timeout(time: 20, unit: 'MINUTES')
+    }
+
+    parameters {
+        string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker image tag to deploy (example: CI build number)')
+    }
+
+    environment {
+        PROD_COMPOSE_PROJECT = "dnotes-prod"
+        REMOTE_DEPLOY_DIR = "/opt/dnotes"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                sh 'ls -la'
+            }
+        }
+
+        stage('Deploy to EC2') {
+            when {
+                expression {
+                    def b = env.BRANCH_NAME ?: env.GIT_BRANCH ?: ''
+                    return b == 'main' ||
+                           b == 'feature/ec2-rds-deploy' ||
+                           b.endsWith('/main') ||
+                           b.endsWith('/feature/ec2-rds-deploy')
+                }
+            }
+            steps {
+                withCredentials([
+                    usernamePassword(credentialsId: 'db-creds',
+                        usernameVariable: 'DB_USER',
+                        passwordVariable: 'DB_PASSWORD'),
+                    string(credentialsId: 'rds-host', variable: 'RDS_HOST'),
+                    string(credentialsId: 'rds-port', variable: 'RDS_PORT'),
+                    string(credentialsId: 'rds-db-name', variable: 'RDS_DB_NAME'),
+                    string(credentialsId: 'flask-secret', variable: 'FLASK_SECRET'),
+                    string(credentialsId: 'smtp-user', variable: 'SMTP_USER'),
+                    string(credentialsId: 'smtp-password', variable: 'SMTP_PASS'),
+                    string(credentialsId: 'ec2-host', variable: 'EC2_HOST'),
+                    string(credentialsId: 'ec2-user', variable: 'EC2_USER')
+                ]) {
+                    sshagent(credentials: ['ec2-ssh-key']) {
+                        sh '''
+set -euo pipefail
+
+SSH_OPTS="-o StrictHostKeyChecking=accept-new"
+DEPLOY_IMAGE_TAG="${IMAGE_TAG:-latest}"
+
+ssh ${SSH_OPTS} ${EC2_USER}@${EC2_HOST} "mkdir -p ${REMOTE_DEPLOY_DIR}/nginx"
+scp ${SSH_OPTS} docker-compose.prod.yml ${EC2_USER}@${EC2_HOST}:${REMOTE_DEPLOY_DIR}/docker-compose.prod.yml
+scp ${SSH_OPTS} nginx/nginx.conf ${EC2_USER}@${EC2_HOST}:${REMOTE_DEPLOY_DIR}/nginx/nginx.conf
+
+ssh ${SSH_OPTS} ${EC2_USER}@${EC2_HOST} "cat > ${REMOTE_DEPLOY_DIR}/.env" <<EOF
+DB_HOST=$RDS_HOST
+DB_PORT=$RDS_PORT
+DB_USER=$DB_USER
+DB_PASSWORD=$DB_PASSWORD
+DB_NAME=$RDS_DB_NAME
+SECRET_KEY=$FLASK_SECRET
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=$SMTP_USER
+SMTP_PASSWORD=$SMTP_PASS
+SMTP_USE_TLS=true
+RESET_TOKEN_MAX_AGE=3600
+IMAGE_TAG=${DEPLOY_IMAGE_TAG}
+EOF
+
+ssh ${SSH_OPTS} ${EC2_USER}@${EC2_HOST} "REMOTE_DEPLOY_DIR='${REMOTE_DEPLOY_DIR}' PROD_COMPOSE_PROJECT='${PROD_COMPOSE_PROJECT}' bash -se" <<'REMOTE_SCRIPT'
+set -e
+cd "${REMOTE_DEPLOY_DIR}"
+
+docker compose -p "${PROD_COMPOSE_PROJECT}" -f docker-compose.prod.yml pull
+docker compose -p "${PROD_COMPOSE_PROJECT}" -f docker-compose.prod.yml up -d
+
+for i in $(seq 1 20); do
+  if curl -fsS http://localhost/health > /dev/null; then
+    echo "Health check passed on attempt $i"
+    break
+  fi
+  echo "Health check attempt $i failed, retrying..."
+  sleep 3
+done
+
+if ! curl -fsS http://localhost/health > /dev/null; then
+  echo "Health check failed after retries. Showing container status and logs..."
+  docker compose -p "${PROD_COMPOSE_PROJECT}" -f docker-compose.prod.yml ps
+  docker compose -p "${PROD_COMPOSE_PROJECT}" -f docker-compose.prod.yml logs --tail=100 web nginx || true
+  exit 1
+fi
+
+docker compose -p "${PROD_COMPOSE_PROJECT}" -f docker-compose.prod.yml ps
+REMOTE_SCRIPT
+'''
+                    }
+                }
+            }
+        }
+    }
+}

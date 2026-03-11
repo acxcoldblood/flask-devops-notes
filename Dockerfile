@@ -1,28 +1,28 @@
-# Use official lightweight Python image
-FROM python:3.11-alpine
+FROM python:3.11-slim
 
-# Set working directory inside container
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
 WORKDIR /app
 
-# Install curl for healthcheck
-RUN apk add --no-cache curl
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
 
-
-# Copy dependency file first (Docker cache optimization)
 COPY requirements.txt .
-
-# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
 COPY . .
 
-# Expose Flask port
+RUN useradd --create-home --shell /usr/sbin/nologin appuser \
+    && chown -R appuser:appuser /app
+
+USER appuser
+
 EXPOSE 5000
 
-# Run Flask app
-CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "wsgi:app"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD curl -fsS http://localhost:5000/health || exit 1
 
-# Healthcheck to monitor application status
-HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
-  CMD curl -f http://localhost:5000/health || exit 1
+CMD ["gunicorn", "--workers=2", "--threads=2", "--bind=0.0.0.0:5000", "--timeout=60", "wsgi:app"]

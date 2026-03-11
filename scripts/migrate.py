@@ -134,6 +134,54 @@ def run_migration():
             cursor.execute("ALTER TABLE categories ADD COLUMN is_system BOOLEAN DEFAULT FALSE")
 
         # 3. Insert Default Categories (Idempotent)
+        # 3. Cleanup Duplicate Categories & Add Unique Constraint
+        print("Checking for duplicate categories...")
+        # Find duplicates: name -> [list of sub-ids]
+        cursor.execute("SELECT id, name FROM categories")
+        rows = cursor.fetchall()
+        cat_map = {}
+        for c_id, c_name in rows:
+            lower_name = c_name.strip().lower()
+            if lower_name not in cat_map:
+                cat_map[lower_name] = []
+            cat_map[lower_name].append(c_id)
+
+        duplicates_found = False
+        for name, ids in cat_map.items():
+            if len(ids) > 1:
+                duplicates_found = True
+                ids.sort()
+                keep_id = ids[0]
+                remove_ids = ids[1:]
+                print(f"Found duplicate category '{name}' (IDs: {ids}). Keeping {keep_id}, removing {remove_ids}")
+                
+                # Update notes to use the kept category ID (if notes used IDs, but they use names currently?)
+                # Wait, schema says: category VARCHAR(50). 
+                # If notes uses names, updates aren't needed for notes table directly, just categories table cleanup.
+                # BUT, if we change to IDs later, this would be important. 
+                # Currently: category VARCHAR(50). So notes table relies on the string. 
+                # So deleting the duplicate row in categories table is safe for the notes table as long as the NAME stays.
+                
+                # Delete duplicates
+                format_strings = ','.join(['%s'] * len(remove_ids))
+                cursor.execute(f"DELETE FROM categories WHERE id IN ({format_strings})", tuple(remove_ids))
+
+        if duplicates_found:
+             print("Duplicate categories cleaned up.")
+
+        # Add UNIQUE constraint
+        cursor.execute("""
+            SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS
+            WHERE TABLE_SCHEMA = %s AND TABLE_NAME = 'categories' AND COLUMN_NAME = 'name' AND NON_UNIQUE = 0
+        """, (Config.DB_NAME,))
+        if cursor.fetchone()[0] == 0:
+             print("Adding UNIQUE constraint to categories(name)...")
+             try:
+                 cursor.execute("CREATE UNIQUE INDEX ux_categories_name ON categories (name)")
+             except Error as e:
+                 print(f"Warning: Could not add unique index: {e}")
+
+        # 4. Insert Default Categories (Idempotent with proper checking)
         cursor.execute("SELECT name FROM categories")
         existing_category_names = {row[0].strip().lower() for row in cursor.fetchall() if row[0]}
 
@@ -149,10 +197,17 @@ def run_migration():
 
         for name, color in default_cats:
             if name.lower() not in existing_category_names:
-                cursor.execute(
-                    "INSERT INTO categories (name, color, is_system) VALUES (%s, %s, TRUE)",
-                    (name, color)
-                )
+                try:
+                    cursor.execute(
+                        "INSERT INTO categories (name, color, is_system) VALUES (%s, %s, TRUE)",
+                        (name, color)
+                    )
+                except Error as e:
+                    # Ignore duplicate entry errors if they happen due to race conditions
+                    if e.errno == 1062:  # ER_DUP_ENTRY
+                        pass
+                    else:
+                         raise
 
         # 4. Update Notes Table (Add missing columns)
         print("Migrating 'notes' table schema...")

@@ -1,0 +1,143 @@
+pipeline {
+    agent any
+
+    options {
+        timeout(time: 20, unit: 'MINUTES')
+    }
+
+    environment {
+        IMAGE_NAME = "acxcoldblood/dnotes"
+        CI_COMPOSE_PROJECT = "dnotes-ci"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                sh 'ls -la'
+            }
+        }
+
+        stage('Prepare CI Environment') {
+            steps {
+                withCredentials([
+                    usernamePassword(credentialsId: 'db-creds',
+                        usernameVariable: 'DB_USER',
+                        passwordVariable: 'DB_PASSWORD'),
+                    string(credentialsId: 'mysql-root-password', variable: 'MYSQL_ROOT'),
+                    string(credentialsId: 'flask-secret', variable: 'FLASK_SECRET'),
+                    string(credentialsId: 'smtp-user', variable: 'SMTP_USER'),
+                    string(credentialsId: 'smtp-password', variable: 'SMTP_PASS')
+                ]) {
+                    sh '''
+echo "Cleaning old CI containers..."
+docker compose -p ${CI_COMPOSE_PROJECT} -f docker-compose.ci.yml down -v --remove-orphans || true
+
+echo "Generating fresh CI .env file..."
+cat > .env <<EOF
+FLASK_ENV=development
+FLASK_DEBUG=1
+APP_NAME=DevOps Notes Manager
+APP_HOST=0.0.0.0
+APP_PORT=5000
+
+DB_HOST=mysql
+DB_PORT=3306
+DB_USER=$DB_USER
+DB_PASSWORD=$DB_PASSWORD
+DB_NAME=devops_notes
+
+MYSQL_ROOT_PASSWORD=$MYSQL_ROOT
+MYSQL_DATABASE=devops_notes
+MYSQL_USER=$DB_USER
+MYSQL_PASSWORD=$DB_PASSWORD
+
+SECRET_KEY=$FLASK_SECRET
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=$SMTP_USER
+SMTP_PASSWORD=$SMTP_PASS
+SMTP_USE_TLS=true
+RESET_TOKEN_MAX_AGE=3600
+EOF
+'''
+                }
+            }
+        }
+
+        stage('Build CI Image') {
+            steps {
+                sh 'docker compose -p ${CI_COMPOSE_PROJECT} -f docker-compose.ci.yml build'
+            }
+        }
+
+        stage('Start CI Stack') {
+            steps {
+                sh 'docker compose -p ${CI_COMPOSE_PROJECT} -f docker-compose.ci.yml up -d'
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                sh '''
+CONTAINER=$(docker compose -p ${CI_COMPOSE_PROJECT} -f docker-compose.ci.yml ps -q web)
+
+for i in $(seq 1 10)
+do
+    STATUS=$(docker exec $CONTAINER curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/health || true)
+    if [ "$STATUS" = "200" ]; then
+        echo "Application is healthy"
+        exit 0
+    fi
+    echo "Attempt $i failed (status: $STATUS)"
+    sleep 5
+done
+
+docker compose -p ${CI_COMPOSE_PROJECT} -f docker-compose.ci.yml logs
+exit 1
+'''
+            }
+        }
+
+        stage('Push Image to Docker Hub') {
+            when {
+                expression {
+                    def b = env.BRANCH_NAME ?: env.GIT_BRANCH ?: ''
+                    return b == 'dev' ||
+                           b == 'main' ||
+                           b == 'feature/ec2-rds-deploy' ||
+                           b.endsWith('/dev') ||
+                           b.endsWith('/main') ||
+                           b.endsWith('/feature/ec2-rds-deploy')
+                }
+            }
+            steps {
+                sh '''
+docker tag dnotes ${IMAGE_NAME}:${BUILD_NUMBER}
+'''
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+docker push ${IMAGE_NAME}:${BUILD_NUMBER}
+if [ "${BRANCH_NAME}" = "main" ]; then
+  docker tag dnotes ${IMAGE_NAME}:latest
+  docker push ${IMAGE_NAME}:latest
+fi
+docker logout
+'''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'docker compose -p ${CI_COMPOSE_PROJECT} -f docker-compose.ci.yml down -v --remove-orphans || true'
+        }
+    }
+}

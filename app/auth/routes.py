@@ -64,11 +64,11 @@ def send_reset_email(to_email, reset_url):
         cfg["sender"] = cfg["user"]
 
     msg = EmailMessage()
-    msg["Subject"] = "Reset your DevNotes password"
+    msg["Subject"] = "Reset your DNotes password"
     msg["From"] = cfg["sender"]
     msg["To"] = to_email
     msg.set_content(
-        "You requested a password reset for DevNotes.\n\n"
+        "You requested a password reset for DNotes.\n\n"
         f"Reset your password using this link:\n{reset_url}\n\n"
         "If you did not request this, you can ignore this email."
     )
